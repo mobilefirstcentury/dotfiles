@@ -70,6 +70,7 @@ configure_bash() {
 configure_zsh() {
     echo "Configuring zsh..."
     link_file .zshrc .zshrc
+    link_file .zlogin .zlogin
     link_file .zmodules .zmodules
     link_directory .zsh_scripts .zsh_scripts
     backup_directory .zsh_modules
@@ -139,6 +140,7 @@ delete_backups() {
     rm -rf $HOME/.tmux.conf.dotbackup
     rm -rf $HOME/.vimrc.dotbackup
     rm -rf $HOME/.zshrc.dotbackup
+    rm -rf $HOME/.zlogin.dotbackup
     rm -rf $HOME/.zmodules.dotbackup
     rm -rf $HOME/.zsh_modules.dotbackup
     rm -rf $HOME/.zsh_scripts.dotbackup
