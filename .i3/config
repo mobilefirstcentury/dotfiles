@@ -99,4 +99,4 @@ bar {
 # Startup scripts (in custom .i3_local)
 exec --no-startup-id /usr/bin/xsetroot -solid '#0c0c0c'
 exec --no-startup-id ~/.i3_local
-exec --no-startup-id urxvt
+#exec --no-startup-id urxvt #This line causes i3 to be unable to go full screen. todo: find a solution
