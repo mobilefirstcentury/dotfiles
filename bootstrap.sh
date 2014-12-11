@@ -95,9 +95,11 @@ configure_git() {
 configure_i3() {
     echo "Configuring i3..."
     backup_directory .i3
-    mkdir -p $HOME/.i3
-    link_file .i3/config .i3/config
+#    mkdir -p $HOME/.i3
+    link_file .i3 .i3
     link_file .i3status.conf .i3status.conf
+    link_file .Xresources .Xresources
+    link_file .xinitrc .xinitrc
 }
 
 configure_vim() {
@@ -127,6 +129,8 @@ delete_backups() {
     rm -rf $HOME/.bash_scripts.dotbackup
     rm -rf $HOME/.i3.dotbackup
     rm -rf $HOME/.i3status.conf.dotbackup
+    rm -rf $HOME/.Xresources.dotbackup
+    rm -rf $HOME/.xinitrc.dotbackup
     rm -rf $HOME/.ipython.dotbackup
     rm -rf $HOME/.config/ipython.dotbackup
     rm -rf $HOME/.bash_aliases.dotbackup
