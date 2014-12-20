@@ -1,3 +1,3 @@
-
-  alias startx='startx &> ~/.xlog'
-  [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx
+#script ~/screen.log
+alias startx='startx &> ~/.xlog'
+[[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx
