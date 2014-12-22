@@ -119,3 +119,36 @@ find /raid -type d -name ".local_sd_customize" \
 find . -name "rc.conf" -print 
 find . -name "rc.conf " -exec chmod o+r '{}' \; -print 
 find . -not (\ -name "*.v" -o -name "*,v" \) '{}' \; -print
+
+
+
+Creating an empty file in Linux is easy. If a-file does not exist, create the file and make it empty by simply:
+$ touch a-file
+$ ls -l a-file
+-rw-r--r-- 1 peter peter 0 2009-05-02 20:15 a-file
+
+Finding all empty files in a directory can also be done using a single command. Ditto for non-empty files.
+
+Suppose you want to find all empty files in the directory /home/peter. The command is:
+ $ find -L /home/peter -maxdepth 1  -type f -size 0
+
+By default, the find command excludes symbolic files. Use the -L option to include them.
+
+The expression -maxdepth 1 specifies that the maximum depth to which the search will drill is one only. By default, the find command will recursively go down the directory. A maximum depth of 1 means that you only want the files directly under /home/peter. Keep in mind that depth 0 is the level of the command line argument (/home/peter). You can use -maxdepth and -mindepth to finely control the depth levels you want included.
+
+-type f means include regular files only. This is not strictly necessary for empty files (as opposed to non-empty ones) because all directories, even those with no files, are of non-empty size.
+
+-size 0 is self-explanatory.
+
+To find all non-empty files in the same directory, simply add ! before -size 0:
+ $ find -L /home/peter -maxdepth 1  -type f ! -size 0
+
+Note that -type f becomes necessary. Without this expression, subdirectories in /home/peter such as /home/peter/.Trash will appear in the output. 
+
+Most of the time, you don't just want to find the files: you want to do something with them. Suppose you want to remove all empty files in the directory. For safety, first run the find command by itself to list the files. Then with the xargs command as below.
+ $ find -L /home/peter -maxdepth 1  -type f  -size 0 
+/home/peter/file1.txt
+/home/peter/file2.txt
+$ find -L /home/peter -maxdepth 1  -type f  -size 0 -print0 |xargs -0 -r rm -f 
+
+$ find -L /home/peter -name *~ -print0 |xargs -0 -r rm # delete all files verifying a pattern

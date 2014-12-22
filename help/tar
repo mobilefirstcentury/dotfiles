@@ -44,4 +44,7 @@ Testing / viewing your archive
 #tar -tzvf myarchive.tgz
 Here we used the – t opton
 -t, –list                           list the contents of an archive
+
+
+tar --exclude='./folder' --exclude='./upload/folder2' -zcvf /backup/filename.tgz .   # extract tar archive with pattern exclusion
 ————————————————-

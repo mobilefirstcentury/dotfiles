@@ -18,7 +18,7 @@ let maplocalleader=","  " change local leader key to ,
 nnoremap <leader>ev :vsplit $MYVIMRC<CR>
 
 " <leader>sv sources .vimrc
-"nnoremap <leader>sv :source $MYVIMRC<CR>:redraw<CR>:echo $MYVIMRC 'reloaded'<CR>
+nnoremap <leader>sv :source $MYVIMRC<CR>:redraw<CR>:echo $MYVIMRC 'reloaded'<CR>
 
 
 " -- backup and swap files -----------------------------------------------------
@@ -738,7 +738,7 @@ Plugin 'klen/python-mode'
 Plugin 'scrooloose/syntastic'
 Plugin 'tomtom/tcomment_vim'
 Plugin 'bling/vim-airline'
-Plugin 'alanctkc/vim-airline-powerbeans'
+"Plugin 'alanctkc/vim-airline-powerbeans'
 Plugin 'sophacles/vim-bundle-mako'
 Plugin 'nanotech/jellybeans.vim'
 Plugin 'tpope/vim-fugitive'
@@ -755,6 +755,20 @@ Plugin 'pangloss/vim-javascript'
 Plugin 'davidhalter/jedi-vim'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'vim-scripts/ZoomWin'
+Plugin 'mileszs/ack.vim'
+Plugin 'mattn/webapi-vim'
+Plugin 'mattn/gist-vim'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'tomtom/tlib_vim'
+Plugin 'garbas/vim-snipmate'
+Plugin 'honza/vim-snippets'
+Plugin 'Raimondi/delimitMate'
+Plugin 'Lokaltog/vim-easymotion'
+Plugin 'gorkunov/smartpairs.vim'
+
+
 
 
 
@@ -814,8 +828,23 @@ let g:airline_left_sep=''
 let g:airline_right_sep=''
 
 " Set airline theme
-let g:airline_theme='powerbeans'
+"let g:airline_theme='powerbeans'
+let g:airline_powerline_fonts=1
 
+let g:airline_mode_map = {
+    \ '__' : '-',
+    \ 'n'  : 'N',
+    \ 'i'  : 'I',
+    \ 'R'  : 'R',
+    \ 'c'  : 'C',
+    \ 'v'  : 'V',
+    \ 'V'  : 'V',
+    \ '' : 'V',
+    \ 's'  : 'S',
+    \ 'S'  : 'S',
+    \ '' : 'S',
+    \ }
+ 
 " Show json quotes
 let g:vim_json_syntax_conceal = 0
 
@@ -841,14 +870,20 @@ set term=screen-256color
 "au VimLeave * :!clear
 
 
+"" Compatible with ranger 1.4.2 through 1.6.*
+    "
+    " Add ranger as a file chooser in vim
+    "
+    " If you add this function and the key binding to the .vimrc, ranger can be
+    " started using the keybinding ",r".  Once you select a file by pressing
+    " enter, ranger will quit again and vim will open the selected file.
 
-" Ranger integration
-fun! RangerChooser()
-  exec "silent !ranger --choosefile=/tmp/chosenfile " . expand("%:p:h")
-  if filereadable('/tmp/chosenfile')
-    exec 'edit ' . system('cat /tmp/chosenfile')
-    call system('rm /tmp/chosenfile')
-  endif
-  redraw!
-endfun
-map <leader>r :call RangerChooser()<CR>
+    fun! RangerChooser()
+        exec "silent !ranger --choosefile=/tmp/chosenfile " . expand("%:p:h")
+        if filereadable('/tmp/chosenfile')
+            exec 'edit ' . system('cat /tmp/chosenfile')
+            call system('rm /tmp/chosenfile')
+        endif
+        redraw!
+    endfun
+    map ,r :call RangerChooser()<CR>

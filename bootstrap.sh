@@ -59,6 +59,16 @@ configure_shell() {
         copy_file .bash_local-linux .bash_local
     fi
 }
+configure_ohmyzsh() {
+    echo "Configuring oh-my-zsh..."
+    link_directory .oh-my-zsh .oh-my-zsh
+}
+
+configure_mutt() {
+    echo "Configuring mutt..."
+    link_file .muttrc muttrc
+    link_directory .mutt .mutt
+}
 
 configure_bash() {
     echo "Configuring bash..."
@@ -94,9 +104,7 @@ configure_git() {
 
 configure_i3() {
     echo "Configuring i3..."
-    backup_directory .i3
-#    mkdir -p $HOME/.i3
-    link_file .i3 .i3
+    link_directory .i3 .i3
     link_file .i3status.conf .i3status.conf
     link_file .Xresources .Xresources
     link_file .xinitrc .xinitrc
@@ -105,7 +113,7 @@ configure_i3() {
 configure_vim() {
     echo "Configuring vim..."
     link_file .vimrc .vimrc
-    clone_or_pull_repo gmarik/vundle .vim/bundle/vundle
+    link_directory .vim .vim
     echo "Installing Vim plugins. Please wait..."
     vim +PluginInstall +qall > /dev/null 2>&1
 }

@@ -46,3 +46,7 @@ linux,server
 The following example removes the word linux from the string.
 # echo "linuxserver" | tr -d "linux"
 server
+
+
+
+$ tr '[:upper:]' '[:lower:]' < input.txt > output.txt # convert text file to lower case

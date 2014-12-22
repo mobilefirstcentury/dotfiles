@@ -25,23 +25,6 @@ ZSH_THEME="babun"
 ((windows)) && source $ZSH/dir_colors/sol.dark
 
 
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to disable command auto-correction.
-# DISABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
@@ -51,10 +34,6 @@ COMPLETION_WAITING_DOTS="true"
 # much, much faster.
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-HIST_STAMPS="dd/mm/yyyy"
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
@@ -74,12 +53,12 @@ export PATH=$HOME/bin:/usr/local/bin:$PATH
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
+Preferred editor for local and remote sessions
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='vim'
+else
+  export EDITOR='mvim'
+fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -89,16 +68,31 @@ export PATH=$HOME/bin:/usr/local/bin:$PATH
 # 
 
 # Activate plugins
+
 # autojump // normalement la déclaration du plugin dans oh-my-zsh devrait suffire !
-
-
 #[[ -s /home/Rachid/.autojump/etc/profile.d/autojump.sh ]] && source /home/Rachid/.autojump/etc/profile.d/autojump.sh
 #autoload -U compinit && compinit -u
 
 
+# Some zsh configs
+
+# Uncomment the following line if you want to change the command execution time
+# stamp shown in the history command output.
+# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+HIST_STAMPS="dd/mm/yyyy"
+
+# no duplicates in history
+setopt hist_ignore_all_dups
+#commands with leading space are not historized
+setopt hist_ignore_space
+export LESS="-mN"  # where are we in the file read. In percentage and absolute.
 
 
-
+HISTFILESIZE=10000
+shopt -s histappend # ne pas écraser HISTFILE en cas de multiples sessions
+stty -ixon #CTRL-s doesn't freeze the terminal anymore
+#export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND" # save command to HISTFILE in real time 
+bindkey -M viins ‘jj’ vi-cmd-mode # jj pour escaper
 
 # Get console in Vi mode and persists state from last command line.
 set editing-mode vi
@@ -128,7 +122,8 @@ export KEYTIMEOUT=1
   alias pbpaste='xclip -selection clipboard -o'
 }
 
-alias h='history'
+alias h='history | less +G'
+hg() { history | grep -e  "^ *[0-9]* *$1" | less +G }
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias egrep='egrep --color=auto'
@@ -142,9 +137,11 @@ alias ps="ps auxf"
 alias psg="ps aux | grep -v grep | grep -i -e VSZ -e"
 alias mkdir="mkdir -pv"
 alias wget="wget -c"
-alias hg="history | grep"
 alias myip="curl http://ipecho.net/plain; echo"
-
+alias trm='trash-put'
+alias tls='trash-ls"
+alias tempty='trash-empty'
+alias trestore='trash-restore'
 
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"

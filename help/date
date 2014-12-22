@@ -124,3 +124,56 @@ year
 %:::z
 numeric time zone with : to necessary precision (e.g., -04, +05:30)
 %Z
+
+Fun with Date Arithmetic
+We all know that the date command tells you the current time. Occasionally, you use the same command to set the time. That however becomes rarer these days with the advent of the ntp service that automatically synchronizes your computer's time with a super accurate public time server of your choice.
+
+Various implementations of the date command are in use today. This article discusses the date command of the GNU coreutils package.
+
+By default, the date command tells you the time now. The date command also lets you do some basic date addition and subtraction. This is achieved by specifying the -d option which displays a time that you entered as a parameter rather than now.
+
+How many times have you asked yourself what the calendar date is N days ago? Just the other day, I needed to find out the precise date of 30 days ago in order to locate the proper log file.
+
+$ date
+Sat Nov 14 17:54:51 PST 2009
+$ date -d -30days
+Thu Oct 15 18:54:56 PDT 2009
+
+
+Just like you use subtraction to calculate a back date, you use addition to calculate a forward date. The example below displays the date 30 days from today.
+$ date -d +30days
+Thu Oct 15 18:54:56 PDT 2009
+
+
+Besides days as the unit, you can also manipulate years, months, hours, minutes, and seconds.
+peter@tiger:~$ date -d +2months
+Thu Jan 14 18:48:43 PST 2010
+
+
+You can combine them together like this:
+$ date -d +2months17days
+Sun Jan 31 18:49:45 PST 2010
+
+
+Note that all the above are calculated relative to today's date. What about queries like 10 days tomorrow?
+$ date -d tomorrow+10days
+date -d tomorrow+10days
+Wed Nov 25 18:52:03 PST 2009
+
+
+10 days yesterday?
+$ date -d yesterday-10days
+Tue Nov  3 18:53:07 PST 2009
+
+
+You can also perform your arithmetic relative to a specific day, say January 21, 2010.
+$ date -d '2010-01-21 + 2 weeks 3 days'
+Sun Feb  7 00:00:00 PST 2010
+
+
+Lastly, the date command also recognizes the day of weeks (Sunday, Monday, ...) and the 2 keywords "last" and "next".
+$ date -d 'next tuesday + 1 day'
+Wed Nov 18 00:00:00 PST 2009
+
+
+I hope you have fun with this versatile tool.

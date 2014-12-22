@@ -48,3 +48,7 @@ cloud servers
 
 The -f option print the lines from file that is growing dynamically. When you run the tail -f filename command, it prints the last 10 lines and waits for new lines to be added to the file. Whenever the new lines are appended to the file, the tail command also appends the new lines on the standard output. The -f option is useful when debugging applications. In general, the applications writes error messages to log files. You can use the -f option to check for the error messages as and when they appear in the log file.
 # tail -f logfile
+
+
+#If you want to see more than ten lines at the outset, specify the new number (say 50 lines) like this:
+tail -50   -f /var/log/messages

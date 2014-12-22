@@ -66,3 +66,20 @@ Here bandwidth_limit is numeric to be specified in kilobits per second.
 
 We can make the scp command to copy the files over a specified port number using the -P option.
 scp -P 6001 storage_backup.bat username@hostname:/tmp/
+
+
+
+Occasionally, I want to copy a short line of text to a remote computer. For instance, I have an URL for some real cool web site which, for whatever reason, I want to send to a remote host. I can always put the text in a file, and transfer it via scp.
+
+$ cat > coolurl.txt
+http://really-cool-web-site/
+
+$ scp coolurl.txt peter@192.168.1.112:
+Or, you can use the following one-liner command:
+
+$ echo 'http://really-cool-web-site/'|ssh peter@192.168.1.112 'cat >coolurl.txt'
+The one-liner uses only simple commands such as echo, ssh and cat. It saves you the step of creating a new file on the local machine.
+
+The text is saved to a file called coolurl.txt on the remote computer under your home directory.
+
+Let me know your favourite way to accomplish the same thing.
