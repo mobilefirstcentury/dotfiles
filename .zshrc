@@ -53,6 +53,16 @@ export PATH=$HOME/bin:/usr/local/bin:$PATH
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
+# SSH config
+
+# il y a un problème d'initialisation du ssh-agent dans cygwin. Les lignes suivantes forcent la reconaissance des clés ssH
+((windows)) && {
+  eval `ssh-agent -s`
+  find ~/.ssh/ maxdepth 1 -type f -not name "*.pub" -print0 | xargs -0 ssh-add 
+}
+
+
+
 Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
@@ -75,6 +85,21 @@ fi
 
 
 # Some zsh configs
+# Set extended globing in zsh
+setopt extendedglob
+
+set ignorecase
+set smartcase
+set incsearch
+set hlsearch
+set cindent
+# pressing esc removes last search highlight 
+nnoremap <esc> :noh<return><esc>
+setopt cdablevars
+setopt correct
+setopt globdots
+setopt interactivecomments
+setopt noclobber
 
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.

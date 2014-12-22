@@ -104,6 +104,8 @@ configure_git() {
 
 configure_i3() {
     echo "Configuring i3..."
+    link_file .fehbg .fehbg
+    link_directory .wallpaper .wallpaper
     link_directory .i3 .i3
     link_file .i3status.conf .i3status.conf
     link_file .Xresources .Xresources
