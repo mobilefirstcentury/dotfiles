@@ -515,10 +515,10 @@ set clipboard=unnamed,unnamedplus
 vmap <C-c> "+y
 
 "Ctrl-p to paste from the + register in cmd mode
-map <C-v> "+p
+map <C-p> "+p
 
 "Ctrl-p to paste from the + register while editing
-imap <C-v> <esc><C-v>
+imap <C-p> <esc><C-p>
 
 "Ctrl-s to save file
 map <C-s> <:><w>

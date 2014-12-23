@@ -1,0 +1,8 @@
+search vagrant
+
+set show_hidden true
+search .vimrc
+open_with ll
+open_with 
+open_with vim
+open_with vim-gtk

@@ -159,7 +159,7 @@ delete_backups() {
     rm -rf $HOME/.zsh_modules.dotbackup
     rm -rf $HOME/.zsh_scripts.dotbackup
 }
-
+toremove
 update() {
     echo "Updating configuration..."
     git pull origin master
@@ -234,5 +234,8 @@ fi
 if [ "$NO_VIM" != 1 ]; then
     configure_vim
 fi
+
+
+[ -d $HOME/dotfiles/.config ] && link_directory .config .config
 
 echo "Done."
