@@ -1,12 +1,18 @@
 !xterm*faceName: Dejavu Sans Mono:style=Book:antialias=true:hinting=medium
 !URxvt.font: xft:Dejavu Sans Mono:bold:size=10:antialias=true
 
+! Avec Menlo j'ai des problemes d'esapcement entre les characteres dans la console virtuelle i3 
+! URxvt*font:                 xft:Menlo for Powerline:regular:size=9
+! URxvt*imFont:               xft:Menlo for Powerline:regular:size=9
+! URxvt*boldFont:             xft:Menlo for Powerline:bold:size=9
+! URxvt*italicFont:           xft:Menlo for Powerline:italic:size=9
+! URxvt*boldItalicFont:       xft:Menlo for Powerline:bold:italic:size=9
 
-URxvt*font:                 xft:Menlo for Powerline:regular:size=9
-URxvt*imFont:               xft:Menlo for Powerline:regular:size=9
-URxvt*boldFont:             xft:Menlo for Powerline:bold:size=9
-URxvt*italicFont:           xft:Menlo for Powerline:italic:size=9
-URxvt*boldItalicFont:       xft:Menlo for Powerline:bold:italic:size=9
+URxvt*font: xft:DejaVu Sans Mono:antialias=true:pixelsize=11
+URxvt*boldFont: xft:DejaVu Sans Mono:style=bold:antialias=true:pixelsize=11
+URxvt*italicFont: xft:DejaVu Sans Mono:style=italic:antialias=true:pixelsize=11
+URxvt*boldItalicFont: xft:DejaVu Sans Mono:style=bolditalic:antialias=true:pixelsize=11
+
 
 !Xft Settings to render crisp fonts 
 Xft.dpi:        96

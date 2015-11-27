@@ -14,4 +14,9 @@
 .vim/backup/
 .vim/bundle/
 .vim/tmp/
+.config/google-chrome/
+.config/menus/
+.config/software-center/
+.config/unity-tweak-tool/
+.vim/.netrwhist
 
