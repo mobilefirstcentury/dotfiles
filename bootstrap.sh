@@ -116,8 +116,8 @@ configure_vim() {
     echo "Configuring vim..."
     link_file .vimrc .vimrc
     link_directory .vim .vim
-    echo "Installing Vim plugins. Please wait..."
-    vim +PluginInstall +qall > /dev/null 2>&1
+#    echo "Installing Vim plugins. Please wait..."
+#    vim +PluginInstall +qall > /dev/null 2>&1
 }
 
 configure_tmux() {
@@ -159,7 +159,7 @@ delete_backups() {
     rm -rf $HOME/.zsh_modules.dotbackup
     rm -rf $HOME/.zsh_scripts.dotbackup
 }
-toremove
+
 update() {
     echo "Updating configuration..."
     git pull origin master
@@ -235,7 +235,7 @@ if [ "$NO_VIM" != 1 ]; then
     configure_vim
 fi
 
-
+echo "Updating configs ..."
 [ -d $HOME/dotfiles/.config ] && link_directory .config .config
 
 echo "Done."

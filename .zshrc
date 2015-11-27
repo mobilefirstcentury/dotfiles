@@ -63,7 +63,7 @@ export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 
 
-Preferred editor for local and remote sessions
+# Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
 else
@@ -93,13 +93,15 @@ set smartcase
 set incsearch
 set hlsearch
 set cindent
-# pressing esc removes last search highlight 
-nnoremap <esc> :noh<return><esc>
+
+
 setopt cdablevars
 setopt correct
 setopt globdots
 setopt interactivecomments
 setopt noclobber
+
+export LESS="-mN"  # where are we in the file read. In percentage and absolute.
 
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
@@ -110,13 +112,19 @@ HIST_STAMPS="dd/mm/yyyy"
 setopt hist_ignore_all_dups
 #commands with leading space are not historized
 setopt hist_ignore_space
-export LESS="-mN"  # where are we in the file read. In percentage and absolute.
-
 
 HISTFILESIZE=10000
-shopt -s histappend # ne pas écraser HISTFILE en cas de multiples sessions
 stty -ixon #CTRL-s doesn't freeze the terminal anymore
+setopt APPEND_HISTORY # Don't erase history
+setopt EXTENDED_HISTORY # Add additional data to history like timestamp
+setopt INC_APPEND_HISTORY # Add immediately
+setopt HIST_FIND_NO_DUPS # Don't show duplicates in search
+setopt HIST_IGNORE_SPACE # Don't preserve spaces. You may want to turn it off
+setopt NO_HIST_BEEP # Don't beep
+setopt SHARE_HISTORY # Share history between session/terminals
 #export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND" # save command to HISTFILE in real time 
+
+
 bindkey -M viins ‘jj’ vi-cmd-mode # jj pour escaper
 
 # Get console in Vi mode and persists state from last command line.
@@ -164,7 +172,7 @@ alias mkdir="mkdir -pv"
 alias wget="wget -c"
 alias myip="curl http://ipecho.net/plain; echo"
 alias trm='trash-put'
-alias tls='trash-ls"
+alias tls='trash-ls'
 alias tempty='trash-empty'
 alias trestore='trash-restore'
 

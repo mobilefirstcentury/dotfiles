@@ -1,0 +1,17 @@
+.config/compiz-1/
+.config/dconf/
+.config/gtk-3.0/
+.config/ibus/
+.config/ipython
+.config/ipython.dotbackup/
+.config/libaccounts-glib/
+.config/nautilus/
+.config/pulse/
+.config/unity/
+.config/user-dirs.dirs
+.config/user-dirs.locale
+.vim/.viminfo
+.vim/backup/
+.vim/bundle/
+.vim/tmp/
+

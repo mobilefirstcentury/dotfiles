@@ -650,6 +650,10 @@ function! BlinkMatch(t)
     redraw
 endfunction
 
+
+" pressing esc removes last search highlight 
+nnoremap <esc> :noh<return><esc>
+
 " center screen on next/previous match, blink current match
 noremap <silent> n nzzzv:call BlinkMatch(0.2)<CR>
 noremap <silent> N Nzzzv:call BlinkMatch(0.2)<CR>
