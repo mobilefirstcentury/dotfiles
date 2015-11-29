@@ -81,6 +81,7 @@ configure_zsh() {
     echo "Configuring zsh..."
     link_file .zshrc .zshrc
     link_file .zlogin .zlogin
+    link_file .zlogout .zlogout
     link_file .zmodules .zmodules
     link_directory .zsh_scripts .zsh_scripts
     backup_directory .zsh_modules
