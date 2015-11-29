@@ -19,4 +19,4 @@
 .config/software-center/
 .config/unity-tweak-tool/
 .vim/.netrwhist
-
+.config/gtk-2.0/

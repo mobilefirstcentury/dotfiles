@@ -114,11 +114,6 @@ bindsym $mod+Shift+J move down
 bindsym $mod+Shift+K move up
 bindsym $mod+Shift+L move right
 
-# split in horizontal orientation
-bindsym $mod+bar split h
-
-# split in vertical orientation
-bindsym $mod+underscore split v
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen
@@ -227,6 +222,12 @@ client.unfocused		#444444 #444444  #00AFDA
 client.focused_inactive         #444444 #444444  #2c2c2f
 client.urgent			#383a3b #383a3b  #ee0000
 
+# J'ai mis ici ces mapping parceque plus haut il ne sont pas pris en compte. Et ici ?
+# split in horizontal orientation
+bindsym $mod+bar split h
+
+# split in vertical orientation
+bindsym $mod+underscore split v
 
 ###  ADDED KEY BINDINGS  ###
 bindsym $MOD+SHIFT+f exec thunar
@@ -270,8 +271,11 @@ bar {
 # exec --no-startup-id terminator -e tmux
 exec --no-startup-id xset dpms 600
 exec --no-startup-id sh ~/.fehbg
-# Launching VBoxClient to allow guest/host integration
-exec --no-startup-id VBoxClient --clipboard 
-exec --no-startup-id VBoxClient --draganddrop 
-exec --no-startup-id VBoxClient --seamless 
-exec --no-startup-id VBoxClient --display
+# Ne lancer VBoxClient que si on est dans une machine Guest
+
+if [[ -x "$(command -v VBoxClient)" ]]; then                                                                                                ~  
+  exec --no-startup-id VBoxClient --clipboard 
+  exec --no-startup-id VBoxClient --draganddrop 
+  exec --no-startup-id VBoxClient --seamless 
+  exec --no-startup-id VBoxClient --display
+fi

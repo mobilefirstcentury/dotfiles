@@ -41,7 +41,8 @@ COMPLETION_WAITING_DOTS="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git autojump)
+#plugins=(git autojump history-substring-search)
+plugins=(git autojump )
 
 source $ZSH/oh-my-zsh.sh
 
@@ -64,6 +65,7 @@ export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 
 # Preferred editor for local and remote sessions
+# [TODO] Verifier si la mention de mvim ci-dessous n'est pas une erreur.
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
 else
@@ -74,6 +76,7 @@ fi
 # export ARCHFLAGS="-arch x86_64"
 
 # ssh
+# [TODO] Pourquoi on ne décommente pas la ligne suivante
 # export SSH_KEY_PATH="~/.ssh/dsa_id"
 # 
 
@@ -93,28 +96,25 @@ set smartcase
 set incsearch
 set hlsearch
 set cindent
-
-
 setopt cdablevars
 setopt correct
 setopt globdots
 setopt interactivecomments
 setopt noclobber
 
-export LESS="-mN"  # where are we in the file read. In percentage and absolute.
+# export LESS="-mN"  # where are we in the file read. In percentage and absolute.
+
+# HISTORY
 
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
 # The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
 HIST_STAMPS="dd/mm/yyyy"
-
+HISTFILESIZE=10000
 # no duplicates in history
 setopt hist_ignore_all_dups
 #commands with leading space are not historized
 setopt hist_ignore_space
-
-HISTFILESIZE=10000
-stty -ixon #CTRL-s doesn't freeze the terminal anymore
 setopt APPEND_HISTORY # Don't erase history
 setopt EXTENDED_HISTORY # Add additional data to history like timestamp
 setopt INC_APPEND_HISTORY # Add immediately
@@ -124,8 +124,27 @@ setopt NO_HIST_BEEP # Don't beep
 setopt SHARE_HISTORY # Share history between session/terminals
 #export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND" # save command to HISTFILE in real time 
 
+# # Bindings liés à history-substring-search (plugin oh-my-zsh)
+# # bind UP and DOWN arrow keys
+# zmodload zsh/terminfo
+# bindkey "$terminfo[kcuu1]" history-substring-search-up
+# bindkey "$terminfo[kcud1]" history-substring-search-down
+#
+# # bind UP and DOWN arrow keys (compatibility fallback
+# # for Ubuntu 12.04, Fedora 21, and MacOSX 10.9 users)
+# bindkey '^[[A' history-substring-search-up
+# bindkey '^[[B' history-substring-search-down
+#
+# # bind k and j for VI mode
+# bindkey -M vicmd 'k' history-substring-search-up
+# bindkey -M vicmd 'j' history-substring-search-down
 
-bindkey -M viins ‘jj’ vi-cmd-mode # jj pour escaper
+
+
+stty -ixon #CTRL-s doesn't freeze the terminal anymore
+
+# [TODO] La ligne suivante ne semble pas prise en compte
+#bindkey -M viins ‘jj’ vi-cmd-mode # jj pour escaper
 
 # Get console in Vi mode and persists state from last command line.
 set editing-mode vi

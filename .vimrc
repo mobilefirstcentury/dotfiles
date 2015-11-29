@@ -1,4 +1,3 @@
-" -- bootstrap -----------------------------------------------------------------
 
 set encoding=utf-8  " set vim encoding to UTF-8
 set nocompatible    " the future is now, use vim defaults instead of vi ones
@@ -169,7 +168,7 @@ endif
 nnoremap <silent> <leader>l :set list! list?<CR>
 
 set noerrorbells      " shut up
-set visualbell t_vb=  " use visual bell instead of error bell
+" set visualbell t_vb=  " use visual bell instead of error bell
 set mousehide         " hide mouse pointer when typing
 
 set showcmd     " show partial command line (default)
@@ -364,11 +363,15 @@ set whichwrap=b,s,<,> " allow cursor left/right key to wrap to the
                       " omit [,] as we use virtual edit in insert mode
 
 " disable arrow keys
- nnoremap <Left> :echo "arrow keys disabled, use h"<CR>
- nnoremap <Right> :echo "arrow keys disabled, use l"<CR>
- nnoremap <Up> :echo "arrow keys disabled, use k"<CR>
- nnoremap <Down> :echo "arrow keys disabled, use j"<CR>
+nnoremap <Left> :echo "arrow keys disabled, use h"<CR>
+nnoremap <Right> :echo "arrow keys disabled, use l"<CR>
+nnoremap <Up> :echo "arrow keys disabled, use k"<CR>
+nnoremap <Down> :echo "arrow keys disabled, use j"<CR>
 
+inoremap <Right> <Nop>
+inoremap <Up> <Nop>
+inoremap <Down> <Nop>
+inoremap <Left> <Nop>
 
 " move to the position where the last change was made
 noremap gI `.
@@ -649,10 +652,6 @@ function! BlinkMatch(t)
     call matchdelete(l:highlight)
     redraw
 endfunction
-
-
-" pressing esc removes last search highlight 
-nnoremap <esc> :noh<return><esc>
 
 " center screen on next/previous match, blink current match
 noremap <silent> n nzzzv:call BlinkMatch(0.2)<CR>
