@@ -271,11 +271,11 @@ bar {
 # exec --no-startup-id terminator -e tmux
 exec --no-startup-id xset dpms 600
 exec --no-startup-id sh ~/.fehbg
-# Ne lancer VBoxClient que si on est dans une machine Guest
 
-if [[ -x "$(command -v VBoxClient)" ]]; then                                                                                                ~  
-  exec --no-startup-id VBoxClient --clipboard 
-  exec --no-startup-id VBoxClient --draganddrop 
-  exec --no-startup-id VBoxClient --seamless 
-  exec --no-startup-id VBoxClient --display
-fi
+# Ne lancer VBoxClient que si on est dans une machine Guest
+# if [[ -x "$(command -v VBoxClient)" ]]; then                                                                                                ~  
+#   exec --no-startup-id VBoxClient --clipboard 
+#   exec --no-startup-id VBoxClient --draganddrop 
+#   exec --no-startup-id VBoxClient --seamless 
+#   exec --no-startup-id VBoxClient --display
+# fi

@@ -57,20 +57,22 @@ This is a complete development configuration using git, vim, tmux, i3, and bash 
 - [jedi-vim](https://github.com/davidhalter/jedi-vim) - python autocomplete and function prototypes
 - [neocomplete](https://github.com/Shougo/neocomplete.vim) - miscellaenous autocomplete
 
-## Installation Machine virtuelle vagrant
+### Installation & Maintenance
+
+#### Installation Machine virtuelle vagrant
 
     $ git clone https://github.com/mobilefirstcentury/dotfiles.git
     $ cd dotfiles
     $ vagrant up
     $ vagrant ssh
 
-## Installation permanente
+#### Installation permanente
 
     $ git clone https://github.com/alanctkc/dotfiles.git
     $ cd dotfiles
     $ ./bootstrap.sh
 
-### Options
+#### Options
 
 `--git-name "[name]"` - Specify the full user.name for git configuration  
 `--git-email [email] ` - Specify the full user.email for git configuration  
@@ -83,7 +85,7 @@ This is a complete development configuration using git, vim, tmux, i3, and bash 
 `--no-tmux` - Exclude tmux configuration  
 `--no-ipython` - Exclude ipython configuration  
 
-### Backups
+#### Backups
 
 By default, backups of your current dotfiles are created at `~/.filename.dotbackup`.
 
@@ -91,18 +93,18 @@ To delete the backups:
 
     $ ./bootstrap.sh --delete-backups
 
-### Updating
+#### Updating
 
     $ ./bootstrap.sh --update
 
-## Software
+#### Software
 
-### Ubuntu
+##### Ubuntu
 
     $ sudo apt-get install git vim-nox zsh tmux i3 ranger python python-dev python-setuptools curl
 
 
-### Python tools
+##### Python tools
 
 IPython is a fantastic python interactive shell, and flake8 lets vim show you where you're not adhering to python syntax or coding style.
 
@@ -114,16 +116,36 @@ IPython is a fantastic python interactive shell, and flake8 lets vim show you wh
 TODO 
 ------
 
+### Bugs
 
-### Vagrant 
+#### Lancement I3 depuis lightdm (Ubuntu) 
+
+Quand on lance i3 directement depuis l'écran de login de Ubuntu (Lightdm), les fichiers de startup (.xinitrc, .zlogin) ne sont pas sourcés.
+J'ai donc des problèmes d'initalisation de la session:  obligation de faire un 'setxkbmap -layout fr' pour avoir le clavier français par exemple.
+
+#### Initialisation spécifiques l'environnement est une Machine virtuelle.
+
+Dans ~/dotfiles/.i3/config , on veut lancer VboxClient (pour la prise en charge de la communication avec la machine host) uniquement si on est dans une machine virtuelle.
+Pour ça on doit tester la présence de l'application VboxClient mais apparemment le fichier config de i3 ne supporte pas les scripts bash.
++   créer un repertoire scripts dotfiles
++   y déplacer le fichier bootstrap
++   créer un script qui fait la vérification et le lancement de VboxClient (reprendre la code commenté dans i3/config)
++   Lancer ce script depuis i3/config
+
+
+
+# Ameliorations
+
+##### Vagrant 
 + pour valider, tester bootstrap sur une machine vierge dans vagrant.
 + faire marcher le fichier Vagrant file pour une installation directe avec vagrant up
 
 
-# Autostart Ubuntu. Faire les actions suivantes dans un autostart pour Ubuntu
+#### Autostart Ubuntu. Faire les actions suivantes dans un autostart pour Ubuntu
 
-# I - On est obligé de faire cette modif pour permettre de lancer I3 sur VT8 depuis Ubuntu, 
-# Sinon on a un message d'erreur. Bien sur on s'assure que l'ajout n'est fait qu'une fois.
+##### I - On est obligé de faire cette modif pour permettre de lancer I3 sur VT8 depuis Ubuntu, 
+##### Sinon on a un message d'erreur. Bien sur on s'assure que l'ajout n'est fait qu'une fois.
+```
 [[ ! -n $(grep "\[MFC" /etc/X11/Xwrapper.config) ]] && {
 cat >> /etc/X11/Xwrapper.config << EOL
 # [MFC DOTFILES] Modification pour permettre la lancement d'une session sur VT8 depuis Ubuntu.
@@ -131,39 +153,38 @@ allowed_users=anybody
 # [MFC FIN MODIF]
 EOL 
 }
+```
+
+##### II Transferer le code qui lance startx en VT pour Ubuntu dans un autostart 
+##### Code est pour l'instant dans .zlogin qui n'est pas lancé sur Ubuntu
 
 
-# II Transferer le code qui lance startx en VT pour Ubuntu dans un autostart 
-# Code est pour l'instant dans .zlogin qui n'est pas lancé sur Ubuntu
 
-
-
-# Install Tree
+#### Install Tree
 sudo apt-get install tree
 
-# Install Vundle
+#### Install Vundle
 $ git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/Vundle.vim
 
-# Modifications sur bootstrap.sh
+#### Modifications sur bootstrap.sh
  eliminer l'installation des plugins vundle (Indiquer dans un Readme qu'il faut lancer Vim puis faire ":PluginInstall" après l'execution de bootstrap.sh
  créer le lien .oh-my-zsh (vérifier d'abord pourquoi ce n'est pas fait de base)
 
-#Install Conky
+####Install Conky
 $ sudo apt-get install conky-all
 $ chmod +x /home/rachid/dotfiles/.i3/conky/conky-i3bar
 
-# install i3 
+#### install i3 
 $ sudo apt-get install
-# Verifier que les dépendances i3lock et i3status i3bar sont bien installées
 
-# Install autojump 
-# Sinon ça provoque une erreur dans zshrc (en relation avec oh-my-zsh où ce plugin est déclaré)
+#### Install autojump 
+#### Sinon ça provoque une erreur dans zshrc (en relation avec oh-my-zsh où ce plugin est déclaré)
 $ sudo apt-get install autojump
  
-#Install feh
+####Install feh
 sudo apt-get install feh
 
-# Adapter le mapping clavier 
+#### Adapter le mapping clavier 
  - swapper caps lock et escape 
     Pour Ubuntu (Session X), il faut créer le fichier ~/.config/autostart/.desktop.(cf http://askubuntu.com/questions/598195/how-to-add-a-script-to-startup-applications-from-the-command-line)
     Pour les consoles virtuelles (Debian):

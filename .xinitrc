@@ -12,6 +12,7 @@ if [ -d /etc/X11/xinit/xinitrc.d ]; then
   done
   unset f
 fi
+
 setxkbmap -layout fr
 #exec xscreensaver &
 #xcompmgr -c -f -r 28 D 10 &
