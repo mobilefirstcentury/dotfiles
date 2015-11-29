@@ -132,7 +132,8 @@ Pour ça on doit tester la présence de l'application VboxClient mais apparemmen
 +   créer un script qui fait la vérification et le lancement de VboxClient (reprendre la code commenté dans i3/config)
 +   Lancer ce script depuis i3/config
 
-
+#### Niveau de battery dans conky
+Le niveau de battery affiche N/A ...  
 
 # Ameliorations
 

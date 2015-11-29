@@ -41,8 +41,7 @@ COMPLETION_WAITING_DOTS="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-#plugins=(git autojump history-substring-search)
-plugins=(git autojump )
+plugins=(git autojump history-substring-search)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -124,20 +123,20 @@ setopt NO_HIST_BEEP # Don't beep
 setopt SHARE_HISTORY # Share history between session/terminals
 #export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND" # save command to HISTFILE in real time 
 
-# # Bindings liés à history-substring-search (plugin oh-my-zsh)
-# # bind UP and DOWN arrow keys
-# zmodload zsh/terminfo
-# bindkey "$terminfo[kcuu1]" history-substring-search-up
-# bindkey "$terminfo[kcud1]" history-substring-search-down
-#
-# # bind UP and DOWN arrow keys (compatibility fallback
-# # for Ubuntu 12.04, Fedora 21, and MacOSX 10.9 users)
-# bindkey '^[[A' history-substring-search-up
-# bindkey '^[[B' history-substring-search-down
-#
-# # bind k and j for VI mode
-# bindkey -M vicmd 'k' history-substring-search-up
-# bindkey -M vicmd 'j' history-substring-search-down
+# Bindings liés à history-substring-search (plugin oh-my-zsh)
+# bind UP and DOWN arrow keys
+zmodload zsh/terminfo
+bindkey "$terminfo[kcuu1]" history-substring-search-up
+bindkey "$terminfo[kcud1]" history-substring-search-down
+
+# bind UP and DOWN arrow keys (compatibility fallback
+# for Ubuntu 12.04, Fedora 21, and MacOSX 10.9 users)
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+
+# bind k and j for VI mode
+bindkey -M vicmd 'k' history-substring-search-up
+bindkey -M vicmd 'j' history-substring-search-down
 
 
 

@@ -20,3 +20,4 @@
 .config/unity-tweak-tool/
 .vim/.netrwhist
 .config/gtk-2.0/
+.oh-my-zsh/cache/*

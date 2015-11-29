@@ -38,9 +38,9 @@ TEXT
 
 [
 
-   { "full_text" : "❖ Home: ${fs_used /home} / ${fs_size /home} " , "seperator" : false  , "color" : "\#00BFFF" },
+   { "full_text" : " ❖ Home: ${fs_used /home} / ${fs_size /home} " , "seperator" : false  , "color" : "\#00BFFF" },
    { "full_text" : " ❖ Root: ${fs_used /} / ${fs_size /} " , "color" : "\#00BFFF" },
    { "full_text" : " ☀ Ram ${memperc}% " , "color" : ${if_match ${memperc}<90}"\#00BFFF"${else}"\#FE2E2E"${endif} },
-   { "full_text" : " ${time %B %d  %r }" , "color" : "\#00BFFF"}
-
+   { "full_text" : " █ ${apcupsd_charge}%" , "color" : "\#00BFFF"},
+   { "full_text" : " ${time %B %d %R }" , "color" : "\#00BFFF"}
 ],
