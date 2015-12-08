@@ -121,6 +121,17 @@ configure_vim() {
 #    vim +PluginInstall +qall > /dev/null 2>&1
 }
 
+
+configure_help() {
+    echo "Configuring help..."
+    link_directory help help
+}
+
+configure_scripts() {
+    echo "Configuring scripts..."
+    link_directory .scripts .scripts
+}
+
 configure_tmux() {
     echo "Configuring tmux..."
     link_file .tmux.conf .tmux.conf
@@ -159,6 +170,8 @@ delete_backups() {
     rm -rf $HOME/.zmodules.dotbackup
     rm -rf $HOME/.zsh_modules.dotbackup
     rm -rf $HOME/.zsh_scripts.dotbackup
+    rm -rf $HOME/help.dotbackup
+    rm -rf $HOME/.scripts.dotbackup
 }
 
 update() {
@@ -235,6 +248,9 @@ fi
 if [ "$NO_VIM" != 1 ]; then
     configure_vim
 fi
+
+configure_help
+configure_scripts
 
 echo "Updating configs ..."
 [ -d $HOME/dotfiles/.config ] && link_directory .config .config

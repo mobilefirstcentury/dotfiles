@@ -27,13 +27,47 @@ URxvt.scrollBar: false
 URxvt.letterSpace: -1
 URxvt.url-launcher: /usr/bin/dwb
 URxvt.matcher.button: 1
-URxvt.perl-ext-common: default,tabbedex,matcher
+URxvt.perl-ext-common: default,tabbedex,matcher,clipboard,keyboard-select
+
 !URxvt.keysym.C-Up:     perl:font-size:increase
 !URxvt.keysym.C-Down:   perl:font-size:decrease
 !URxvt.keysym.C-S-Up:   perl:font-size:incglobal
 !URxvt.keysym.C-S-Down: perl:font-size:decglobal
 URxvt.tabbed.new-button: false
 Xxvt.intensityStyles: false
+
+! N'affiche plus le rectangle d'information "KeyCAP" quand on fait un Control-C
+URxvt.iso14755 : false
+
+! URxvt.keysym.M-c:   perl:clipboard:copy
+! URxvt.keysym.M-v:   perl:clipboard:paste
+! URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
+
+! URxvt.keysym.C-c:   perl:clipboard:copy
+! URxvt.keysym.C-v:   perl:clipboard:paste
+
+
+! URxvt.keysym.Shift-Control-C: perl:clipboard:copy
+! URxvt.keysym.Shift-Control-V: perl:clipboard:paste
+
+URxvt.keysym.Control-c: perl:clipboard:copy
+URxvt.keysym.Control-v: perl:clipboard:paste
+
+URxvt.clipboard.copycmd:  xclip -i -selection clipboard
+URxvt.clipboard.pastecmd: xclip -o -selection clipboard
+
+
+URxvt.clipboard.autocopy:  true
+
+! URxvt.xselection.copycmd:  xclip -i 
+! URxvt.xselection.pastecmd: xclip -o 
+!
+! URxvt.keysym.Shift-Control-Y: perl:xselection:copy
+! URxvt.keysym.Shift-Control-P: perl:xselection:paste
+
+URxvt.keysym.M-Escape: perl:keyboard-select:activate
+URxvt.keysym.M-s: perl:keyboard-select:search
+
 
 !Solarized color scheme for the X Window System
 !

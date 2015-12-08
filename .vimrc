@@ -24,11 +24,20 @@ nnoremap <leader>sv :source $MYVIMRC<CR>:redraw<CR>:echo $MYVIMRC 'reloaded'<CR>
 
 set backup      " enable backup files
 set writebackup " enable backup files
-set swapfile    " enable swap files (useful when loading huge files)
+set noswapfile    " disable swap files (useful when loading huge files but a pain in the ass when vim is killed and and you have a bunch of warnings on file reopening)
+
 
 let s:vimdir=$HOME . "/.vim"
-let &backupdir=s:vimdir . "/backup"  " backups location
-let &directory=s:vimdir . "/tmp"     " swap location
+" Les doubles slash sont sensés éviter les collision de nom dans les fichiers
+" temporaires de vim
+set backupdir=~/.vim/backup//
+set directory=~/.vim/swap//
+set undodir=~/.vim/undo//
+
+
+let &backupdir=s:vimdir . "/backup//"  " backups location
+let &directory=s:vimdir . "/swap//"     " swap location
+let &undodir=s:vimdir . "/undo//"     " undo location
 
 if exists("*mkdir")
   if !isdirectory(s:vimdir)
@@ -39,6 +48,9 @@ if exists("*mkdir")
   endif
   if !isdirectory(&directory)
     call mkdir(&directory, "p")
+  endif
+  if !isdirectory(&undodir)
+    call mkdir(&undodir, "p")
   endif
 endif
 
@@ -77,13 +89,15 @@ cnoremap <C-a> <home>
 " CTRL+E moves to end of line in command mode
 cnoremap <C-e> <end>
 
-" CTRL+C closes the command window
-if has("autocmd")
-  augroup command
-    autocmd!
-    autocmd CmdwinEnter * noremap <buffer> <silent> <C-c> <ESC>:q<CR>
-  augroup END
-endif
+" " [RBC] C-c colle le clipboard. Je dois donc desactiver les lignes suivantes.
+" " Est-ce que ça posera un problème ? 
+" " CTRL+C closes the command window
+" if has("autocmd")
+"   augroup command
+"     autocmd!
+"     autocmd CmdwinEnter * noremap <buffer> <silent> <C-c> <ESC>:q<CR>
+"   augroup END
+" endif
 
 " -- display -------------------------------------------------------------------
 
@@ -169,7 +183,12 @@ nnoremap <silent> <leader>l :set list! list?<CR>
 
 set noerrorbells      " shut up
 " set visualbell t_vb=  " use visual bell instead of error bell
-set mousehide         " hide mouse pointer when typing
+
+" Enable use of mouse to position cursor. Beware, set mouse=a disable copy to
+" primary buffer from mouse selection. With set mouse=r it's ok.
+" copy from mouse selection. With mouse=r
+" set mousehide         " hide mouse pointer when typing
+set mouse=a
 
 set showcmd     " show partial command line (default)
 set cmdheight=1 " height of the command line
@@ -284,11 +303,12 @@ noremap H ^
 " move to end of line (when not using mac keyboard)
 noremap L g_
 
+" [TODO] J'utilise C-y par ailleur. Voir ce qu'on doit faire avec ce qui suit.
 " scroll slightly faster
-nnoremap <C-e> 2<C-e>
-nnoremap <C-y> 2<C-y>
-map <C-Up> <C-y>
-map <C-Down> <C-e>
+" nnoremap <C-e> 2<C-e>
+" nnoremap <C-y> 2<C-y>
+" map <C-Up> <C-y>
+" map <C-Down> <C-e>
 
 set startofline " move to first non-blank of the line when using PageUp/PageDown
 
@@ -493,6 +513,8 @@ noremap <silent> <leader>s :call Preserve("%s/\\s\\+$//e")<CR>
 " <leader>$ fixes mixed EOLs (^M)
 noremap <silent> <leader>$ :call Preserve("%s/<C-V><CR>//e")<CR>
 
+" Copy Paste Settings
+
 " use <leader>d to delete a line without adding it to the yanked stack
 nnoremap <silent> <leader>d "_d
 vnoremap <silent> <leader>d "_d
@@ -512,19 +534,50 @@ vnoremap <silent> p "_dP
 vnoremap <silent> P "_dp
 
 " always share the OS clipboard
-set clipboard=unnamed,unnamedplus
+set clipboard=unnamed,unnamedplus,autoselect
 
-"Ctrl-c to copy in + buffer from visual mode
-vmap <C-c> "+y
+" CTRL-X and SHIFT-Del are Cut
+vnoremap <C-X> "+x
+vnoremap <S-Del> "+x
+
+" CTRL-C and CTRL-Insert are Copy
+vnoremap <C-v> "+y
+vnoremap <C-Insert> "+y
+
+" CTRL-V and SHIFT-Insert are Paste
+" map <C-V>   	"+gP
+map <S-Insert>  	"+gP
+
+" cmap <C-V>  	<C-R>+
+cmap <S-Insert> 	<C-R>+
+
+" " Pasting blockwise and linewise selections is not possible in Insert and
+" " Visual mode without the +virtualedit feature.  They are pasted as if they
+" " were characterwise instead.
+" " Uses the paste.vim autoload script.
+"
+" exe 'inoremap <script> <C-V>' paste#paste_cmd['i']
+" exe 'vnoremap <script> <C-V>' paste#paste_cmd['v']
+
+imap <S-Insert> 	<C-V>
+vmap <S-Insert> 	<C-V>
+
+" Use CTRL-Q to do what CTRL-V used to do
+noremap <C-Q>   	<C-V>
+
+
+
+"Ctrl-c to copy in *  buffer from visual mode
+" vnoremap <C-s> "*y
 
 "Ctrl-p to paste from the + register in cmd mode
-map <C-p> "+p
+" map <C-P> "*p
 
 "Ctrl-p to paste from the + register while editing
-imap <C-p> <esc><C-p>
+" imap <C-p> <esc>l"*pa
 
 "Ctrl-s to save file
-map <C-s> <:><w>
+"map <C-s> <:><w>
 
 
 
@@ -770,11 +823,8 @@ Plugin 'honza/vim-snippets'
 Plugin 'Raimondi/delimitMate'
 Plugin 'Lokaltog/vim-easymotion'
 Plugin 'gorkunov/smartpairs.vim'
-
-
-
-
-
+Plugin 'gabrielelana/vim-markdown'
+Plugin 'godlygeek/tabular'
 
 if has('lua') && (v:version > 703 || v:version == 703 && has('patch885'))
     Plugin 'Shougo/neocomplete.vim'

@@ -4,12 +4,54 @@ Generic dotfiles for all MFC machines
 Overview
 --------
 
-This is a complete development configuration using git, vim, tmux, i3, and bash or zsh. 
+MFCWorkstation est une distribution mouse-less. Il est bien sûr possible d'utiliser la sousis mais la selection des logiciels 
+ainsi que leur configuration est centrée autour de la console et des raccourcis clavier VIM.
+
+
+Remarque preliminaire
+---------------------
+
+### Documentation 
+Pour l'instant c'est un peu le bordel pour suivre les instructions d'install de la worstation. On a 6  fichiers !!!!
++ ~/Documents/_WORKSTATION/_INSTALL/initMFCWorkstation.2.0: Ce fichier est  un gros bordel pas propre: il faut absolument effacer tout les points qui ont déjà été portés dans les autres fichiers.
++ ~notes/workstation.md qui contient les modifs notées en live et qui devrait passer dans un le todo du repo github des dotfiles.
++ ~/dotfiles/README.md qui contient le todo du repo
++ ~/dotfiles/bootstrap.sh qui script les modifs pour une installation automatiques (A terme une grande partie du contenu des fichiers ci-dessus devraient être portée dans bootstrap.sh)
++ ~/Documents/_WORKSTATION/_INSTALL/setupUbuntu qui contient d'autres informations d'installation (!!)à
++ ~/Documents/_WORKSTATION/_TODO/debug.md qui contient les modifications en cours qui n'ont encore permit de résoudre un problème.
 
 
 
 
 ### Features
+
+
+#### Copier/Coller
+Vim offre de superbes fonctionnalités, est extremement personnalisable, est disponible sur toutes les machines unix, est utilisable en remote via un un lien ssh sur une ligne bas débit.
+Vim serait un outil idéal pour le codeur s'il n'avait pas des problèmes incompréhensibles pour gérér ... le copier/coller!
+
+La solution (partielle) retenue pour la MFCWorkstation est la suivante:
+* contrairement à la tradition linux on fusionne la selection primaire et le clipboard. Cela permet de simplifier la compatibilité de Vim avec le reste du système.
+* En dehors de VIM on utilisera CTL-C ou selection souris et CTL-V ou clic bouton du milieu pour copier/coller :
+  * ** A noter ** pour synchroniser clipboard et primary dans toutes les applications on utilise xcmenu (un clipboard manager) que j'ai modifié le fichier config.h et recompilé pour obtenir le comportement voulu.
+  * Xcmenu maintient un historique des clipboards (et selections) accessible via win+c depuis dmenu dans i3: on peut donc laisser les selections souris écraser le clipboard puisqu'on peut retrouver facilement la valeur du clipboard dans l'historique affiché par xcmenu.
+* On utilisera également la souris : tout texte selectionné avec la souris se retrouve dans le clipboard.
+* le terminal URxvt (dans lequel vit VIM) est configuré pour synchroniser clipboard et selection primaire
+* on utilisera un manager de clipboard pour faire la même chose dans les autres applications X utilisées.
+* Vim est également configuré pour synchroniser les registres "* (lié à la selection primaire système)  et "+ (lié au clipboard système).  
+  * configuration:
+    * set mouse=a
+    * set clipboard=unnamed,unnamedplus,autoselect
+  * Par contre Vim fait exception car on ne peut pas utiliser C-c/C-v pour copier/coller. Il faut avoir recours au jargon VIM: y et p.
+  * De plus il y deux modes de selections à la souris dans VIM:
+    * par défaut c'est VIM qui prend en charge les evenements souris et qui essaie de (mal) synchroniser les selections avec buffers internes et le système:
+      * Immediatement après la selection, le texte selectionné est bien dans "* mais pas dans "+ :(
+      * Par contre si on colle cette selection DANS VIM avec le bouton de milieu de la souris, alors le texte se retrouve aussi dans "+.
+    * si on appuye sur Shift en faisant la selection souris, alors ce n'est pas VIM qui maître mais URxvt:
+      * URxvt gère bien la synchronisation des buffers et le texte se retrouve bien dans le clipboard et la selection primaire,
+      * par contre Urxvt ne connait pas le contenu de VIM est copie (entre autre) les numéros de lignes avec le texte ....
+
+En résumé: même en simplifiant pour n'avoir qu'un seul buffer, on a des raccourcis clavier et, pire des comportements, qui ne sont pas uniformes sur toutes les applications :(
 
 #### Shell aliases
 - `gst` - git status
@@ -111,88 +153,5 @@ IPython is a fantastic python interactive shell, and flake8 lets vim show you wh
     $ sudo easy_install pip
     $ sudo easy_install ipython
     $ sudo easy_install flake8
-
-
-TODO 
-------
-
-### Bugs
-
-#### Lancement I3 depuis lightdm (Ubuntu) 
-
-Quand on lance i3 directement depuis l'écran de login de Ubuntu (Lightdm), les fichiers de startup (.xinitrc, .zlogin) ne sont pas sourcés.
-J'ai donc des problèmes d'initalisation de la session:  obligation de faire un 'setxkbmap -layout fr' pour avoir le clavier français par exemple.
-
-#### Initialisation spécifiques l'environnement est une Machine virtuelle.
-
-Dans ~/dotfiles/.i3/config , on veut lancer VboxClient (pour la prise en charge de la communication avec la machine host) uniquement si on est dans une machine virtuelle.
-Pour ça on doit tester la présence de l'application VboxClient mais apparemment le fichier config de i3 ne supporte pas les scripts bash.
-+   créer un repertoire scripts dotfiles
-+   y déplacer le fichier bootstrap
-+   créer un script qui fait la vérification et le lancement de VboxClient (reprendre la code commenté dans i3/config)
-+   Lancer ce script depuis i3/config
-
-#### Niveau de battery dans conky
-Le niveau de battery affiche N/A ...  
-
-# Ameliorations
-
-##### Vagrant 
-+ pour valider, tester bootstrap sur une machine vierge dans vagrant.
-+ faire marcher le fichier Vagrant file pour une installation directe avec vagrant up
-
-
-#### Autostart Ubuntu. Faire les actions suivantes dans un autostart pour Ubuntu
-
-##### I - On est obligé de faire cette modif pour permettre de lancer I3 sur VT8 depuis Ubuntu, 
-##### Sinon on a un message d'erreur. Bien sur on s'assure que l'ajout n'est fait qu'une fois.
-```
-[[ ! -n $(grep "\[MFC" /etc/X11/Xwrapper.config) ]] && {
-cat >> /etc/X11/Xwrapper.config << EOL
-# [MFC DOTFILES] Modification pour permettre la lancement d'une session sur VT8 depuis Ubuntu.
-allowed_users=anybody
-# [MFC FIN MODIF]
-EOL 
-}
-```
-
-##### II Transferer le code qui lance startx en VT pour Ubuntu dans un autostart 
-##### Code est pour l'instant dans .zlogin qui n'est pas lancé sur Ubuntu
-
-
-
-#### Install Tree
-sudo apt-get install tree
-
-#### Install Vundle
-$ git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/Vundle.vim
-
-#### Modifications sur bootstrap.sh
- eliminer l'installation des plugins vundle (Indiquer dans un Readme qu'il faut lancer Vim puis faire ":PluginInstall" après l'execution de bootstrap.sh
- créer le lien .oh-my-zsh (vérifier d'abord pourquoi ce n'est pas fait de base)
-
-####Install Conky
-$ sudo apt-get install conky-all
-$ chmod +x /home/rachid/dotfiles/.i3/conky/conky-i3bar
-
-#### install i3 
-$ sudo apt-get install
-
-#### Install autojump 
-#### Sinon ça provoque une erreur dans zshrc (en relation avec oh-my-zsh où ce plugin est déclaré)
-$ sudo apt-get install autojump
- 
-####Install feh
-sudo apt-get install feh
-
-#### Adapter le mapping clavier 
- - swapper caps lock et escape 
-    Pour Ubuntu (Session X), il faut créer le fichier ~/.config/autostart/.desktop.(cf http://askubuntu.com/questions/598195/how-to-add-a-script-to-startup-applications-from-the-command-line)
-    Pour les consoles virtuelles (Debian):
-        A
-        * modifier le fichier  /etc/default/keyboard (privilege admin)  (cf  http://www.emacswiki.org/emacs/MovingTheCtrlKey)
-        * $sudo dpkg-reconfigure -phigh console-setup 
-
- - swapper left control et left shift : ??
 
 

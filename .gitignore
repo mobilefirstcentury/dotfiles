@@ -21,3 +21,15 @@
 .vim/.netrwhist
 .config/gtk-2.0/
 .oh-my-zsh/cache/*
+.config/enchant/
+.config/gedit/
+.config/totem/
+.config/Trolltech.conf
+.config/VirtualBox/
+.config/dwb/
+.config/htop/
+.config/pavucontrol.ini
+.config/pulseaudio-ctl/
+.config/zathura/
+.vim/*.tmp
+

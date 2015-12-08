@@ -47,7 +47,7 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=.:$HOME/bin:/usr/local/bin:$PATH:$HOME/.scripts
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
@@ -68,7 +68,7 @@ export PATH=$HOME/bin:/usr/local/bin:$PATH
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
 else
-  export EDITOR='mvim'
+  export EDITOR='vim'
 fi
 
 # Compilation flags
@@ -102,6 +102,11 @@ setopt interactivecomments
 setopt noclobber
 
 # export LESS="-mN"  # where are we in the file read. In percentage and absolute.
+export LESS='-g -i -M -R -S -w  -z-4'
+# export PAGER=/usr/local/bin/vimpager
+# alias less=$PAGER
+alias zless=$PAGER
+
 
 # HISTORY
 
@@ -193,7 +198,17 @@ alias trm='trash-put'
 alias tls='trash-ls'
 alias tempty='trash-empty'
 alias trestore='trash-restore'
+alias fu="python ~/scripts/fu/fu"
+
+# Folder Alias 
+hash -d help=~/Dev/Help
+hash -d notes=~/Documents/_NOTES
+
 
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+#
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+ack-grep -hi -w -B ${2:-2} $1 ~/dotfiles/help | sed "/^#\|$1\|^$/!d" 
+
