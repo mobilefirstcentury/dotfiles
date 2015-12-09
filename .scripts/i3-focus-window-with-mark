@@ -1,0 +1,6 @@
+#!/bin/bash
+marks=($(i3-msg -t get_marks | jq --raw-output '.[]'))
+if [[ ${#marks[@]} -gt 0 ]]; then
+	rep=$(printf "%s\n" "${marks[@]}" | rofi -P "Marks" -dmenu)
+	i3-msg '[con_mark="'$rep'"] focus'
+fi

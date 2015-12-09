@@ -57,17 +57,40 @@ bindsym $mod+c exec --no-startup-id xcmenuctrl
 for_window [window_role="pop-up"] floating enable,move absolute center
 
 # ASSIGN WORKSPACE VARIABLES
-set $WS1 1|dev
-set $WS2 2|test
-set $WS3 3|web
-set $WS4 4|doc
-set $WS5 5|stuff
+set $WS1 dev
+set $WS2 test
+set $WS3 web
+set $WS4 doc
+set $WS5 stuff
 set $WS6 6
 set $WS7 7
 set $WS8 8
-set $WS9 9|monitor
-set $WS10 10|media
+set $WS9 monitor
+set $WS10 media
 
+# switch to workspace
+bindsym $mod+ampersand workspace number 1 $WS1
+bindsym $mod+eacute workspace number 2 $WS2
+bindsym $mod+quotedbl workspace number 3 $WS3
+bindsym $mod+apostrophe workspace number 4 $WS4
+bindsym $mod+parenleft workspace number 5 $WS5
+bindsym $mod+minus workspace number 6 $WS6
+bindsym $mod+egrave workspace number 7 $WS7
+bindsym $mod+underscore workspace number 8 $WS8
+bindsym $mod+ccedilla workspace number 9 $WS9
+bindsym $mod+agrave workspace number 10 $WS10
+
+# move focused container to workspace
+bindsym $mod+Shift+ampersand move container to workspace number 1 $WS1
+bindsym $mod+Shift+eacute move container to workspace number 2 $WS2
+bindsym $mod+Shift+quotedbl move container to workspace number 3 $WS3
+bindsym $mod+Shift+apostrophe move container to workspace number 4 $WS4
+bindsym $mod+Shift+parenleft move container to workspace number 5 $WS5
+bindsym $mod+Shift+minus move container to workspace number 6 $WS6
+bindsym $mod+Shift+egrave move container to workspace number 7 $WS7
+bindsym $mod+Shift+underscore move container to workspace number 8 $WS8
+bindsym $mod+Shift+ccedilla move container to workspace number 9 $WS9
+bindsym $mod+Shift+agrave move container to workspace number 10 $WS10
 
 # WINDOW CONTROL 
 ## Float everything
@@ -135,29 +158,6 @@ bindsym $mod+a focus parent
 # focus the child container
 bindsym $mod+d focus child
 
-# switch to workspace
-bindsym $mod+1 workspace $WS1
-bindsym $mod+2 workspace $WS2
-bindsym $mod+3 workspace $WS3
-bindsym $mod+4 workspace $WS4
-bindsym $mod+5 workspace $WS5
-bindsym $mod+6 workspace $WS6
-bindsym $mod+7 workspace $WS7
-bindsym $mod+8 workspace $WS8
-bindsym $mod+9 workspace $WS9
-bindsym $mod+0 workspace $WS10
-
-# move focused container to workspace
-bindsym $mod+Shift+ampersand move container to workspace $WS1
-bindsym $mod+Shift+eacute move container to workspace $WS2
-bindsym $mod+Shift+quotedbl move container to workspace $WS3
-bindsym $mod+Shift+apostrophe move container to workspace $WS4
-bindsym $mod+Shift+parenleft move container to workspace $WS5
-bindsym $mod+Shift+minus move container to workspace $WS6
-bindsym $mod+Shift+egrave move container to workspace $WS7
-bindsym $mod+Shift+underscore move container to workspace $WS8
-bindsym $mod+Shift+ccedilla move container to workspace $WS9
-bindsym $mod+Shift+agrave move container to workspace $WS10
 
 # reload the configuration file
 bindsym $mod+Shift+C reload
@@ -278,12 +278,12 @@ bar {
 }
 
 # Append i3 layout
-exec --no-startup-id "i3-msg 'workspace 1|dev; append_layout ~/.i3/layouts/dev/workspace-1.json'"
-exec --no-startup-id "i3-msg 'workspace 2|test; append_layout ~/.i3/layouts/dev/workspace-2.json'"
-exec --no-startup-id "i3-msg 'workspace 3|web; append_layout ~/.i3/layouts/dev/workspace-3.json'"
-exec --no-startup-id "i3-msg 'workspace 4|doc; append_layout ~/.i3/layouts/dev/workspace-4.json'"
-exec --no-startup-id "i3-msg 'workspace 9|monitor; append_layout ~/.i3/layouts/dev/workspace-9.json'"
-exec --no-startup-id "i3-msg 'workspace 10|media; append_layout ~/.i3/layouts/dev/workspace-10.json'"
+exec --no-startup-id "i3-msg 'workspace 1|dev; append_layout ~/.i3/layouts/dev/workspace-1.json'"       #Workspace $WS1
+exec --no-startup-id "i3-msg 'workspace 2|test; append_layout ~/.i3/layouts/dev/workspace-2.json'"      #Workspace $WS2
+exec --no-startup-id "i3-msg 'workspace 3|web; append_layout ~/.i3/layouts/dev/workspace-3.json'"       #Workspace $WS3
+exec --no-startup-id "i3-msg 'workspace 4|doc; append_layout ~/.i3/layouts/dev/workspace-4.json'"       #Workspace $WS4
+exec --no-startup-id "i3-msg 'workspace 9|monitor; append_layout ~/.i3/layouts/dev/workspace-9.json'"   #Workspace $WS9
+exec --no-startup-id "i3-msg 'workspace 10|media; append_layout ~/.i3/layouts/dev/workspace-10.json'"   #Workspace $WS10
 
 
 ## BACKGROUND OPTIONS (STARTED IN .XINITRC)
@@ -315,7 +315,7 @@ exec --no-startup-id urxvt -name console-doc-topright -title alt
 
 exec --no-startup-id urxvt -name console-monitor-left -title main 
 exec --no-startup-id urxvt -name mtr-monitor-topright -title MTR -e mtr google.com
-exec --no-startup-id urxvt -name htop-monitor-bottomright -title HTOP -e htop
+exec --no-startup-id urxvt -name htop-monitor-bottomright -title htop -e htop
 
 
 exec --no-startup-id urxvt -name music-media-topleft -title music  -e cmus  

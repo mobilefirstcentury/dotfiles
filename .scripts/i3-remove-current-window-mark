@@ -1,0 +1,5 @@
+#!/bin/bash
+mark=$(i3-msg -t get_tree | jq --raw-output 'recurse | if .type? == "con" and .focused == true and .mark != null then .mark else empty end')
+if [[ -n "${mark}" ]]; then
+	i3-msg unmark ${mark} &> /dev/null
+fi

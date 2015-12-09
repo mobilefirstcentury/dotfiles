@@ -1,4 +1,0 @@
-#!/bin/bash
-
-ack -hi -w -B ${2:-2} $1 ~/help | sed "/^#\|$1\|^$/!d" 
-
