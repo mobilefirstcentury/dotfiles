@@ -15,6 +15,17 @@ fi
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
+# colors 
+# J'ai été obligé de modifier à la main les couleurs des terminaux et de les appliquer ici :
+# Les repertoires NTFS (sur HDD par example etaient illisibles)
+# en faisant un dircolors --print-database > $ZSH/dir_colors/base_colors puis de changer les couleurs de sticky files. 
+if [ "$TERM" != "dumb" ]; then
+    eval "`dircolors -b $ZSH/dir_colors/base_colors`"
+#    alias ls='ls --color=auto'
+    #alias dir='ls --color=auto --format=vertical'
+    #alias vdir='ls --color=auto --format=long'
+fi
+
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each

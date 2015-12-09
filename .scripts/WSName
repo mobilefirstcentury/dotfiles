@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Script to rename current workspace.
+# I3 creates new workspaces with a numbered names only witch is not very helpfull
+# So when creating a new workspace, you can rename.            
+# Please keep in mind that the name should begin with a number (workspaces are ordered alphabetically by i3)
+# Please follow the naming convention : number|name.
+# Example usage: WSName "7|WebApp"
+
+
+
+_current_workspace_name=$(i3-get-current-workspace)
+_current_workspace_number=`expr "$_current_workspace_name" : '^.\([0-9]*\)'`
+i3-msg "rename workspace $_current_workspace_name to $_current_workspace_number|$@" 1>null 
+# i3-msg "bindsym Mod4+$_current_workspace_number workspace $_current_workspace_number|$@"
+
+# echo "Le nom est $_current_workspace_name"
+# echo "Le numero est $_current_workspace_number"
+
+# ONumb="7|6777Z"
+# Stext="Hallo World"
+# echo `expr "$Stext" : '^\(.[a-z]*\)'` # Hallo
+# echo `expr "$Stext" : '.*World'`      # 11
+#
+# echo `expr "$ONumb" : '^\(.[0-9]*\)'` # Hallo
+#

@@ -1,0 +1,17 @@
+#!/bin/bash
+marks=($(i3-msg -t get_marks | jq --raw-output '.[]'))
+if [[ ${#marks[@]} -gt 0 ]]; then
+	target=$(printf "%s\n" "${marks[@]}" | rofi -P "Marks" -dmenu)
+	mark=$(i3-msg -t get_tree | jq --raw-output 'recurse | if .type? == "con" and .focused == true and .mark != null then .mark else empty end')
+	if [[ -z "${mark}" ]]; then
+		i3-msg 'mark _'
+		origin="_"
+	else
+		origin=${mark}
+	fi
+	i3-msg 'move window to mark '${target}
+	i3-msg '[con_mark="'${origin}'"] focus'
+	if [[ -z "${mark}" ]]; then
+		i3-msg 'unmark _'
+	fi
+fi

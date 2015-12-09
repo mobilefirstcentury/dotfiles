@@ -99,12 +99,55 @@ cnoremap <C-e> <end>
 "   augroup END
 " endif
 
+
+" -- new command to allow for output of shell execution in a scratch buffer
+"  Usage: :Shell ls -al or <leader>x
+" Only one window by command, if a window already exists for a command, it will be reused.
+" Possible to reexecute the command by typing <localleader>r in normal mode in a window opened by :Shell.
+" "<localleader>g go to the previous window.
+" The command :Shell! reexecute the last command.
+
+let s:_ = ''
+function! s:ExecuteInShell(command, bang)
+	let _ = a:bang != '' ? s:_ : a:command == '' ? '' : join(map(split(a:command), 'expand(v:val)'))
+
+	if (_ != '')
+		let s:_ = _
+		let bufnr = bufnr('%')
+		let winnr = bufwinnr('^' . _ . '$')
+		silent! execute  winnr < 0 ? 'belowright new ' . fnameescape(_) : winnr . 'wincmd w'
+		setlocal buftype=nowrite bufhidden=wipe nobuflisted noswapfile wrap number
+		silent! :%d
+		let message = 'Execute ' . _ . '...'
+		call append(0, message)
+		echo message
+		silent! 2d | resize 1 | redraw
+		silent! execute 'silent! %!'. _
+		silent! execute 'resize ' . line('$')
+		silent! execute 'syntax on'
+		silent! execute 'autocmd BufUnload <buffer> execute bufwinnr(' . bufnr . ') . ''wincmd w'''
+		silent! execute 'autocmd BufEnter <buffer> execute ''resize '' .  line(''$'')'
+		silent! execute 'nnoremap <silent> <buffer> <CR> :call <SID>ExecuteInShell(''' . _ . ''', '''')<CR>'
+		silent! execute 'nnoremap <silent> <buffer> <LocalLeader>r :call <SID>ExecuteInShell(''' . _ . ''', '''')<CR>'
+		silent! execute 'nnoremap <silent> <buffer> <LocalLeader>g :execute bufwinnr(' . bufnr . ') . ''wincmd w''<CR>'
+		nnoremap <silent> <buffer> <C-W>_ :execute 'resize ' . line('$')<CR>
+		silent! syntax on
+	endif
+endfunction
+command! -complete=shellcmd -nargs=* -bang Shell call s:ExecuteInShell(<q-args>, '<bang>')
+cabbrev shell Shell
+nnoremap <leader> <silent> <F11> :Shell!<CR>
+nnoremap <silent> <leader>x :Shell 
+
+
+
 " -- display -------------------------------------------------------------------
 
 set title       " change the terminal title
 "set lazyredraw  " do not redraw when executing macros
 set report=0    " always report changes
 set cursorline  " highlight current line
+set diffopt+=vertical
 
 "if has("autocmd")
 "  augroup vim
@@ -207,55 +250,58 @@ endif
 
 " ease reading in GUI mode by inserting space between lines
 set linespace=2
+" set foldenable        " enable folding
+" setlocal foldmethod=indent
+" let g:vim_markdown_folding_disabled=0 
 
-if has("folding")
-  set foldenable        " enable folding
-  set foldmethod=syntax " fold based on syntax highlighting
-  set foldlevelstart=99 " start editing with all folds open
-
-  " toggle folds
-  nnoremap <Space> za
-  vnoremap <Space> za
-
-  set foldtext=FoldText()
-  function! FoldText()
-    let l:lpadding = &fdc
-    redir => l:signs
-      execute 'silent sign place buffer='.bufnr('%')
-    redir End
-    let l:lpadding += l:signs =~ 'id=' ? 2 : 0
-
-    if exists("+relativenumber")
-      if (&number)
-        let l:lpadding += max([&numberwidth, strlen(line('$'))]) + 1
-      elseif (&relativenumber)
-        let l:lpadding += max([&numberwidth, strlen(v:foldstart) + strlen(v:foldstart - line('w0')), strlen(v:foldstart) + strlen(line('w$') - v:foldstart)]) + 1
-      endif
-    else
-      if (&number)
-        let l:lpadding += max([&numberwidth, strlen(line('$'))]) + 1
-      endif
-    endif
-
-    " expand tabs
-    let l:start = substitute(getline(v:foldstart), '\t', repeat(' ', &tabstop), 'g')
-    let l:end = substitute(substitute(getline(v:foldend), '\t', repeat(' ', &tabstop), 'g'), '^\s*', '', 'g')
-
-    let l:info = ' (' . (v:foldend - v:foldstart) . ')'
-    let l:infolen = strlen(substitute(l:info, '.', 'x', 'g'))
-    let l:width = winwidth(0) - l:lpadding - l:infolen
-
-    let l:separator = ' … '
-    let l:separatorlen = strlen(substitute(l:separator, '.', 'x', 'g'))
-    let l:start = strpart(l:start , 0, l:width - strlen(substitute(l:end, '.', 'x', 'g')) - l:separatorlen)
-    let l:text = l:start . ' … ' . l:end
-
-    return l:text . repeat(' ', l:width - strlen(substitute(l:text, ".", "x", "g"))) . l:info
-  endfunction
-endif
+" if has("folding")
+"   set foldenable        " enable folding
+"   set foldmethod=syntax " fold based on syntax highlighting
+"   set foldlevelstart=99 " start editing with all folds open
+"
+"   " toggle folds
+"   nnoremap <Space> za
+"   vnoremap <Space> za
+"
+"   set foldtext=FoldText()
+"   function! FoldText()
+"     let l:lpadding = &fdc
+"     redir => l:signs
+"       execute 'silent sign place buffer='.bufnr('%')
+"     redir End
+"     let l:lpadding += l:signs =~ 'id=' ? 2 : 0
+"
+"     if exists("+relativenumber")
+"       if (&number)
+"         let l:lpadding += max([&numberwidth, strlen(line('$'))]) + 1
+"       elseif (&relativenumber)
+"         let l:lpadding += max([&numberwidth, strlen(v:foldstart) + strlen(v:foldstart - line('w0')), strlen(v:foldstart) + strlen(line('w$') - v:foldstart)]) + 1
+"       endif
+"     else
+"       if (&number)
+"         let l:lpadding += max([&numberwidth, strlen(line('$'))]) + 1
+"       endif
+"     endif
+"
+"     " expand tabs
+"     let l:start = substitute(getline(v:foldstart), '\t', repeat(' ', &tabstop), 'g')
+"     let l:end = substitute(substitute(getline(v:foldend), '\t', repeat(' ', &tabstop), 'g'), '^\s*', '', 'g')
+"
+"     let l:info = ' (' . (v:foldend - v:foldstart) . ')'
+"     let l:infolen = strlen(substitute(l:info, '.', 'x', 'g'))
+"     let l:width = winwidth(0) - l:lpadding - l:infolen
+"
+"     let l:separator = ' … '
+"     let l:separatorlen = strlen(substitute(l:separator, '.', 'x', 'g'))
+"     let l:start = strpart(l:start , 0, l:width - strlen(substitute(l:end, '.', 'x', 'g')) - l:separatorlen)
+"     let l:text = l:start . ' … ' . l:end
+"
+"     return l:text . repeat(' ', l:width - strlen(substitute(l:text, ".", "x", "g"))) . l:info
+"   endfunction
+" endif
 
 " highlight SCM merge conflict markers
-match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
+" match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
 
 
 " -- buffers -------------------------------------------------------------------
@@ -787,6 +833,7 @@ call vundle#begin()
 
 " Plugins
 Plugin 'gmarik/Vundle.vim'
+Plugin 'gabrielelana/vim-markdown'
 Plugin 'kien/ctrlp.vim'
 Plugin 'nono/vim-handlebars'
 Plugin 'Glench/Vim-Jinja2-Syntax'
@@ -823,8 +870,9 @@ Plugin 'honza/vim-snippets'
 Plugin 'Raimondi/delimitMate'
 Plugin 'Lokaltog/vim-easymotion'
 Plugin 'gorkunov/smartpairs.vim'
-Plugin 'gabrielelana/vim-markdown'
 Plugin 'godlygeek/tabular'
+Plugin '907th/vim-auto-save'
+Plugin 'nelstrom/vim-markdown-folding'
 
 if has('lua') && (v:version > 703 || v:version == 703 && has('patch885'))
     Plugin 'Shougo/neocomplete.vim'
@@ -837,6 +885,7 @@ call vundle#end() "required
 
 " Turn filetype back on
 filetype plugin indent on
+
 
 
 " """"""""""""""""""""""""""""""""""""""""""""""""
@@ -868,7 +917,7 @@ let g:pymode_run = 0
 let g:pymode_lint = 0
 
 " Disable python folding
-let g:pymode_folding = 0
+" let g:pymode_folding = 0
 
 " Disable default pymode python options
 let g:pymode_options = 0
@@ -903,6 +952,30 @@ let g:vim_json_syntax_conceal = 0
 
 " Expand current split to fullscren/restore split size
 nmap <silent><leader>o :ZoomWin<CR>
+
+" Silence autosave 
+let g:auto_save_silent = 1  " do not display the auto-save notification
+
+" markdown-folding plugin folding option
+let g:markdown_fold_style = 'nested'
+
+" quelques mappings plus intuitifs pour les foldings
+" settings de markdown-folding
+"activate / desactivate foldingn
+nnoremap zz zi  
+"open a level
+nnoremap zo za 
+"zc close a level 
+"close all levels
+nnoremap <S-z><S-o> zR 
+"open all levels
+nnoremap <S-z><S-c> zM 
+"close all level but reveal the cursor. Only Me. 
+nnoremap zm zv 
+
+" Fugitive closes its buffers automatically
+autocmd BufReadPost fugitive://* set bufhidden=delete
+
 
 " ==================== Colors ====================
 
