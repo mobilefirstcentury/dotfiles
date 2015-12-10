@@ -887,8 +887,6 @@ call vundle#end() "required
 " Turn filetype back on
 filetype plugin indent on
 
-
-
 " """"""""""""""""""""""""""""""""""""""""""""""""
 " =============== Plugin Settings ================
 

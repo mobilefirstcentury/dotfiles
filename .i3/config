@@ -57,6 +57,7 @@ bindsym $mod+c exec --no-startup-id xcmenuctrl
 for_window [window_role="pop-up"] floating enable,move absolute center
 
 # ASSIGN WORKSPACE VARIABLES
+<<<<<<< HEAD
 set $WS1 dev
 set $WS2 test
 set $WS3 web
