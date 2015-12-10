@@ -27,7 +27,7 @@ URxvt.scrollBar: false
 URxvt.letterSpace: -1
 URxvt.url-launcher: /usr/bin/dwb
 URxvt.matcher.button: 1
-URxvt.perl-ext-common: default,tabbedex,matcher,clipboard,keyboard-select
+URxvt.perl-ext-common: default,tabbedex,matcher,selection,clipboard,keyboard-select
 
 !URxvt.keysym.C-Up:     perl:font-size:increase
 !URxvt.keysym.C-Down:   perl:font-size:decrease

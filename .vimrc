@@ -873,6 +873,7 @@ Plugin 'gorkunov/smartpairs.vim'
 Plugin 'godlygeek/tabular'
 Plugin '907th/vim-auto-save'
 Plugin 'nelstrom/vim-markdown-folding'
+Plugin 'tyru/open-browser.vim'
 
 if has('lua') && (v:version > 703 || v:version == 703 && has('patch885'))
     Plugin 'Shougo/neocomplete.vim'
@@ -976,7 +977,11 @@ nnoremap zm zv
 " Fugitive closes its buffers automatically
 autocmd BufReadPost fugitive://* set bufhidden=delete
 
-
+"Settings open-browser-vim plugin 
+let g:netrw_nogx = 1 " disable netrw's gx mapping.
+nmap gx <Plug>(openbrowser-smart-search)
+vmap gx <Plug>(openbrowser-smart-search)
+"
 " ==================== Colors ====================
 
 " Use syntax highlighting and color scheme

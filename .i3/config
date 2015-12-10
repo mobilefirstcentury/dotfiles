@@ -62,11 +62,13 @@ set $WS2 test
 set $WS3 web
 set $WS4 doc
 set $WS5 stuff
-set $WS6 6
-set $WS7 7
-set $WS8 8
+set $WS6 
+set $WS7 
+set $WS8 help 
 set $WS9 monitor
 set $WS10 media
+
+
 
 # switch to workspace
 bindsym $mod+ampersand workspace number 1 $WS1
@@ -91,6 +93,14 @@ bindsym $mod+Shift+egrave move container to workspace number 7 $WS7
 bindsym $mod+Shift+underscore move container to workspace number 8 $WS8
 bindsym $mod+Shift+ccedilla move container to workspace number 9 $WS9
 bindsym $mod+Shift+agrave move container to workspace number 10 $WS10
+
+# Tentative d'implementation d'un swap back mais les configs de i3 sont vraiment limités.
+# Faire ça plutôt en script python
+# set $BACKWS $WS1
+# set $THISWS $WS1
+# bindsym $mod+Shift+space set $THISWS $BACKWS; set $BACKWS i3-get-current-workspace; workspace $WSTHIS
+
+
 
 # WINDOW CONTROL 
 ## Float everything
@@ -147,10 +157,10 @@ bindsym $mod+t layout tabbed
 bindsym $mod+e layout default
 
 # toggle tiling / floating
-bindsym $mod+Shift+space floating toggle
+# bindsym $mod+Shift+space floating toggle
 
 # change focus between tiling / floating windows
-bindsym $mod+space focus mode_toggle
+bindsym $mod+Shift+space focus mode_toggle
 
 # focus the parent container
 bindsym $mod+a focus parent

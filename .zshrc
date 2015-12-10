@@ -118,6 +118,9 @@ export LESS='-g -i -M -R -S -w  -z-4'
 # alias less=$PAGER
 alias zless=$PAGER
 
+# I want zmv !
+autoload -U zmv
+alias mmv='noglob zmv -W'
 
 # HISTORY
 
