@@ -1,6 +1,12 @@
-Tar command examples
-By Ramesh Peram11:42No comments
-Create linux tar gz (Gzip) archive
+---- tar cheatsheet ----
+=======================
+
+# create an compressed archive 
+  $ tar czf foder.to.encrypt.tar.gz folder.to.encrypt
+
+# extract an encrypted archive (with tar and 7z)
+  $ sudo tar xf folder.to.encrypt.tar.gz  // Preserving owners and permissions needs priviledges
+
 
 #tar -czvf myarchive.tgz mydirectory/'
 #tar -czvf myarchive.tgz myfile1 myfile2 mydir1
@@ -51,3 +57,5 @@ tar --exclude='./folder' --exclude='./upload/folder2' -zcvf /backup/filename.tgz
 
 # extract archive with a new directory name
 mkdir pretty_name && tar xf ugly_name.tar -C pretty_name --strip-components 1
+
+

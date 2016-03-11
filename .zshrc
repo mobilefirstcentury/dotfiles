@@ -58,7 +58,7 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-export PATH=.:$HOME/bin:/usr/local/bin:$PATH:$HOME/.scripts
+export PATH=.:$HOME/bin:/usr/local/bin:$PATH:$HOME/.scripts:$HOME/scripts
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
@@ -75,12 +75,12 @@ export PATH=.:$HOME/bin:/usr/local/bin:$PATH:$HOME/.scripts
 
 
 # Preferred editor for local and remote sessions
-# [TODO] Verifier si la mention de mvim ci-dessous n'est pas une erreur.
 if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
+  export EDITOR='nvim'
 else
-  export EDITOR='vim'
+  export EDITOR='nvim'
 fi
+alias vim=nvim
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -107,10 +107,11 @@ set incsearch
 set hlsearch
 set cindent
 setopt cdablevars
-setopt correct
+#setopt correct
 setopt globdots
 setopt interactivecomments
 setopt noclobber
+unsetopt correct
 
 # export LESS="-mN"  # where are we in the file read. In percentage and absolute.
 export LESS='-g -i -M -R -S -w  -z-4'
@@ -127,8 +128,10 @@ alias mmv='noglob zmv -W'
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
 # The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+export HISTTIMEFORMAT="%F %T "
 HIST_STAMPS="dd/mm/yyyy"
-HISTFILESIZE=10000
+HISTFILESIZE=100000000
+#
 # no duplicates in history
 setopt hist_ignore_all_dups
 #commands with leading space are not historized
@@ -183,6 +186,10 @@ bindkey '^h' backward-delete-char
 bindkey '^[OA' history-beginning-search-backward
 bindkey '^[OB' history-beginning-search-forward
 
+
+# On utilise Ctrl-C pour la copy, On doit donc remmaper le Break pour killer une ligne de commande ou envoyer un sigkill au process courant
+bindkey '^G' send-break 
+
 # eliminates delay when escaping insert mode
 export KEYTIMEOUT=1
 
@@ -195,10 +202,12 @@ export KEYTIMEOUT=1
 alias h='history | less +G'
 hg() { history | grep -e  "^ *[0-9]* *$1" | less +G }
 alias ls='ls --color=auto'
+alias ack=ack-grep
 alias grep='grep --color=auto'
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
-alias fhere="find . -name "
+# alias fhere="find . -name "
+alias fhere="ag -S -g "
 alias ll="ls -lhAF"
 alias df="df -Tha --total"
 alias du="du -ach | sort -h"
@@ -213,10 +222,22 @@ alias tls='trash-ls'
 alias tempty='trash-empty'
 alias trestore='trash-restore'
 alias fu="python ~/scripts/fu/fu"
+alias dropbox='~/.dropbox-dist/dropbox.py'
 
 # Folder Alias 
-hash -d help=~/Dev/Help
+hash -d help=~/Help
 hash -d notes=~/Documents/_NOTES
+hash -d downloads=~/Downloads
+hash -d music=~/Music
+hash -d images=~/Pictures
+hash -d dev=~/Dev
+hash -d documents=~/Documents
+hash -d inbox=~/Documents/_INBOX
+hash -d trash=~/Documents/_TRASH
+hash -d temp=~/Documents/_TEMP
+hash -d todo=~/Documents/_TODO
+hash -d play=~/Documents/_PLAY
+hash -d admin=~/Documents/_ADMIN
 
 
 # Example aliases
@@ -226,3 +247,72 @@ hash -d notes=~/Documents/_NOTES
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
+
+
+# custom functions
+
+function mdread {
+    pandoc "$1" -f markdown -t html | lynx -stdin
+}
+
+PATH="/home/rachid/perl5/bin${PATH+:}${PATH}"; export PATH;
+PERL5LIB="/home/rachid/perl5/lib/perl5${PERL5LIB+:}${PERL5LIB}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="/home/rachid/perl5${PERL_LOCAL_LIB_ROOT+:}${PERL_LOCAL_LIB_ROOT}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"/home/rachid/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=/home/rachid/perl5"; export PERL_MM_OPT;
+
+# Quand on quitte ranger on se retrouve dans le repertoire à partir duquel on a lancé rcd
+# Quand on quitte ranger-cd on se retrouve dans le dernier repertoire exploré sous ranger
+function ranger-cd {
+    tempfile="$(mktemp -t tmp.XXXXXX)"
+    /usr/bin/ranger --choosedir="$tempfile" "${@:-$(pwd)}"
+    test -f "$tempfile" &&
+    if [ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]; then
+        cd -- "$(cat "$tempfile")"
+    fi
+    rm -f -- "$tempfile"
+}
+
+# Creating a dir and jumping in it. Doing il all the time. Quite boring.
+function mkcd()
+{
+mkdir $1 && eval cd $1
+}
+
+
+# On définit l'opérateur '=' pour effectuer des calculs en ligne de commande grâce à l'utilitaire wcacl
+= () {                                                                                                                                                                               ~  
+#    calc="$@"
+#    echo -ne "$calc\n" | wcalc | sed 's:^> ::g'  
+#    echo -ne "$calc\n" | wcalc 
+     # remember current working directory
+     cd .        
+
+     if [ $# -lt 1 ] || [ "$@" = "-h" ]; then
+       echo " = is based on wcalc.\n Type 'man wcalc' or 'wcalc' then 'help' for help."
+     else
+       wcalc $@
+     fi
+
+# for unknown reasons, wcalc change current directory to home dir ...
+     popd > /dev/null
+}            
+
+
+# load gpg-agent 
+if which gpg-agent >/dev/null; then
+  GPG_ENV_FILE="${HOME}/.gnupg/gpg-agent.env"
+  if ! pgrep gpg-agent >/dev/null; then
+    gpg-agent --daemon --write-env-file "${GPG_ENV_FILE}" >/dev/null
+  fi
+  if [ -f "${GPG_ENV_FILE}" ]; then
+    source "${GPG_ENV_FILE}"
+    export GPG_AGENT_INFO
+  fi
+fi
+
+# The next line updates PATH for the Google Cloud SDK.
+source '/home/rachid/google-cloud-sdk/path.zsh.inc'
+
+# The next line enables shell command completion for gcloud.
+source '/home/rachid/google-cloud-sdk/completion.zsh.inc'

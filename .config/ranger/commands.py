@@ -1122,3 +1122,16 @@ class grep(Command):
             action.extend(['-e', self.rest(1), '-r'])
             action.extend(f.path for f in self.fm.thistab.get_selection())
             self.fm.execute_command(action, flags='p')
+
+import subprocess
+class autojump(Command):
+    """
+    :j
+
+    Jump to directory using autojump
+    """
+    def execute(self):
+        arg = self.rest(1)
+        if arg:
+            directory = subprocess.check_output(["autojump"]+arg.split(), universal_newlines=True).strip()
+            self.fm.cd(directory)

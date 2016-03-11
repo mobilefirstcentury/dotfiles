@@ -1,4 +1,4 @@
-*emmet.txt*        *Emmet* for Vim
+-emmet.txt-        -Emmet- for Vim
 
              Emmet: vim plugins for HTML and CSS hi-speed coding
 =====================================================================================

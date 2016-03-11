@@ -1,4 +1,7 @@
 
+set langmenu=en_US.UTF-8    " sets the language of the menu (gvim)
+language en_US.UTF-8                 " sets the language of the messages / ui (vim)
+
 set encoding=utf-8  " set vim encoding to UTF-8
 set nocompatible    " the future is now, use vim defaults instead of vi ones
 set nomodeline      " disable mode lines (security measure)
@@ -34,10 +37,10 @@ set backupdir=~/.vim/backup//
 set directory=~/.vim/swap//
 set undodir=~/.vim/undo//
 
-
 let &backupdir=s:vimdir . "/backup//"  " backups location
 let &directory=s:vimdir . "/swap//"     " swap location
 let &undodir=s:vimdir . "/undo//"     " undo location
+let custompluginsdir=s:vimdir . "/.plugins//"     " undo location
 
 if exists("*mkdir")
   if !isdirectory(s:vimdir)
@@ -55,6 +58,7 @@ if exists("*mkdir")
 endif
 
 set backupskip+=*.tmp " skip backup for *.tmp
+set backupskip+=security.md " skip backup for file sensitive security.md! 
 
 if has("persistent_undo")
   let &undodir=&backupdir
@@ -227,11 +231,29 @@ nnoremap <silent> <leader>l :set list! list?<CR>
 set noerrorbells      " shut up
 " set visualbell t_vb=  " use visual bell instead of error bell
 
-" Enable use of mouse to position cursor. Beware, set mouse=a disable copy to
-" primary buffer from mouse selection. With set mouse=r it's ok.
-" copy from mouse selection. With mouse=r
-" set mousehide         " hide mouse pointer when typing
-set mouse=a
+
+
+if !has('nvim')
+  " optimize output for urxvt
+  set ttymouse=urxvt
+
+  " Enable use of mouse to position cursor. Beware, set mouse=a disable copy to
+  " primary buffer from mouse selection. With set mouse=r it's ok.
+  " copy from mouse selection. With mouse=r
+  " set mousehide         " hide mouse pointer when typing
+  set mouse=a
+  
+  " always share the OS clipboard
+  set clipboard=unnamed,unnamedplus,autoselect
+
+  " Use 256 colors in color schemes
+  set t_Co=256
+  set term=screen-256color 
+  tnoremap <leader>e <C-\><C-n> 
+else
+  " Pour l'instant nvim ne supporte pas l'autoselect
+  set clipboard=unnamed,unnamedplus
+end
 
 set showcmd     " show partial command line (default)
 set cmdheight=1 " height of the command line
@@ -416,15 +438,19 @@ map <S-Right> <C-w>>
 " <leader>q quits the current window
 nnoremap <silent> <leader>q :q<CR>
 inoremap <silent> <leader>q <ESC>:q<CR>
+" <leader> <escape> also quits the current window
+nnoremap <silent> <leader><ESC>  :q<CR>
+inoremap <silent> <leader><ESC>  <ESC>:q<CR>
+
 
 " create a new tab
 nnoremap <silent> <leader>t :tabnew<CR>
 
 " next/previous buffer navigation
 nnoremap <silent> <C-b> :bnext<CR>
-nnoremap <silent> <S-b> :bprev<CR>
+nnoremap <silent> <C-S-b> :bprev<CR>
 
-set whichwrap=b,s,<,> " allow cursor left/right key to wrap to the
+set whichwrap=h,l,b,s,<,> " allow cursor left/right key to wrap to the
                       " previous/next line
                       " omit [,] as we use virtual edit in insert mode
 
@@ -523,6 +549,7 @@ set shiftround    " use multiple of shiftwidth when indenting with '<' and '>'
 " Turn off automatic line breaking in html and css
 au BufRead,BufNewFile *.html,*.css set textwidth=0
 
+"
 " Use two-space tabs for javascrit
 autocmd FileType javascript setlocal shiftwidth=2 softtabstop=2 tabstop=2
 
@@ -579,8 +606,6 @@ noremap <silent> <leader>P "+P
 vnoremap <silent> p "_dP
 vnoremap <silent> P "_dp
 
-" always share the OS clipboard
-set clipboard=unnamed,unnamedplus,autoselect
 
 " CTRL-X and SHIFT-Del are Cut
 vnoremap <C-X> "+x
@@ -644,6 +669,15 @@ set formatoptions+=c  " auto-wrap comments using textwidth
 
 set formatoptions+=r  " auto-insert current comment leader,  C-u to undo
 
+" my screen is 180 characters wide and i don't want to scroll horizontally
+" while reading markdown. So wrap lines longer than that.
+au BufRead,BufNewFile *.md setlocal textwidth=190
+
+" this allows fenced block codes to by syntax colored in VIM
+au BufNewFile,BufReadPost *.md set filetype=markdown
+let g:markdown_fenced_languages = ['coffee', 'css', 'erb=eruby', 'javascript', 'js=javascript', 'json=javascript', 'ruby', 'sass', 'xml', 'html']
+
+
 " exit from insert mode without cursor movement
 inoremap jk <ESC>`^
 
@@ -664,7 +698,8 @@ nnoremap U <C-r>
 nnoremap J :call Preserve("normal! J")<CR>
 
 " split line and preserve cursor position
-nnoremap S :call Preserve("normal! i\r")<CR>
+" Conflit avec Vim-Sneek. Et pas très utile de toute façon. 
+"nnoremap S :call Preserve("normal! i\r")<CR>
 
 " select what was just pasted
 nnoremap <leader>v V`]
@@ -821,8 +856,44 @@ if filereadable(expand("~/.vimrc.local"))
   source ~/.vimrc.local
 endif
 
+" On veut pouvoir suivre un lien [[relative-path-to-file]] avec la touche K
+" Cela vient de https://github.com/c9s/markdown-git-wiki 
 
+fun! s:OpenLink()
+  let name = expand('<cWORD>')
+  let name = substitute( name , '\(\[\[\|\]\]\)' , '' , 'g')
+  exec ':edit ' . name . '.md'
+endf
 
+nmap <script> K   :call <SID>OpenLink()<CR>
+
+" On veut ouvrir les liens [title](path-to-file) avec la touche K
+" si path-to-file n'a pas d'extension, on suppose un fichier markdown
+" Pour avoir un système de wiki vraiment pratique, il fautdrait que "L" ouvre
+" les deux formats de lien [[path-to-file]] et [title](path-to-file).
+ 
+
+fun! s:OpenLink2()
+  let name = expand('<cWORD>')
+  let linkElements = matchlist(name,'\[\(.*\)\](\(.*\))')
+  let linkTitle = linkElements[1]
+  let linkPath = linkElements[2]
+  "exec ":echo " . linkPath  
+
+  "if filereadable(linkPath) 
+
+  let linkExt = fnamemodify(linkPath, ':e')
+  if empty(linkExt)
+    exec ':edit ' . linkPath . '.md'
+  else
+    exec ':edit ' . linkPath
+  endif
+  "else
+  "  exec ":echo 1" 
+  "endif
+endf
+
+nmap <script> K   :call <SID>OpenLink2()<CR>
 " """"""""""""""""""""""""""""""""""""""""""""""""
 " =============== Plugin Mangement ===============
 
@@ -833,39 +904,27 @@ call vundle#begin()
 
 " Plugins
 Plugin 'gmarik/Vundle.vim'
-Plugin 'gabrielelana/vim-markdown'
-Plugin 'kien/ctrlp.vim'
-Plugin 'nono/vim-handlebars'
-Plugin 'Glench/Vim-Jinja2-Syntax'
-Plugin 'klen/python-mode'
-Plugin 'scrooloose/syntastic'
+"Plugin 'gabrielelana/vim-markdown'
+Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'tomtom/tcomment_vim'
 Plugin 'bling/vim-airline'
 "Plugin 'alanctkc/vim-airline-powerbeans'
-Plugin 'sophacles/vim-bundle-mako'
-Plugin 'nanotech/jellybeans.vim'
+"Plugin 'nanotech/jellybeans.vim'
+Plugin 'szw/vim-maximizer'
 Plugin 'tpope/vim-fugitive'
-Plugin 'jnwhiteh/vim-golang'
-Plugin 'groenewege/vim-less'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'tmhedberg/matchit'
-Plugin 'voithos/vim-python-matchit'
 Plugin 'justinmk/vim-sneak'
 Plugin 'mattn/emmet-vim'
 Plugin 'elzr/vim-json'
 Plugin 'pangloss/vim-javascript'
-Plugin 'davidhalter/jedi-vim'
 Plugin 'altercation/vim-colors-solarized'
-Plugin 'vim-scripts/ZoomWin'
-Plugin 'mileszs/ack.vim'
-Plugin 'mattn/webapi-vim'
 Plugin 'mattn/gist-vim'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'christoomey/vim-tmux-navigator'
-Plugin 'MarcWeber/vim-addon-mw-utils'
-Plugin 'tomtom/tlib_vim'
-Plugin 'garbas/vim-snipmate'
+"Plugin 'tomtom/tlib_vim'
+Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'Raimondi/delimitMate'
 Plugin 'Lokaltog/vim-easymotion'
@@ -874,15 +933,32 @@ Plugin 'godlygeek/tabular'
 Plugin '907th/vim-auto-save'
 Plugin 'nelstrom/vim-markdown-folding'
 Plugin 'tyru/open-browser.vim'
+Plugin 'Mizuchi/vim-ranger'
+Plugin 'djoshea/vim-autoread'
+Plugin 'kchmck/vim-coffee-script'
 
 if has('lua') && (v:version > 703 || v:version == 703 && has('patch885'))
     Plugin 'Shougo/neocomplete.vim'
 else
     Plugin 'ervandew/supertab'
 endif
+" Plugins conditionnels
+" neovim -> neomake
+Plugin 'scrooloose/syntastic'
 
+
+
+
+
+  
 "All of yours plugins must be added before the following line
 call vundle#end() "required
+
+" Ici je place mes propres plugins qui ne peuvenet pas ou que je ne veux pas
+" gérer avec Vundle. C'est une bonne manière par exmple de modulariser le
+" bordel dans ce .vimrc ...
+" execute 'source' custompluginsdir . 'soywiki.vim'
+" execute 'source' custompluginsdir . 'soywiki_starter.vim'
 
 " Turn filetype back on
 filetype plugin indent on
@@ -960,6 +1036,11 @@ let g:markdown_fold_style = 'nested'
 
 " quelques mappings plus intuitifs pour les foldings
 " settings de markdown-folding
+
+" On veut voir les titres de niveaux 1 et 2 à l'ouverture des fichiers
+" markdown
+set foldlevel=1
+
 "activate / desactivate foldingn
 nnoremap zz zi  
 "open a level
@@ -979,6 +1060,21 @@ autocmd BufReadPost fugitive://* set bufhidden=delete
 let g:netrw_nogx = 1 " disable netrw's gx mapping.
 nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
+
+" This allows previewing html directly in vim by using an elinks dump of the
+" page.
+let g:netrw_http_cmd= "elinks" 
+let g:netrw_http_xcmd= "-dump >"
+
+" If vim is called without any filename, open the current directory
+" Augroup VimStartup
+
+augroup VimStartup
+  au!
+  au VimEnter * if expand("%") == "" | e . | endif
+augroup END
+
+
 "
 " ==================== Colors ====================
 
@@ -990,14 +1086,17 @@ colorscheme solarized "ajouté pour installation solarized
 
 
 
-" Use 256 colors in color schemes
-set t_Co=256
-set term=screen-256color
 
 " clear screen when vim exists ?
 "set t_te= t_ti=
 "au VimLeave * :!clear
 
+" Integration de Vim avec Ranger. Le code ci-dessous n'est plus utile car on
+" utilise un plugin qui assure cette intégration.
+" Les 2 remaps ci-dessous permettent d'ouvrir et de fermer ranger depuis vim
+    nnoremap <leader>r :tabe %:p:h<cr>
+    tnoremap <Leader><ESC> <C-\><C-n> :tabclose<CR>
+    tnoremap <Leader>q <C-\><C-n> :tabclose<CR>
 
 "" Compatible with ranger 1.4.2 through 1.6.*
     "
@@ -1007,12 +1106,12 @@ set term=screen-256color
     " started using the keybinding ",r".  Once you select a file by pressing
     " enter, ranger will quit again and vim will open the selected file.
 
-    fun! RangerChooser()
-        exec "silent !ranger --choosefile=/tmp/chosenfile " . expand("%:p:h")
-        if filereadable('/tmp/chosenfile')
-            exec 'edit ' . system('cat /tmp/chosenfile')
-            call system('rm /tmp/chosenfile')
-        endif
-        redraw!
-    endfun
-    map ,r :call RangerChooser()<CR>
+    " fun! RangerChooser()
+    "     exec "silent !ranger --choosefile=~/.tmp/chosenfile " . expand("%:p:h")
+    "     if filereadable('~/.tmp/chosenfile')
+    "         exec 'edit ' . system('cat ~/.tmp/chosenfile')
+    "         call system('rm ~/.tmp/chosenfile')
+    "     endif
+    "     redraw!
+    " endfun
+    " map ,r :call RangerChooser()<CR>

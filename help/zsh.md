@@ -1,4 +1,16 @@
-zsh -f   # start a "clean" version of zsh (without your startup files)
+AIDE ZSH
+========
+
+
+[TODO]
+======
+
+Reprendre un maximum de choses de [the art of command line](https://github.com/jlevy/the-art-of-command-line)
+
+help
+----
+### Man
+
 man zsh          Zsh overview 
 man zshmisc      Anything not fitting into the other sections
 man zshexpn      Zsh command and parameter expansion
@@ -13,77 +25,140 @@ man zshmodules   Zsh loadable modules
 man zshzftpsys   Zsh built-in FTP client
 man zshall       Meta-man page containing all of the above
 
-Global aliases
-Searching and filtering my mysql database with my own utility searchdb
->searchdb client1 | grep -i website1 | fmt -50 | putclip
-How you can simplify this using 3 zsh Global Aliases 
->searchdb client1 G website1 F P
-alias -g ND='*(/om[1])' # newest directory
-alias -g NF='*(.om[1])' # newest file
-#Example of use
-cp NF ND          # copy newest file to newest directory
+### help on builtins
+  $ run-help read
+
+List Keyboard Shorcuts
+======================
+bindkey    -> lists all keyboard shortcuts
+
+Directory Jump
+==============
+
+  j foo    -> jumps to a the most frequently used directory containing 'foo'
+  jc bar   -> jumps to a sub-directory of current directory containing 'bar'
+  jo music -> opens a directory containing 'music' in file explorer (ranger)
+  j w in   -> jumps to a directory containing the 'w' and 'in'      0
+
+# Quick and Dirty Help
+
+CTRL+SHIFT+C Kills current foreground process
+CTRL+SHIFT+C Kills current line
+CTRL + A	Move to the beginning of the line
+CTRL + E	Move to the end of the line
+CTRL + [left arrow]	Move one word backward (on some systems this is ALT + B)
+CTRL + [right arrow]	Move one word forward (on some systems this is ALT + F)
+CTRL + U (bash)	Clear the characters on the line before the current cursor position
+CTRL + U (zsh)	If you're using the zsh, this will clear the entire line
+CTRL + K	Clear the characters on the line after the current cursor position
+ESC + [backspace]	Delete the word in front of the cursor
+CTRL + W	Delete the word in front of the cursor
+ALT + D	Delete the word after the cursor
+CTRL + R	Search history
+CTRL + G	Escape from search mode
+CTRL + _	Undo the last change
+CTRL + L	Clear screen
+CTRL + S	Stop output to screen
+CTRL + Q	Re-enable screen output
+CTRL + C	Terminate/kill current foreground process
+CTRL + Z	Suspend/stop current foreground process
+!!	Execute last command in history
+!abc	Execute last command in history beginning with abc
+!abc:p	Print last command in history beginning with abc
+CTRL + R to search through the history.
+[ENTER] to execute the current expression. 
+[Right Arrow] modify the current expression. 
+CTRL + G escape from search mode.
+-  Goes back in directory history list
+dirs display the directory history list
 
 
-# useful zsh stuff *N*
-ls *(.)           # list just regular files *N*
-ls -d *(/)           # list just directories *C*
-vi *(.om[1])      # vi newest file
-gvim.exe *~vssver.scc(.om[1]) & # newest file ignoring any vssver.scc
-vi -p *(.om[1,3]) # open 3 newest files in tabs (gvim)
-ls -lt  **/*(.om[1,20]) # list 20 newest files anywhere in directory hierarchy (very useful) *N*
-ls -lt  **/*.php(.om[1,20]) # list 20 newest php files anywhere in directory hierarchy (very useful) *N*
-grep -i "$1" **/*.{js,php,css}~(libs|temp|tmp|test)/* # exclude directories from grep *N* EXTENDED_GLOB required
-ls -lt **/*~*vssver.scc(.om[1,20])  # excluding vssver.scc *N*
-ls -lt **/^vssver.scc(.om[1,20])    #  excluding vssver.scc (simpler) *N*
-ls -lt **/^(vssver.scc|*.ini)(.om[1,20]) # excluding vssver and any *.ini *N*
-vi *(m0)          # re-edit all files changed today!
-ls *(^m0)         # files NOT modified today
-ls -l *(m4)       # list files modified exactly 4 days ago
-ls -l *(.m4)      # list files modified exactly 4 days ago (ignore directories)
-vi **/main.php    # where ever it is in hierarchy
-ls -l **/main.{php,js,css}    #    *N*
-ls fred^erick*    # list all files fred* except frederick*    *N*
-ls *.^pdf         # list all but pdf's *NN*
-ls (x*~x[3-5])    # list files x* except x3 to x5
-ls x^[3-5]*       # list files x* except x3 to x5 *N*
-ls **/*~*/.git/*  # ignore all git subdirectories *~* matches a path *N*
-vi !$             # vi last parameter
-vi !-2:2          # second parameter of second but last command
-vi !$:r.php       # vi last parameter but change extension to .php
-^php^cfm          # modify previous command (good for correcting spellos)
-ls *(.L0)         # list pesky empty files (yes that is a zero) *N*
-ls -l *(L-2)      # list file size less than 2 bytes *N*
-ls -l *(.L-20)    # list file size less than 20 bytes - . ignore directories *N*
-# zsh list largest / biggest files , files larger than
-ls -l *(Lk+100)   # list file size larger/greater than 100kb *N*
-ls -l *(Lm+2)     # list file size larger/greater than 2 mbs *N*
-ls **/*(.Lm+10)   # list files larger than 10MB anywhere in hierarchy *N*
-ls -hlS **/*(.Lm+2)  | less  # list largest files  largest first  *N*
+
+Troubleshoot
+============
+
+Safe mode
+---------
+zsh -f   # start a "clean" version of zsh (without your startup files)
+
+Exit cmd mode in ZLE
+------------------
+  - En mode "normal", quand on tappe ":" on a une ligne  "execute:" qui s'affiche.
+  - le seul moyen d'en sortir pour l'instant c'est de tapper : beep ou undo :(
+  - [TODO] trouver une meilleure solution !!
+
+
+Usefull commands
+===============
+
+LS
+--
+
+### Vrac
+
+ls *(.)                                               # list just regular files
+ls -d *(/)                                            # list just directories *C*
+ls *(@)                                               # list all symlinks in the current directory
+ls -lt  **/*(.om[1,20])                               # list 20 newest files anywhere in directory hierarchy (very useful)
+ls -lt  **/*.php(.om[1,20])                           # list 20 newest php files anywhere in directory hierarchy (very useful)
+ls -lt **/*~*vssver.scc(.om[1,20])                    # excluding vssver.scc
+ls -lt **/^vssver.scc(.om[1,20])                      # excluding vssver.scc (simpler)
+ls -lt **/^(vssver.scc|*.ini)(.om[1,20])              # excluding vssver and any *.ini
+ls *(^m0)                                             # files NOT modified today
+ls -l *(m4)                                           # list files modified exactly 4 days ago
+ls -l *(.m4)                                          # list files modified exactly 4 days ago (ignore directories)
+ls -l **/main.{php,js,css}                            #
+ls fred^erick*                                        # list all files fred* except frederick*
+ls *.^pdf                                             # list all but pdf's *NN*
+ls (x*~x[3-5])                                        # list files x* except x3 to x5
+ls x^[3-5]*                                           # list files x* except x3 to x5
+ls **/*~*/.git/*                                      # ignore all git subdirectories *~* matches a path
+ls *(.L0)                                             # list pesky empty files (yes that is a zero)
+ls -l *(L-2)                                          # list file size less than 2 bytes
+ls -l *(.L-20)                                        # list file size less than 20 bytes - . ignore directories
+vim *(.om[1])                                         # vim newest file
+vim -p *(.om[1,3])                                    # open 3 newest files in tabs (gvim)
+vim *(m0)                                             # re-edit all files changed today!
+vim **/main.php                                       # where ever it is in hierarchy
+vim !$                                                # vim last parameter
+vim !-2:2                                             # second parameter of second but last command
+vim !$:r.php                                          # vim last parameter but change extension to .php
+grep -i "$1" **/*.{js,php,css}~(libs|temp|tmp|test)/* # exclude directories from grep  EXTENDED_GLOB required
+^php^cfm                                              # modify previous command (good for correcting spellos)
+
+### List files and directories by date, size, etc.
+
+ls -l *(Lk+100)   # list file size larger/greater than 100kb 
+ls -l *(Lm+2)     # list file size larger/greater than 2 mbs 
+ls **/*(.Lm+10)   # list files larger than 10MB anywhere in hierarchy 
+ls -hlS **/*(.Lm+2)  | less  # list largest files  largest first  
 ls *.*(mh3)  # modified 3 hours ago
 ls *.*(mh-3) # less than 3 hours
 ls *.*(mh+3) # more than 3 hours
 ls *.*(^mh3) # all files not 3 hours  old
-# counts requires extended globbing *N*
+
+### Counts requires extended globbing
+
 setopt EXTENDED_GLOB   # lots of clever stuff requires this
-ls DATA_[0-9](#c3).csv  # match all files DATA_nnn.csv  *N*
-ls a(#c3).txt     # match aaa.txt   *N*
-ls DATA_[0-9](#c4,7).csv  # match DATA_nnnn.csv to DATA_nnnnnnn.txt *N*
-ls DATA_[0-9](#c4,).csv  # match DATA_nnnn.csv to DATA_nnnnn.txt etc *N*
-ls DATA_[0-9](#c,4).csv  # match DATA_n.csv to DATA_nnn.txt *N*
-touch {1..5} {6,7,8,12} {00..03} # *N*
-ls <-> <-6> <4-> <4-5> 0<-> {1..5} {2,3} {00..03} (4|5) [3-4]  [3-47-8] 0? ?2 *2 # *N*
+ls DATA_[0-9](#c3).csv  # match all files DATA_nnn.csv  
+ls a(#c3).txt     # match aaa.txt   
+ls DATA_[0-9](#c4,7).csv  # match DATA_nnnn.csv to DATA_nnnnnnn.txt 
+ls DATA_[0-9](#c4,).csv  # match DATA_nnnn.csv to DATA_nnnnn.txt etc 
+ls DATA_[0-9](#c,4).csv  # match DATA_n.csv to DATA_nnn.txt 
+touch {1..5} {6,7,8,12} {00..03} # 
+ls <-> <-6> <4-> <4-5> 0<-> {1..5} {2,3} {00..03} (4|5) [3-4]  [3-47-8] 0? ?2 *2 # 
 touch {y,y2}.cfm
-ls y2#.cfm y{2,}.cfm y(2|).cfm {y2,y}.cfm (y|y2).cfm y*.cfm # *N*
+ls y2#.cfm y{2,}.cfm y(2|).cfm {y2,y}.cfm (y|y2).cfm y*.cfm # 
 #
-grep -i "$1" */*.php~libs/*~temp/*~test/* # exclude directories lib,temp,test from grep *N* EXTENDED_GLOB required
+grep -i "$1" */*.php~libs/*~temp/*~test/* # exclude directories lib,temp,test from grep  EXTENDED_GLOB required
 # file ownership
 ls -ld *.*(u:apache:)
 # filering files a-m but only if owned by apache 
 ls -dl (*.*~[a-m]*)(^u:apache:.^x)
 # grep
-grep -i "$1" **/*.{js,php,css}~(libs|temp|temp|test)/* # exclude directories from grep *N* EXTENDED_GLOB required
+grep -i "$1" **/*.{js,php,css}~(libs|temp|temp|test)/* # exclude directories from grep  EXTENDED_GLOB required
 grep -iw '$direct' report/**/*.{inc,php}  # searching for a php variable
-#  deleting  double dot files & swap files *N*
+#  deleting  double dot files & swap files 
 rm **/.*.swp
 
 # use tab to complete/display history item before executing
@@ -97,11 +172,11 @@ vi !$ (last parameter)
 vi !^  (first previous parameter)
 vi !:1 (first previous parameter)
 vi !-2:2 (second parameter of second but last command)
-echo !:2-3   # echo previous parameters 2 to 3 *N*
-echo !:2*    # echo previous parameters 2 onwards  *N*
-echo !:2-    # echo previous parameters 2 onwards omitting last *N*
+echo !:2-3   # echo previous parameters 2 to 3 
+echo !:2*    # echo previous parameters 2 onwards  
+echo !:2-    # echo previous parameters 2 onwards omitting last 
 
-touch 1 2 3    # *N*
+touch 1 2 3    # 
 !!:0 !^ !:2 !$ !#$ !#:2 !#1 !#0   #  *U*
 
 history               # View recent commands
@@ -122,7 +197,7 @@ echo chim
 also use control-R
 ^str1^str2^:G         # replace as many as possible
 
-# in all of above remember <TAB> will display changed command WITHOUT executing it *N*
+# in all of above remember <TAB> will display changed command WITHOUT executing it 
 
 cd !?ls<TAB>   #get command and parameters of a previous ls command
 cd !?ls?:*<TAB>   #get (just) parameters of a previous ls command
@@ -199,17 +274,17 @@ For history command 42
 !-2, !-3,  are earlier commands
 !-2^, !-2:2, !-2$, !-2* are earlier parameters
 
-ls /                  # recall/step through previous parameters *N*
+ls /                  # recall/step through previous parameters 
 
 cd !$:h  (remove file name)
 cat !!:t (only file name)
 # Convert images (foo.gif => foo.jpg):
 $ for i in **/*.gif; convert $i $i:r.jpg
 
-# examples of if then else conditionals *N*
+# examples of if then else conditionals 
 if [ $# -gt 0 ];then string=$*;else;string=$(getclip);fi # get parameter OR paste buffer
 var=133;if [[ "$var" = <-> ]] ; then echo "$var is numeric" ;fi
-if [[ "$ip" = <-> ]] then # check ip address numeric *N*
+if [[ "$ip" = <-> ]] then # check ip address numeric 
 if [[ "$1" == [0-9] ]]  # if $1 is a digit
 if (( $# == 0 ));
 if [ $# -gt 0 ]  # parameter cnt > 0 (arguments)
@@ -245,7 +320,7 @@ print ${${(z)$(history -n -1)}[-1]}
 print ${${(z)history[$((HISTCMD-1))]}[-1]}
 gvim.exe $(history -n -1 | sed "s/^[^ ]* //;s/ .*//")
 print ${${(z)history[$((HISTCMD-1))]}[2]}
-# save last 4 history items to a file (without numbers) *N*
+# save last 4 history items to a file (without numbers) 
 fc -ln -4 > /tmp/hist
 fc -ln 1 | grep rsync | gvim -
 
@@ -254,18 +329,18 @@ ls -ld *(/^F)  # list any empty sub-directories
 ls -ld **/*(/^F) # recursively list any empty sub-directories
 print **/*(/^F) | xargs -n1 -t rmdir #delete empty directories
 zargs rmdir -- ./**/*(/od) 2> /dev/null # deletes empty directories
-autoload zargs;zargs ./**/*.{php,inc,js} -- grep -i 'cons. unit'   *N* EXTENDED_GLOB
+autoload zargs;zargs ./**/*.{php,inc,js} -- grep -i 'cons. unit'    EXTENDED_GLOB
 zargs **/*.{js,php,css}~(libs|locallibs|test|dompdf)/* -- grep console.log *C* EXTENDED_GLOB
-zargs ./**/*.{php,inc,js} -- tar rvf dev2$(date '+%d-%m-%Y').tar *N*
+zargs ./**/*.{php,inc,js} -- tar rvf dev2$(date '+%d-%m-%Y').tar 
 # grep whole file structure for php files with if ($var=4) (single equals) bug
-zargs ./**/*.{inc,php} -- grep -i 'if *( *$[a-z0-9_]*=[0-9"]'   ## detect if ($fred=2) type php errors (single equals) *N*
-# selectively tar a web root *N*
+zargs ./**/*.{inc,php} -- grep -i 'if *( *$[a-z0-9_]*=[0-9"]'   ## detect if ($fred=2) type php errors (single equals) 
+# selectively tar a web root 
 zargs ./{html,live}/**/*.{php,inc,js}~(**/wiki|**/dompdf)/* -- tar rvf /tmp/web2$(date "+%d-%m-%Y").tar
 ls ^x*           # list all but x*
 #list all files without an extension ( no dot)
 ls *~*.*(.)
 # delete all directories Pictures_of_* except Pictures_of_beautiful_flowers
-rm -rf Pictures_of_^beautiful_flowers   # selective delete *N*
+rm -rf Pictures_of_^beautiful_flowers   # selective delete 
 ls x*~(x3|x5)    # list files x* except x3 and x5
 ls **/fred*~*junk*/* # list all files fred* unless in a junk directory
 # grep, dont use egrep, grep -E is better
@@ -287,7 +362,7 @@ grep "I am a \(cat\|dog\)" matches lines containing the string "I am a cat" or t
 grep "Fred\(eric\)\? Smith" file   # grep fred or frederic
 # grep back references (memory)
 grep -i "<H\([1-6]\).*</H\1>" *.html # matches pairs of tags
-tel blenkinsop | grep -o "[[:alnum:][:graph:]]*@[[:alnum:][:graph:]]*" # filter just an email address from a text stream (not zsh) *N*  
+tel blenkinsop | grep -o "[[:alnum:][:graph:]]*@[[:alnum:][:graph:]]*" # filter just an email address from a text stream (not zsh)   
 # ls
 ls *.h~(fred|foo).h # same thing
 ls (x*~x[3-5])   # list files x* except x3 to x5
@@ -302,14 +377,14 @@ ls {_,}fred.php  # list files _fred.php fred.php
 ls (_|)fred.php  # same effect by globbing
 ls *.{jpg,gif}(.N) # don't break if one or other image type absent
 # FNG optionally matching a character 
-ls -l *y{2,}.cfm  #  matches *y.cfm and *y2.cfm *N*
-ls -l *y(2|).cfm  #  matches *y.cfm and *y2.cfm *N*
-ls *{y2,y}.cfm    #  matches *y.cfm and *y2.cfm *N*
-ls *y2#.cfm       #  matches *y.cfm and *y2.cfm *N*
+ls -l *y{2,}.cfm  #  matches *y.cfm and *y2.cfm 
+ls -l *y(2|).cfm  #  matches *y.cfm and *y2.cfm 
+ls *{y2,y}.cfm    #  matches *y.cfm and *y2.cfm 
+ls *y2#.cfm       #  matches *y.cfm and *y2.cfm 
 ls foot(fall)#.pl #  match option string fall
 
 setopt no_case_glob  # set ignore case for ls etc
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'   # case insensitive completion for cd etc *N*
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'   # case insensitive completion for cd etc 
 
 # globbing modifiers
 # :r removes the suffix from the result,
@@ -329,7 +404,7 @@ ls {^dev*,}/index.php(.N) # ignore directories beginning dev*
 ls (dev*|fred*|joe*)/index* # does not break if no matches
 ls **/index.php~dev*(/*)##   # ignore subdirectories dev* multi-level
 vi *(.om[1]^D)   # vi newest file ^D means switch off GLOB_DOTS ie ignore dot files
-ls *.txt(.om[1]) # ls newest *.txt file  *N*
+ls *.txt(.om[1]) # ls newest *.txt file  
 ls -tld **/*(m-2)# list files modified in last 2 days in hierarchy
 ls *(om[1,5])    # print the 5 most recent files
 ls -l *(m4)      # list files modified exactly 4 days ago
@@ -337,20 +412,20 @@ ls -ltd *(mw3)   # list files 3 weeks old
 ls -1ld *([1,10])# list just 10 files one per line , no directories
 ls *(m-1)        # files modified today
 ls *(m0)         # files modified today
-ls *(^m0)        # files NOT modified today *N*
+ls *(^m0)        # files NOT modified today 
 vi *(m0)         # re-edit all files changed today!
 cp *.mp3(mh-4) /tmp # copy files less than 4 hours old
 ls -ltd *(mh0)    # list files modified only in last hour
 ls *.{aux,dvi,log,toc} # rm latex temp files  *C*
 rm ./*(Om[1,-11])# removes all files but the ten newest ones (delete all but last 10 files in a directory)
-mv *.*(^m-1) old/ # move all but today's files to sub-directory archive older files *N*
+mv *.*(^m-1) old/ # move all but today's files to sub-directory archive older files 
 # exact dates (N)
 ls -l *.*(mM4)
 autoload -U age
 ls -tl *.*(e#age 2014/06/01 now#)
 ls -tl *(.e#age 2014/06/01 2014/06/30#)
 
-files=(${(f)"$(ls *$**)"}(.N))   # store matching files *N*
+files=(${(f)"$(ls *$**)"}(.N))   # store matching files 
 
 ls *(n:t)        # order by name strip directory
 ls **/*(On:t)    # recursive reverse order by name, strip directory
@@ -367,7 +442,7 @@ fred=$((6**2 + 6))      # can do maths
 # arrays
 X=(x1 x2)               # create an array
 print -C 1 $X           # print each array element on it's own line
-# 2 dimensional arrays- lookup conversion *N*
+# 2 dimensional arrays- lookup conversion 
 typeset -A convtable
 convtable=(151 2 152 2 153 2 158 4 159 3 160 2 171 4 172 1 173 4)
 echo $convtable[158]
@@ -405,15 +480,15 @@ file=${1/%\//C:\/}                 # substitute / with c:/ End of string
 JUNK=R.E.M.                        # substitute last . for a _
 print ${JUNK/.(#e)/_}              # substitute last . for a _
 print ${JUNK/%./_}                 # substitute last . for a _
-wpath=${wpath//\//\\\\}            # substitute Unix / with dos \ slashes *N*
+wpath=${wpath//\//\\\\}            # substitute Unix / with dos \ slashes 
 upath=${wpath//\\/\/}              # convert backslashes to forward slashes (Dos to Unix
-dpath=${upath/#\/c\//c:/}          # convert /c/path/ to c:\path\ *N*
+dpath=${upath/#\/c\//c:/}          # convert /c/path/ to c:\path\ 
 foo=$'bar\n\nbaz\n'
-print ${foo//$'\n'}                # strip out any carriage returns (some systems use \r) *N*
-print ${foo%%$'\n'}                # strip out a trailing carriage return *N*
+print ${foo//$'\n'}                # strip out any carriage returns (some systems use \r) 
+print ${foo%%$'\n'}                # strip out a trailing carriage return 
 
 url='www.some.com/some_strIng-HERe'
-anchortext=${${(C)url//[_-]/ }:t}  # titlecase *N*
+anchortext=${${(C)url//[_-]/ }:t}  # titlecase 
 echo "<a href='$url'>$anchortext</a>"
 
 
@@ -446,8 +521,8 @@ gvim.exe c:/aax/$scratchfile &
 
 
 
-# regular expressions in zsh  examples *N*
-#pcre perl regular expressions   *N*
+# regular expressions in zsh  examples 
+#pcre perl regular expressions   
 
 zmodload zsh/pcre
 setopt REMATCH_PCRE
@@ -475,20 +550,20 @@ gvim.exe /c/aax/*(.om[1]+cyg) &            #### both operations
 # odd stuff not necessarily zsh
 cp -a file1 file   # -a transfer  permissions etc of file1 to file2preserve
 # only copy if destination file exists and is older that source file
-[[ -e $L/config.php ]] && cp -p -update $T/config.php $L *N*
+[[ -e $L/config.php ]] && cp -p -update $T/config.php $L 
 # variable with variable name
 eval "$1=$PWD"
 
 
 # brilliant will change your life
 setopt autopushd                # *C*
-dirs -v                         # *N*
+dirs -v                         # 
 cd ~5                           # cd to fifth directory in directory stack
 cd -<tab complete> then type number of directory needs compinit *C*
-dirs -p                         # display recent directories *N*
+dirs -p                         # display recent directories 
 cp file ~1                      # where 1 is first entry in pushd stack
 #
-cp file.txt ~+<TAB>          # select recent directory *N*
+cp file.txt ~+<TAB>          # select recent directory 
 pushd +2                        # cd to 3rd entry in pushd stack
 #zsh completion
 startfilename<tab>           # will complete matching files anywhere in $PATH
@@ -520,9 +595,9 @@ alias -g .....='../../../..'
 # suffix based alias
 alias -s jpg='/c/program\ files/IrfanView/i_view32.exe'
 now just type the image name to launch irfanview
-alias -s php='c:/wamp/php/php.exe'  # now just type test.php to execute it *N*
+alias -s php='c:/wamp/php/php.exe'  # now just type test.php to execute it 
 # named directories (quick jump to a deep sub-directory)
-hash -d zsh="/usr/src/zsh"          # create shortcuts to deep directories  *N*
+hash -d zsh="/usr/src/zsh"          # create shortcuts to deep directories  
 cd ~zsh
 
 #magic equals
@@ -530,7 +605,7 @@ vim =some_file                            # edits file anywhere in $PATH
 ls =some_file                             # lists file anywhere in $PATH
 #magic ** (recursion)
 vim **/some_file                          # edits file under under current dir
-rm /c/intranet/**/*.stackdump             # specify recursion at a sub-directory *N*
+rm /c/intranet/**/*.stackdump             # specify recursion at a sub-directory 
 # modifying more than one file (multios)
 # writes ls results to file1 & file2 appends to file3
 ls > file1 > file2 >> file3 | wc          # multi-io
@@ -555,7 +630,7 @@ $ zmv -i '(*)' '${(U)1}' # uppercase
 $ zmv '([a-z])(*).txt' '${(C)1}$2.txt' ; rename fred.txt to Fred.txt
 
 
-# initialize zsh/config *N*
+# initialize zsh/config 
 autoload -U compinit
 compinit
 # case insensitive completion
@@ -581,16 +656,16 @@ for f in */include/dbcommon.php; do;cp dbcommon.php $f; done
 for f (**/x) cp newx $f  
 for f (**/x) {cp newx $f } 
 for f in **/x; do;cp newx $f; done
-# create a clone of a file, modifying it on the fly *N*
+# create a clone of a file, modifying it on the fly 
 for i in {3,4}; sed s/flag=2/flag=$i/ fred.txt > fred$i.txt
 for i in {1..9}; sed s/flag=2/flag=$i/ fred.txt > fred$i.txt
-# can be simplified to *N*
+# can be simplified to 
 for f (*.txt) { echo $f }
 for f (*.txt) echo $f   # if no ;
 for f (*(.)) mv $f fixed_$f
-# loop a command *N*
+# loop a command 
 while true; do echo "infinite loop"; sleep 5; done
-# loop a command *N*
+# loop a command 
 for count in {1..10}; do
 r\m x*([1,10]); # delete 10 files at a time
 echo "loop $count"
@@ -619,7 +694,7 @@ done
 
 # multiple script commands on same line
 if [ $# -gt 0 ];then string=$*;else;string=$(getclip);fi
-if grep -iq 'matching' *.php ;then echo "Found" ;else echo "Not Found"; fi   *N*
+if grep -iq 'matching' *.php ;then echo "Found" ;else echo "Not Found"; fi   
 
 # Command on multilines with a backslash
 ls \
@@ -660,7 +735,7 @@ echo "$bg[blue]$fg[yellow]highlight a message"
 
 curl -u userid:password -d status=" updating twitter with from curl " http://twitter.com/statuses/update.xml
 
-# my .zshenv *N*
+# my .zshenv 
 autoload -U compinit
 compinit
 autoload      edit-command-line
@@ -686,23 +761,23 @@ print ${${(Cs:-:):-fred-goat-dog.jpg}%.*}
 #" read a file into a variable
 var="$(<file)"
  
-Zsh Syntax Aide-Memoire (concentrated) *N*
-cd -         # list recent dirs *N*
-cp 1.php ~-  # list recent dirs *N*
+Zsh Syntax Aide-Memoire (concentrated) 
+cd -         # list recent dirs 
+cp 1.php ~-  # list recent dirs 
 vi *(om[1])       # edit newest file
-vi *(om[1])  # edit newest file *N*
+vi *(om[1])  # edit newest file 
 gvim -p *(m0)     # all files modified today
 mv *.*(^m-1) old/ # move all but todays files to sub-directory
 vi -p *(.om[1,3]) # open 3 newest files in tabs (gvim)
 ls *(^m0)         # files NOT modified today
 ls -l *(m4)       # list files modified exactly 4 days ago
 ls *.{jpg,gif}(.N) # do not break if one or other image type absent
-ls *.(jpg|gif|png)(.) # do not break if one or other image type absent *N*
-ls $OLDPWD/*(.om[1])   # list newest file from previous directory *N*
-ls ~1/*(.om[1])   # list newest file from previous directory needs setopt autopushcd *N*
+ls *.(jpg|gif|png)(.) # do not break if one or other image type absent 
+ls $OLDPWD/*(.om[1])   # list newest file from previous directory 
+ls ~1/*(.om[1])   # list newest file from previous directory needs setopt autopushcd 
 for i in quote_* ; php -l $i # check syntax of PHP files with quote in name
-for i (*.php) php -l $i # check syntax of all PHP files  *N*
-for f (*.php) { diff $f  ${PWD/html/staging}/$f} # diff all files in parallel directories *N*
+for i (*.php) php -l $i # check syntax of all PHP files  
+for f (*.php) { diff $f  ${PWD/html/staging}/$f} # diff all files in parallel directories 
 A=(1 2 5 6 7 9) # pre-populate an array    # [N]
 for ((i=1;$#A[i];i++)) echo $A[$i]    # [N]
 
@@ -712,20 +787,20 @@ mv !?main?$<tab> # recall just last parameter of command containing the string m
 !?client<tab>
 # # recall last parameter of cmd containing 'client'
 vi !?client?$<tab>
-ls -l **/main.{php,js,css}    #    *N*
+ls -l **/main.{php,js,css}    #    
 ls (x*~x[3-5])    # list files x* except x3 to x5
-ls **/*~*/.git/*  # ignore all git subdirectories *~* matches a path *N*
-ls (^(backup*|cache*|list*|tmp)/)##*(.) # ignore 4 directories  *N*
+ls **/*~*/.git/*  # ignore all git subdirectories *~* matches a path 
+ls (^(backup*|cache*|list*|tmp)/)##*(.) # ignore 4 directories  
 !!:gs/fred/joe/       # edit previous command replace all fred by joe
-cp NF ${PWD/html/release}    # *N*
+cp NF ${PWD/html/release}    # 
 mv Licence\ to\ Print\ Money.pdf !#^:gs/\\ // 
 
-# debug echo shell commands and provide trace info *N*
+# debug echo shell commands and provide trace info 
 # you do need XTRACE if you want to echo whats happening in your script
 setopt XTRACE VERBOSE
 unsetopt XTRACE VERBOSE
 
-# run a remote zsh script via ssh *N*
+# run a remote zsh script via ssh 
 ssh 192.168.1.218 -l root "zsh -c 'for i (/usr/*(/)) {ls \$i }'"
 # zsh menu
 echo "enter 0-2,a" 
@@ -739,7 +814,7 @@ case "$ans" in
 esac
 
 # useful aliases
-# flip between 2 deep parallel directories *N*
+# flip between 2 deep parallel directories 
 alias flip=' cd html live > /dev/null &>1 || cd live html > /dev/null &>1'
 # syntax-check all php files in date order excluding certain
 alias phpall='for f (*.php~test.php(om)) {php -l $f}'

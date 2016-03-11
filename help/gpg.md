@@ -1,3 +1,124 @@
+----  GPG CheatCheet ----
+=========================
+
+** notes ** 
+  - Cette page contient deux cheatsheets qu'il faudra éditer et mettre au propre
+  - En cas de conflit préférer la première source qui semble plus récente
+
+
+### Adding a subkey
+
+Give the 8-digit ID of your master key
+
+```
+gpg --edit-key ABCD1234
+> addkey
+> save
+```
+
+Then send them out:
+
+```
+gpg --keyserver pgp.mit.edu --send-key ABCD1234
+```
+
+This will also send out subkeys which were newly added as can be [seen here](http://pgp.mit.edu/pks/lookup?op=vindex&search=0xEED978EEFD2BB107).
+
+### Exporting private keys
+
+You can list keys in your DB by ``gpg --list-keys``. In the output, ``pub`` means a public key. ``sub`` means a subkey.
+
+List your secret keys using ``gpg -K``.  In the output, ``sec`` means a secret (private) key. ``ssb`` means secret subkey.
+
+
+```
+gpg -a --export-secret-key "Satish BD <user@example.com>" > private.asc
+```
+
+The name/email must match the ``uid`` field as shown by ``gpg -K``. Alternatively, you can specify the primary key like ABCD1234 instead of name/email. This will also export *all* the subkeys (both signing keys and encrypting keys), including those revoked.
+
+It is bad idea to store the private key like this, so encrypt it away using symmetric encryption (i.e. password protection)
+
+```
+gpg --symmetric --output private.asc.gpg private.asc
+rm -f private.asc
+chmod 400 private.asc.gpg
+```
+
+The ``.gpg`` file is now in binary format and encrypted. You can send it by email to yourself or scp to remote machine, etc.
+
+
+You don't need to export public key anymore. Once the private key is imported (as below), you can use it as you please.
+
+### Importing private keys
+
+On another machine, you can import it as
+```
+gpg --decrypt private.asc.gpg     # symmetric decryption
+gpg --allow-secret-key-import --import private.asc
+gpg --editkey ABCD1234
+> trust
+> save
+```
+
+If this is the first (or the only) private key, it will be used by default for all operations by GPG. You can also put it in ``gpg.conf`` as [shown here](http://askubuntu.com/a/334898). Note that this ``default-key`` actually must be the master key, so that it implicitly selects all its subkeys as well (not just the primary key). It is probably best to not edit ``gpg.conf`` but use the options everytime on the command line (``--default-key`` or ``--local-user``).
+
+### How to use subkeys
+
+Just explicitly specify the key you want to use with ``-u`` option. This can be the subkey number (DEED1234) also.
+
+```
+gpg --clearsign --armor --local-user DEED1234! hello.txt 
+```
+
+You can get the subkey number by ``gpg -K``. The password it will ask will be the same as that of master key. **NOTE THE TRAILING EXCLAMATION MARK**. Without this gpg will [auto-choose](http://lists.gnupg.org/pipermail/gnupg-users/2002-June/013781.html).
+
+### Generate revocation certificate
+
+```
+gpg --output revoke.asc --armor --gen-revoke "Satish BD <user@example.com>"   # outputs to .asc
+gpg --symmetric --output revoke.asc.gpg revoke.asc         # symmetric encryption
+rm -f revoke.asc
+chmod 400 revoke.asc.gpg
+```
+
+### Using subkeys with APG (Android PGP)
+
+Do **not** export the master key. Always export only the subkeys you need for sign/encrypt.
+The master key must always be only in your main computer's backup.
+As before, remember the EXCLAMATION MARK!
+
+```
+gpg --armor --export-secret-subkeys SUBKEY1! SUBKEY2! [SUBKEY3! ...] > secretsub.asc
+```
+
+Transfer the file ``secretsub.asc`` to your phone. Then, open APG on your phone, "Import from file", choose ``secretsub.asc``. Note that it will show the fingerprint of the *master* key, even if you have not exported it earlier! This is fine, it is similar to ``sec#`` that appears if you so something like below. The password is still that of the master key though.
+
+[Remember to use AES256, SHA512 and ZLIB compression in APG's settings]
+
+```
+gpg --armor --export-secret-subkeys SUBKEY1! SUBKEY2! [SUBKEY3! ...] > secretsub.asc
+gpg --delete-secret-keys "Satish BD <user@example.com>"
+
+# Now import only the subkeys
+gpg --import secretsub.asc    # Yes, --import works for secret keys as well
+
+gpg -K
+/home/bdsatish/.gnupg/secring.gpg
+---------------------------------
+sec#  1024D/FD2BB207 2012-03-19 [expires: 2017-03-18]
+uid                  Satish BD <user@example.com>
+ssb   2048g/105D2FAC 2012-03-19
+ssb   2048D/2C3ED390 2013-07-31
+```
+
+Note the special hash after ``sec#`` above. It simply means that the master key FD2BB207 is not usable because it's actually missing from the keyring! You can cross-verify it by trying to generate a revocation certificate. GPG will complain that "Secret parts of primary key are not available.".
+
+
+-----------------------------
+Autre version du cheatSheet
+
+----------------------------
 
 Quick'n easy gpg cheatsheet
 

@@ -10,7 +10,7 @@ set $mod Mod4
 # new container tabbed
 
 # TOGGLE FLOATING / TILING
-#bindsym $MOD+SHIFT+t floating toggle
+bindsym $MOD+SHIFT+f floating toggle
 
 # new window default border
 #new_window 1pixel
@@ -32,7 +32,9 @@ floating_modifier $mod
 #bindsym $mod+Return exec i3-sensible-terminal
 
 # Back and Forth
+
 workspace_auto_back_and_forth yes
+bindsym $mod+twosuperior workspace back_and_forth  
 
 # kill focused window
 bindsym $mod+q kill
@@ -57,7 +59,6 @@ bindsym $mod+c exec --no-startup-id xcmenuctrl
 for_window [window_role="pop-up"] floating enable,move absolute center
 
 # ASSIGN WORKSPACE VARIABLES
-<<<<<<< HEAD
 set $WS1 dev
 set $WS2 test
 set $WS3 web
@@ -216,7 +217,8 @@ bindsym Mod4+Control+q mode "Exit >> (L)ogout, (X)eboot, (P)oweroff  (C)Reload (
 
 # take screenshot
 # bindsym Print exec scrot '%Y-%m-%d-%t_$wx$h.png' -e 'mv $ $f ~/images/'
-bindsym Print exec scrot 'Screenshot - %Y-%m-%d--%_$wx$h_scrot.png' -e 'mv $f ~/images/'
+# bindsym Print exec scrot 'Screenshot - %Y-%m-%d--%_$wx$h_scrot.png' -e mv $f ~images/
+bindsym Print exec scrot '%Y-%m-%d_$wx$h.png' -e 'mv $f ~/Pictures/ScreenShots/'
 
 # colors
 
@@ -293,6 +295,7 @@ exec --no-startup-id "i3-msg 'workspace 1|dev; append_layout ~/.i3/layouts/dev/w
 exec --no-startup-id "i3-msg 'workspace 2|test; append_layout ~/.i3/layouts/dev/workspace-2.json'"      #Workspace $WS2
 exec --no-startup-id "i3-msg 'workspace 3|web; append_layout ~/.i3/layouts/dev/workspace-3.json'"       #Workspace $WS3
 exec --no-startup-id "i3-msg 'workspace 4|doc; append_layout ~/.i3/layouts/dev/workspace-4.json'"       #Workspace $WS4
+exec --no-startup-id "i3-msg 'workspace 8|help; append_layout ~/.i3/layouts/dev/workspace-8.json'"   #Workspace $WS8
 exec --no-startup-id "i3-msg 'workspace 9|monitor; append_layout ~/.i3/layouts/dev/workspace-9.json'"   #Workspace $WS9
 exec --no-startup-id "i3-msg 'workspace 10|media; append_layout ~/.i3/layouts/dev/workspace-10.json'"   #Workspace $WS10
 
@@ -304,7 +307,7 @@ exec --no-startup-id "i3-msg 'workspace 10|media; append_layout ~/.i3/layouts/de
 exec --no-startup-id xset dpms 600 #activate power management
 exec --no-startup-id sh ~/.fehbg #background image
 exec --no-startup-id xcmenu #clipboard manager
-exec --no-startup-id urxvt -name SCRATCHPAD -title SCRATCHPAD -e vim ~/Utils/scratchpad.md #scratchpad to take notes
+exec --no-startup-id urxvt -name SCRATCHPAD -title SCRATCHPAD -e nvim ~/Documents/Utils/scratchpad.md #scratchpad to take notes
 
 
 
@@ -323,6 +326,9 @@ exec --no-startup-id urxvt -name console-web-topright -title alt
 exec --no-startup-id zathura
 exec --no-startup-id urxvt -name console-doc-topright -title alt
 
+
+exec --no-startup-id urxvt -name console-help-topleft -title main 
+exec --no-startup-id urxvt -name console-help-topright -title alt
 
 exec --no-startup-id urxvt -name console-monitor-left -title main 
 exec --no-startup-id urxvt -name mtr-monitor-topright -title MTR -e mtr google.com

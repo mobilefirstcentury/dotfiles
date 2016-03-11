@@ -1,8 +1,50 @@
-search vagrant
+search help
+search j
+search archwiki
+search Mon
+search Mon*
+search ruby.md
+search ruby*
+search *ranger*
+touch 
+touch toto.md
+vim new.md
+nvim toto.md
+find *.md
+find 2005
+find *2005*
+search 
+find AA
+find i3
+find now
+filter *.txt
+filter booo
+search fugitive
+search fugiti
+search ugiti
+find cut
+find emm
+filter em
+filter 
+autojump :q
+autojump tuto
 
-set show_hidden true
-search .vimrc
-open_with ll
+shell @ %s
+cd
+cd .
+h
+mkdir VIDEOS
+mv _VIDEOS
+r
+rename _VIDEOS
+q
+help
+rm
+open_with em
+remove
+search ui
+search app
+delete
+delete 
 open_with 
-open_with vim
-open_with vim-gtk
+find tran

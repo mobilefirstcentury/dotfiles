@@ -1,0 +1,7 @@
+#!/bin/bash
+
+#echo "`date -u`: I am `whoami`" >> ~/.logs/mfc.log
+
+# call a /usr/local/bin script that has been declared in sudoers as been executable via sudo without password
+# mfcNetworkRestart allows restarting the network without having to sudo (So as to be callable throught dmenu in i3wm)
+sudo _mfcNetworkRestart

@@ -34,6 +34,15 @@ cpu_avg_samples 2
 # Stuff after 'TEXT' will be formatted on screen
 TEXT
 
+#[
+#
+#   { "full_text" : " ᐁ Wifi: ${wireless_essid wlan0}" , "color" : "\#00BFFF" },
+#   { "full_text" : " ❖ Disk: ${fs_used /} / ${fs_size /} " , "color" : "\#00BFFF" },
+#   { "full_text" : " ☀ Ram ${memperc}% " , "color" : ${if_match ${memperc}<90}"\#00BFFF"${else}"\#FE2E2E"${endif} },
+#   { "full_text" : " █ Battery ${battery_percent BAT1}%" , "color" : "\#00BFFF"},
+#   { "full_text" : " ${time %B %d %R }" , "color" : "\#00BFFF"}
+#],
+
 # JSON for i3bar
 
 [
@@ -41,7 +50,7 @@ TEXT
    { "full_text" : " ᐁ Wifi: ${wireless_essid wlan0}" , "color" : "\#00BFFF" },
    { "full_text" : " ❖ Disk: ${fs_used /} / ${fs_size /} " , "color" : "\#00BFFF" },
    { "full_text" : " ☀ Ram ${memperc}% " , "color" : ${if_match ${memperc}<90}"\#00BFFF"${else}"\#FE2E2E"${endif} },
-   { "full_text" : " █ Battery ${battery_percent BAT1}%" , "color" : "\#00BFFF"},
+   { "full_text" : " █ Battery ${battery_percent BAT1}%" , "color" :${if_match ${battery_percent BAT1}<20}"\#FE2E2E"${else}"\#00BFFF"${endif}},
    { "full_text" : " ${time %B %d %R }" , "color" : "\#00BFFF"}
 ],
 

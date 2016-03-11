@@ -4,7 +4,7 @@
 #
 # Executed by startx (run your window manager from here)
 
-echo $(date +%Y.%m.%d-%H:%M:%S) ": Loading xinitrc  ..." >> ~/.xlog
+echo $(date +%Y.%m.%d-%H:%M:%S) ": Loading xinitrc  ..." >> ~/.logs./xlog
 
 if [ -d /etc/X11/xinit/xinitrc.d ]; then
   for f in /etc/X11/xinit/xinitrc.d/*; do

@@ -34,7 +34,14 @@ URxvt.perl-ext-common: default,tabbedex,matcher,selection,clipboard,keyboard-sel
 !URxvt.keysym.C-S-Up:   perl:font-size:incglobal
 !URxvt.keysym.C-S-Down: perl:font-size:decglobal
 URxvt.tabbed.new-button: false
-Xxvt.intensityStyles: false
+URxvt.tabbed.autohide: true
+URxvt.keysym.Shift-Left: perl:tabbedex:move_tab_left
+URxvt.keysym.Shift-Right: perl:tabbedex:move_tab_right
+URxvt.keysym.Shift-Up: perl:tabbedex:rename_tab
+URxvt.keysym.Shift-Down: perl:tabbedex:new_tab
+!URxvt.tabbed.reopen-on-close: yes
+
+URxvt.intensityStyles: false
 
 ! N'affiche plus le rectangle d'information "KeyCAP" quand on fait un Control-C
 URxvt.iso14755 : false

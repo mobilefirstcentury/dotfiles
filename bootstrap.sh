@@ -124,7 +124,7 @@ configure_vim() {
 
 configure_help() {
     echo "Configuring help..."
-    link_directory help help
+    link_directory help Help
 }
 
 configure_scripts() {

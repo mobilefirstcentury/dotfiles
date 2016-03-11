@@ -15,7 +15,7 @@ grep ‘ada’ file1.txt
 Example2: Search for a word which is either capital or small letters(i — case-insensitive )
 grep -i ‘ac’ file1.txt 
 
-Example3: Inverce your search, search all words other than ace
+Example3: Inverse your search, search all words other than ace
 grep -v ‘ace’ file1.txt 
 
 Example4: To get the count of a ared word occurrence.

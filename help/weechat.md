@@ -1,6 +1,9 @@
 WEECHAT MANUEL UTILISATEUR
 ==========================
 
+TODO
+=====
+Reprendre ce document http://doc.fedora-fr.org/wiki/Weechat,_installation,_configuration_et_utilisation
 
 RACCOURCIS
 ==========
@@ -61,6 +64,9 @@ Rejoindre/quitter les canaux IRC
 
 /join #channel
 
+### Filter les messages join/quit
+
+/filter add joinquit * irc_join,irc_part,irc_quit *
 
 ### Quitter un canal (en laissant le tampon ouvert) :
 
@@ -68,15 +74,18 @@ Rejoindre/quitter les canaux IRC
 
 ### Quitter le canal et fermer le tampon
 
-
 /close
 
 Messages privés IRC
 -------------------
 /query foo ceci est un message
 
-Split vertical de l'écran verticalement
+Split de l'écran en plusieurs fenêtres
 --------------------------------------
-
+/window splitv
+/window splith
 /window splitv 33
 
+Merge des des fenêtres
+-----------------------
+/window merge

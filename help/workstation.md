@@ -1,39 +1,108 @@
-=====  AIDE STATION DE TRAVAIL =======
+-----  AIDE STATION DE TRAVAIL ---------
+======================================
 
-Attention
-----------
-
-Le fichier ~/Documents/_NOTES/workstation.md est destiné à l'admin pas à l'utilisateur.
-Il contient les instructions d'installation et maintenace de la workstation.
-[TODO] Le mettre dans ~/Documents/_WORKSTATION/_INSTALL
 
 
 Informations générales
-----------------------
+======================
 
-### 3 environements possibles ###
+## 3 environements possibles 
 La station de travail est basée sur Ubuntu Desktop 14.04. Mais on a accès à une session virtuelle basée sur I3.
 I3 est un gestionnaire de fenêtre très léger et très rapide qui permet d''éviter la lourdeur de Ubuntu Desktop.
 On peut également utiliser utiliser directement une console virtuelle standard.
 
-#### Accès aux 3 environnements de travail ###
+### Accès aux 3 environnements de travail 
 + **Ubuntu desktop** : Ctrl-Alt-F7
 + **I3**: Ctrl-ALt-F8
 + **Console Virtuell**: Ctrl-Alt-F2 (ou autre sauf F0)
 
-### Une station de travail optimisée pour le travail au clavier.
+## Une station de travail optimisée pour le travail au clavier.
 La souris est un outil très lent pour coder. Il vaut bien mieux s''habituer à travailler uniquement au clavier.
 Cette station de travail utilisable uniquement au clavier à conditions d''aprendre les raccourcis clavier de VIM.
 
-#### Déplacement: pas de touches flêches!
+### Déplacement: pas de touches flêches!
 Comme les touches flêches obligent à déplacer sa main du clavieri, on utilise les touches h,j,k,l  pour se déplacer.
 +   **h: droite**
 +   **j: bas**
 +   **k: haut**
 +   **l: gauche**
 
+
+Guide d''Utilisation de I3
+==========================
+
+## Ouverture de session I3
++ Accéder à la console de login : 
+  + Ctrl-Alt F1 : affiche l'écran de login
+  + entrer le login et le password
+  + La session I3 est ouverte.
+
+## Gérer la session I3
++   quitter i3: win-shift-Suppr
++   recharger I3: Win+Shift+r
++   afficher la session ubuntu: ctrl-alt-f7
++   afficher la session i3: ctrl-alt-f8
+
+## Gestion des workspaces
++   ouvrir un nouveau workspace: win-num
+    - Workspace 1: dev                                  
+    - Workspace 2: test
+    - ...
++   Renommer un workspace: win+p puis WSName <Nouveau Nom>
+    
+
+
+## Gestion des fenêtres                        
+### Modes de disposition des containers
+Chaque workspace est découpé en containers: chaque container peut contenir une application ou plusieurs autres containers.
+Les règles de construction des containers sont un peu compliquées:
++ chaque container a un mode horizontal ou vertical
+  + Mode horizontal: 
+    + les containers enfants s'affichent les uns à côté des autres.
+    + Win+w: passer un container en mode horizontal
+  + Mode vertical:
+    + Les container enfants s'affichent les un au dessus des autres,
+    + Win+B: Passer un container en mode vertical
++ lors du lancement d'une nouvelle application:
+  + Si le container actif a le même mode que son parent direct, l'application s'affiche dans un container frère.
+  + Si le container actif a un mode différent de son parent direct, l'application s'affiche dans un container fils. 
+
+### Gestion des fenêtres & containers
++   naviguer  entre les fenêtres: touches h,j,k,l
++   déplacer les fenêtres les unes par rapport aux autres: win-h, win-j, win-k, win-l
++   passer un container en mode horizontal: win+w
++   passer un container en mode vertical: win+B
++   passer en écran ou réduire une fenêtre: win-f
++   déplacer une fenêtre vers un autre workspace: win-shift-num
+
+## Gestion des applications
++   lancer une console : Win+Shift+T
++   lancer une application depuis le menu: win-p puis taper le nom de l''aplication.
++   fermer une fenêtre: ctrl-w, sinon win-q
+
+
 Guide d'Utilisation de l'Aide
------------------------------
+==============================
+
+helpme
+------
+helpme <cmd> : affiche les utilisations courantes de <cmd> 
+
+bro
+---
+bro <cmd> : affiche une liste d'example d'utilisations de la commande
+
+fu
+--
+fu <cmd> : affiche une liste d'examples d'utilisations de la commande
+
+how do i 
+--------
+howdoi <space-seperated-keywords> : affiche les meilleures réponses internet aux questions contenant les mots clés
+
+
+Lecture des fichiers d'aide
+----------------------------
 
 Les fichiers d'aide sont dans le repertoire ~help (~/Dev/Help)  au format markdown.
 Exemple de recherche d'aide:
@@ -47,26 +116,68 @@ On cherche de l'aide sur le 'balance' dans emmet
 6. En mode normal, <n> passe à l'occurence suivante et <N> à l'occurence précédante.
 7. On quitte vim avec <:q!>
 
-Guide d''Utilisation de I3
--------------------------
 
-### Raccourcis Clavier ####
-+   quitter i3: win-shift-e
-+   recharger I3: Win+Shift+r
-+   lancer une console : Win+Shift+Enter  (On peut lancer plusieurs consoles, elles se répartissent sur l''écran.)
-+   naviguer  entre les fenêtres: touches h,j,k,l
-+   déplacer les fenêtres les unes par rapport aux autres: win-h, win-j, win-k, win-l
-+   couper (Spliter): Win+b (Split vertical),  win+w  (split horizontal)
-+   passer en écran ou réduire une fenêtre: win-f
-+   lancer une application depuis le menu: win-p puis taper le nom de l''aplication.
-+   fermer une fenêtre: ctrl-w, sinon win-q
-+   ouvrir un nouveau workspace: win-num
-    - Workspace 1: console
-    - Workspace 2: web
-    - ...
-+   déplacer une fenêtre vers un autre workspace: win-shift-num
+Dossiers de travail
+===================
+## Format des documents 
+A chaque fois que c'est possible, les documents seront au format markdown.
+
+## Structure de base des répértoire de travail
+### Documents
+  - Repertoire contenant:
+    - les documents de travail hormis le code des projets
+    - la documentation 'distribuable' de ces projet 
+### Liste des sous-repertoires de Documents 
+Repertoire | Usage
+--- | ---
+_BOOKS | livres et Articles
+_INBOX | repertoire utilisé comme buffer pour les documents entrants IMPORTANTS  qui devront être utilisés/rangés rapidement
+_NOTES | On n'utilise de documents bureautiques (word, excel, etc.) que lorqu'on ne peut pas faire autrement. Tous les documents sont en markdown
+_PERSO | Comme son nom l'indique
+_TEMP | les documents dont on ne sait pas encore si on va les détruire ou utiliser/ranger                   
+_THEMES | base de connaissance
+_TODO | Gestion des informations de todo
+ PLAYGROUND | Documents à supprimer rapidement 
+_TRASH | Poubelle Système. [TODO] Mettre en place un système pour que les fichiers/rep supprimés depuis la console aillent ici. 
+
+      
+### Dev 
+  - Repertoire contenant :
+    - Le code des projets
+    - la documentation 'distribuable' de ces projets
+### Liste des sous-repertoires de Dev
+Repertoire | Usage
+--- | ---
+_SANDBOX| Repertoire dans lequels sont installés des projets pour fin de test, apprentissage ou experimentation
+_SANDBOX/_LEARN | projets d'autoformation
+_SANBBOX/_EXPERIMENT | projets d'experimentation
+_SANDBOX/_TEST | projets de tests
 
 
+## Dossiers favoris
+----------------
+Un certain nombre de repertoires sont accessible avec l'accès '~' (accès tilde)
 
+### accès tilde
+  $ ~<deux première lettres du repertoire><tab>  : complete la ligne avec le nom court du dossier favori. PUIS:
+  $ <enter> : accède au reporoire
+  $ On peut également tapper <nom-du-shortcut> en ligne de commande pour sauter dans ce repertoire
+
+### liste des repertoires favoris
+  Shortcut   |  
+  ~help      | fichiers d'aide
+  ~notes     | notes de travail
+  ~download  | repertoire de telechargement
+  ~music     |                                                                                | )
+  ~images    |                                                                                | )
+  ~documents | tout document qui n'est pas du code source ou des fichiers distribuables
+  ~inbox     | repertoire des documents importants qui n'ont pas encore été traités ou rangés
+  ~trash     | documents qui VONT passer à la poubelle
+  ~temp      | documents qui ont de fortes chances de passer à la poubelle
+  ~todo      | une note correspond à une tâche à effectuer
+
+Gestion du PC
+=============
++ Relancer la connection internet : 'Win+p' puis 'mfcNetworkRestart'
 
 
