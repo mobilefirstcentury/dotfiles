@@ -12,3 +12,4 @@
 !.config/vimb
 !.config/nvim/init.vim
 !.config/nvim/plugin/*
+!.config/autostart/*
