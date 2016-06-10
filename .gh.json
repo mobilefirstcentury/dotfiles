@@ -10,7 +10,7 @@
     "default_remote": "origin",
     "default_pr_forwarder": "",
     "default_pr_reviewer": "",
-    "github_token": "0e09d7f3dab5a1fc2280ae5fc59577754bdf5612",
+    "github_token": "47e6d71d56e5ac58e4b18ebf82d3ccdef124ec2b",
     "github_user": "rachidbch",
     "hooks": {
         "issue": {

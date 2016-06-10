@@ -1,0 +1,55 @@
+#!/bin/bash
+
+#
+# a simple way to parse shell script arguments
+# 
+# please edit and use to your hearts content
+# 
+
+
+# set default parameters values if any
+let HUBIC=false
+
+function usage() {
+
+    echo "backups the workstation"
+    echo ""
+    echo "\t-h --help"
+    echo "\t--hubic"
+    echo ""
+}
+
+while [ "$1" != "" ]; do
+    PARAM=`echo $1 | awk -F= '{print $1}'`
+    VALUE=`echo $1 | awk -F= '{print $2}'`
+    case $PARAM in
+        -h | --help)
+            usage
+            exit
+            ;;
+        --hubic)
+            HUBIC=true
+            ;;
+        *)
+            echo "ERROR: unknown parameter \"$PARAM\""
+            usage
+            exit 1
+            ;;
+    esac
+    shift
+done
+
+
+function hubic_backup()
+{
+  echo "backup to hubic according to ~/.rclone/hubic.$1.$SOURCE.filter"
+  echo "check logs in ~/.logs/rclone.hubic."$1".out"
+  SOURCE=`echo "$2" | tr '/' '_'`
+  rclone --verbose  --filter-from ~/.rclone/hubic."$1"."$SOURCE".filter copy "$2" hubic:"$1"/"$3" &>>! ~/.logs/rclone.hubic."$1".out
+}
+
+if [ "$HUBIC" = true ] ; then
+  # if log directory doesn't exist create it
+  ! [ -d ~/.logs ] && mkdir ~/.logs
+   hubic_backup Workstation ~/Documents Documents  
+fi

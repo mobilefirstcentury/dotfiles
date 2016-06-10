@@ -1,3 +1,7 @@
+---- Netsat user guide ----
+=============================
+
+
 Netstat command explained with 10 examples
 By surya aix10:45No comments
 The netstat command in any Unix flavored server  is a very useful tool when dealing with networking issues. This command is capable of producing information related to network connections, routing tables, interface statistics etc. This utility also helps the network administrators to keep an eye on the invalid or suspicious network connections. In this article we will understand the basics of this command using some practical examples. 

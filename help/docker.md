@@ -5,10 +5,73 @@ Docker Cheat Sheet
 TODO
 ====
 
-
 Notes
 =====
 + Utiliser un plugin Oh-my-zsh pour la completion des commandes Docker.
+
+
+Quick Tour
+==========
+**note** for docker command to be run without sudo, the user must be added to docker group.
+  
+  ```sh
+  # test docker installation
+  $ docker run hello-world    # downloads the hello-word docker image and runs it in a container and immediately exits
+    -> 
+    output greeting message from docker and exit
+  # list already installed docker images
+  $ docker images
+    -> 
+    lists all installed images
+    images whose repository does not have a slash '/' are official images from Docker
+  # search usefull images on the docker hub  
+  $ docker search wordpress 
+
+  # As of 2016/03 there's no native way to list available tags on a remote repository image ...
+  # [TODO] There's now a complicated V2 API ...
+  $ curl https://registry.hub.docker.com/v1/repositories/debian/tags | jformat "%{name}" | sort
+
+
+  # pull image to use                                                               
+  $ sudo docker pull wordpress:latest  # Whatever Image name and tag 
+  
+  # we can create and run the image in a named container
+  # our terminal will be bound to the container, exiting with `Ctrl+C` (`Ctrl+Shift+C` on Workstation)
+  # mkcd ~play/myapp
+  # here we're :
+  #   - mapping http & https ports
+  #   - running in detached mode `-d` with interactive terminal `-ti` so we can attach/detach terminal freely
+  #   - we're giving the container access to a host folder
+  $ sudo docker run -d -ti --name=myapp -p 80:80 -p 443:443 -v ~play/myapp:/opt/apps -e USER_UID=`id -u` wordpress:latest  
+  # We now need to exec a bash terminal to access it
+  $ docker exec -t -i myapp /bin/bash
+  
+  # to have access to a terminal shell, a shell session must lanched
+$ sudo docker run -d -ti --name=myapp -p 80:80 -p 443:443 -v ~play/myapp:/opt/apps -e USER_UID=`id -u` wordpress:latest /bin/bash
+
+  # we then list all containers
+  $ docker ps -l 
+  # or only running containers
+  $ docker ps 
+
+  # a named container can be started in the background with a simpler command
+  $ docker start myapp
+
+  # we can check the processes run in the container
+  $ docker top myapp
+
+  # the container can be stoped
+  $ docker stop myapp
+  
+  # if no longer needed the container can be deleted
+  $ docker rm myapp  # or ID
+  # if no longer needed the image can be deleted
+  $ sudo docker rmi wordpress:latest   # or whatever name given by `docker images`
+  ```
+
+
+
+
 
 Prerequisites
 =============
@@ -26,6 +89,7 @@ Attention à ne pas installer le package ubuntu docker.io qui est très en retar
 + Installation de Compose
   + sudo curl -L https://github.com/docker/compose/releases/download/1.5.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
   + sudo chmod +x /usr/local/bin/docker-compose
+
 Definitions
 ===========
 
@@ -260,3 +324,36 @@ docker rm -v `docker ps -a -q -f status=exited`
 
 #### checks the status of the docker daemon
   sudo service docker status
+#### Expose Ports Dynamically
+  How to expose ports of a running container
+  - access port through container's ip adress:
+    # get the ip address of the container
+    $ docker inspect <container> | grep IPAddress
+    # access port 
+    $ wget http://container-ip:port
+  - commit the container to create a new image and re-run it with new exposed port
+    $ sudo docker ps 
+    $ sudo docker commit <containerid> <foo/live>
+    $ sudo docker run -i -p 22 -p 8000:80 -m /data:/data -t <foo/live> /bin/bash
+  - use '-P' flag to have all used port exposed
+    # run container with '-P' flag
+    $ sudo docker run -d -ti --name=myapp -P -v ~play/myapp:/opt/apps -e USER_UID=`id -u` wordpress:latest 
+    # get random port mapped
+    $ docker port <CONTAINER>
+  - use ssh tunneling
+
+#### remove containers
+  - remove all containers stoped for more than one week
+  [TODO] Pourquoi ça ne marche pas?
+  $ docker ps -a | grep 'weeks ago' | awk '{print $1}' | xargs --no-run-if-empty docker rm
+  
+  - Nuke option! Stop and remove all containers
+  $ docker stop $(docker ps -a -q)
+  $ docker rm $(docker ps -a -q)
+
+#### remove images
+  - remove image by name
+  $ docker rmi jplock/zookeeper
+  - remove non referenced images
+  $ docker rmi $(docker images -f "dangling=true" -q)
+

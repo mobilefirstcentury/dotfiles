@@ -98,13 +98,20 @@ fu <cmd> : affiche une liste d'examples d'utilisations de la commande
 
 how do i 
 --------
-howdoi <space-seperated-keywords> : affiche les meilleures réponses internet aux questions contenant les mots clés
+howdoi <space-separated-keywords> : affiche les meilleures réponses internet aux questions contenant les mots clés
+
+
+how do i in VIM
+----------------
+:r !howdoi 'grid flexbox' # write the result of the howdoi query in the current file  
+:!howdoi 'grid flexbox'  # displays the result of the howdoi query in the vim scratchpad
+
 
 
 Lecture des fichiers d'aide
 ----------------------------
 
-Les fichiers d'aide sont dans le repertoire ~help (~/Dev/Help)  au format markdown.
+Les fichiers d'aide sont dans le repertoire ~help (~/help -> dotfiles/help)  au format markdown.
 Exemple de recherche d'aide:
 On cherche de l'aide sur le 'balance' dans emmet
 
@@ -153,6 +160,12 @@ _SANDBOX/_LEARN | projets d'autoformation
 _SANBBOX/_EXPERIMENT | projets d'experimentation
 _SANDBOX/_TEST | projets de tests
 
+
+### Les repertoires applicatifs 
+  - ~/.scripts: scripts internes utilisés par la workstation
+  - ~/scripts : scripts externes utilisés par la workstation
+  - ~/.packages: code source des applications ou modules internes, compilés et  utilisés par la workstation
+  - ~/packages: code source des applications ou moduless externes, compilés et utilisés par la workstation
 
 ## Dossiers favoris
 ----------------

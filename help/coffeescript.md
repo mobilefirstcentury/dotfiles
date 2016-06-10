@@ -40,18 +40,18 @@ Functions
 
   + definition
 
-    ```
+    ```coffee
     square = (x) -> x * x
     cube   = (x) -> square(x) * x
     ```
   + arguments default values
 
-    ```
+    ```coffee
     fill = (container, liquid = "coffee") ->
       "Filling the #{container} with #{liquid}..."
     ```
   + Coffee Scripts returns everything as often as possible (better for readability and usability) 
-    ```
+    ```coffee
     # In examples below we don't need to explicitely return the strings
     grade = (student) ->
       if student.excellentWork
@@ -66,7 +66,8 @@ Functions
 
 Objects and Arrays
 ------------------
-    ```
+
+    ```coffee
     song = ["do", "re", "mi", "fa", "so"]
 
     singers = {Jagger: "Rock", Elvis: "Roll"}
@@ -91,22 +92,25 @@ Objects and Arrays
     $('.account').attr class: 'active'
     ```
 
+
 Lexical Scoping and Variable Safety
 ----------------------------------
+
   - All of the variable declarations have been pushed up to the top of the closest scope.
   - Javascript generated code is protected in a `(function(){ ... })();` safety wrapper:
     + global scope can't be polluted
     + to create global variable, one has to attach them to **window** or **exports** objects:
-    ```
+
+    ```coffee
     root = exports ? this
     root.foo = -> 'Hello World'
     ```
 
 
-If, Else, Unless, and Conditional Assignment
+If Else Unless, and Conditional Assignment
 --------------------------------------------
 
-    ```
+    ```coffee
     mood = greatlyImproved if singing
     mood = joyfull unless today is monday
 
@@ -117,14 +121,13 @@ If, Else, Unless, and Conditional Assignment
       showIt()
 
     date = if friday then sue else jill
-
     ```
 
 
-Splats...
+Splats
 ---------
 
-    ```
+    ```coffee
     gold = silver = rest = "unknown"
 
     awardMedals = (first, second, others...) ->
@@ -160,7 +163,7 @@ Loops and Comprehensions
   - **note** smart loops should replace most use cases of **each**/**forEach**, **map**, or **select**/**filter**, ...
   - unlike for loops, coffee script smart loops  are expressions, and can be returned and assigned.
   - if assigned to a variable, all iteration steps results are collected in an array (also true for while loops -- see below) 
-  ```
+  ```coffee
   # all global properties in a array
   globals = (name for name of window)[
   # The first ten global properties only.
@@ -168,7 +171,7 @@ Loops and Comprehensions
   ```
 
 ### normal iterations
-    ```
+    ```coffee
     eat food for food in ['toast', 'cheese', 'wine']
 
     courses = ['greens', 'caviar', 'truffles', 'roast', 'cake']
@@ -188,7 +191,7 @@ Loops and Comprehensions
     ```
 ### iteration over keys and values
 
-    ```
+    ```coffee
     yearsOld = max: 10, ida: 9, tim: 11
 
     ages = for child, age of yearsOld
@@ -199,7 +202,7 @@ Loops and Comprehensions
 
 ### while loop
 
-    ```
+    ```coffee
     buy()  while supply > demand
     buy()  until demand >= supply
     
@@ -213,12 +216,16 @@ Loops and Comprehensions
     loop 
       climb-one-step-to-the-sky()
 
+    # there's no `do X while Y `loop, we have to emulate it
+    loop 
+      X
+      break unless Y
     ```
 
 ### variable discrimination in callbacks embedded in loops
     + using callbacks in loops is REALLY UNINTUITIVE: callbacks access outside variables "by reference" (sort of) not "by value" 
     + so one ends frequently with all callback sharing last iterated value of the used variable: the following code bugs as filename is always `list[0]`
-    ```
+    ```coffee
     for (i = 0, len = 10; i < len; i++) {
       filename = list[i];
       fs.readFile(filename, function(err, contents) {
@@ -230,7 +237,7 @@ Loops and Comprehensions
     + the classic work around is to wrap the code with a function that's immediatly called and given used variables as arguments (arguments are passed by value)
     + CoffeeScript provides the `do` keyword for just that ...
 
-    ```
+    ```coffee
     for filename in list
       do (filename) ->
         fs.readFile filename, (err, contents) ->
@@ -243,7 +250,7 @@ Array Slicing and Splicing with Ranges
 
 ### slicing
 
-    ```
+    ```coffee
     numbers = [0...10]  # means [0,1,2,3,4,5,6,7,8,9] as `...` excludes last element
     start   = numbers[0..2] # [ 0, 1, 2 ]
     middle  = numbers[3...-2]  # [ 3, 4, 5, 6, 7 ]
@@ -286,7 +293,7 @@ then           | Instead of a newline or semicolon, `then` can be used to separa
 
 ### Example idioms
 
-    ```
+    ```coffee
     launch() if ignition is on
     volume = 10 if band isnt SpinalTap
     letTheWildRumpusBegin() unless answer is no
@@ -300,7 +307,7 @@ then           | Instead of a newline or semicolon, `then` can be used to separa
 ** note **
   Operator `?` returns true unless a variable is **null** or **undefined**
 
-    ```
+    ```coffee
     # test for the existence of mind
     solipsism = true if mind?
 
@@ -351,7 +358,7 @@ Classes, Inheritance, and Super
   - `::` operator gives quick access to an object's prototype.
   - `super` is converted into a call against the immediate ancestor's method of the same name.
 
-    ```
+    ```coffee
     String::dasherize = ->
       this.replace /_/g, "-"
 
@@ -364,7 +371,7 @@ Destructuring Assignment
 ------------------------
 
 ### variable swapping
-    ```
+    ```coffee
     theBait   = 1000
     theSwitch = 0
     [theBait, theSwitch] = [theSwitch, theBait]
@@ -372,7 +379,7 @@ Destructuring Assignment
 
 ### Functions returning multiples values 
 
-    ```
+    ```coffee
     weatherReport = (location) ->
       # Make an Ajax request to fetch the weather...
       [location, 72, "Mostly Sunny"]
@@ -383,12 +390,12 @@ Destructuring Assignment
 
 ### nested properties pull out
 
-    ```
+    ```coffee
     # this translates to `spawn = require('child_process').spawn`
     {spawn} = require "child_process" 
     ```
 
-    ```
+    ```coffee
     futurists =
       sculptor: "Umberto Boccioni"
       painter:  "Vladimir Burliuk"
@@ -404,7 +411,7 @@ Destructuring Assignment
     ```
 ### With splats, destructuring on steroids
 
-   ```
+   ```coffee
    [first-letter, middle..., last-letter] = "impossible".split("")
    [first-word, ..., last-word] = "Every literary critic believes he will outwit history and have the last word".split " "
     ```
@@ -412,7 +419,7 @@ Destructuring Assignment
 ### Destructured Options for Class Constructors 
 ** note ** Best practice for class definition
 
-    ```
+    ```coffee
     class Person
       constructor: (options) ->
         {@name, @age, @height = 'average'} = options
@@ -427,7 +434,7 @@ Bound Functions, Generator Functions
   - In JavaScript, to preserve `this` reference in callbacks one has to write weird boilerplate code. 
   - Coffee Scripts used the fat arrow operator to attach a callback to specific `this` object
 
-    ```
+    ```coffee
     # @customer and @cart are what we expect in the 'fat arrow-ed' callback
     # without the fat arrow `@customer` would have referred to the undefined "customer" property of the DOM element and would have raised an exception.
     Account = (customer, cart) ->
@@ -442,7 +449,7 @@ Bound Functions, Generator Functions
 Generators
 ---------
 
-    ```
+    ```coffee
     perfectSquares = ->
       num = 0
       loop
@@ -459,7 +466,7 @@ Switch/When/Else
 -----------------
 
     # For improved readability there's no need for 'break' operator in switch statement
-    ```
+    ```coffee
     switch day
       when "Mon" then go work
       when "Tue" then go relax
@@ -472,7 +479,7 @@ Switch/When/Else
       else go work
       ```
     # We can have a much cleaner if/else chain with switch operator
-    ```
+    ```coffee
     score = 76
     grade = switch
       when score < 60 then 'F'
@@ -483,10 +490,10 @@ Switch/When/Else
     ```
 
 Try/Catch/Finally
-=================
+-------------------
 
 
-    ```
+    ```coffee
     try
       allHellBreaksLoose()
       catsAndDogsLivingTogether()
@@ -499,7 +506,7 @@ Try/Catch/Finally
 Chained Comparisons
 -------------------
 
-    ```
+    ```coffee
     cholesterol = 127
     healthy = 200 > cholesterol > 60
     ```
@@ -513,7 +520,7 @@ String Interpolation, Block Strings, and Block Comments
   - double quoted strings allow for interpolated values
   - single quoted strings are literals
 
-    ```
+    ```coffee
     author = "Wittgenstein"
     quote  = "A picture is a fact. -- #{ author }"
 
@@ -533,7 +540,7 @@ String Interpolation, Block Strings, and Block Comments
 ### block strings (with smart indentation)
 
     # first identation is preserved to have code aligned
-    ```
+    ```coffee
     html = """
            <strong>
              cup of coffeescript
@@ -542,7 +549,7 @@ String Interpolation, Block Strings, and Block Comments
     ```
     tranlslates in ...
 
-    ```
+    ```coffee
     html = "<strong>\n  cup of coffeescript\n</strong>";
     ```
 
@@ -551,7 +558,7 @@ Javascript comments generation
 -------------------------------
 
     # this will generate comments in the compiled javascript code
-    ```
+    ```coffee
     ###
     SkinnyMochaHalfCaffScript Compiler v1.0
     Released under the MIT License
@@ -564,7 +571,7 @@ Block Regular Expressions
   - block regex are extended regular expressions that ignore internal whitespace and can contain comments and interpolation. 
   - modeled after Perl's `/x` modifier, CoffeeScript's block regexes are delimited by `///` 
 
-    ```
+    ```coffee
     OPERATOR = /// ^ (
       ?: [-=]>             # function
        | [-+*/%<>&|^!?=]=  # compound assign / compare
@@ -586,7 +593,7 @@ Cake, and Cakefiles
     $ cake -o "myDir" setup
 
     # [TODO] not sure this code is correct ...
-    ```
+    ```coffee
     fs = require 'fs'
     dir = ""
 
@@ -602,3 +609,535 @@ Cake, and Cakefiles
       # do something with `dir` and setup file ...
     ```
 
+Micro examples
+--------------
+
+### Booleans have the value of (true, yes, or on) or (false, no, or off)
+echo('areYouHappy is a Boolean<br>') if typeof areYouHappy is 'boolean'
+
+### MATH
+echo("5 + 2 = #{5 + 2}")
+echo("5 - 2 = #{5 - 2})
+echo("5 * 2 = #{5 * 2}")
+echo("5 / 2 = #{5 / 2}")
+echo("5 % 2 = #{5 % 2}")
+
+### Coffee Script has 16 digits of precision
+precisionTest = 0.1000000000000001;
+echo("Precision : #{precisionTest + 0.10000000000000011}")
+
+
+### Round to 2 digits
+balance = 1563.87
+echo("Monthly Payment = #{(balance/12).toFixed(2)}")
+
+
+### Shortcut for adding 1
+randNum = 5
+echo("randNum++ = #{randNum++}")
+echo("++randNum = #{++randNum}")
+
+### Shortcut for subtracting 1
+randNum = 5
+echo("randNum-- = #{randNum--}")
+echo("--randNum = #{--randNum}")
+
+### Order of operations
+echo("3 + 2 * 5   = #{3 + 2 * 5}")
+echo("(3 + 2) * 5 = #{(3 + 2) * 5}")
+
+### Math properties and functions
+```coffee
+echo("Math.E           = #{Math.E}")
+echo("Math.PI          = #{Math.PI}")
+echo("Math.abs(-8)     = #{Math.abs(-8)}")
+echo("Math.cbrt(1000)  = #{Math.cbrt(1000)}")
+echo("Math.ceil(6.45)  = #{Math.ceil(6.45)}")
+echo("Math.floor(6.45) = #{Math.floor(6.45)}")
+echo("Math.round(6.45) = #{Math.round(6.45)}")
+echo("Math.log(10)     = #{Math.log(10)}")
+echo("Math.log10(10)   = #{Math.log10(10)}")
+echo("Math.pow(4,2)    = #{Math.pow(4,2)}")
+echo("Math.sqrt(1000)  = #{Math.sqrt(1000)}")
+```
+
+### Generate a random number
+```coffee
+randNum = Math.floor(Math.random() * 100) + 1
+echo("Random Number = #{randNum}")
+```
+### STRINGS 
+
+```coffee
+fName = "Derek"
+lName = "Banas"
+longString = "This is a long string we can play with"
+```
+
+#### You can combine Strings with a +
+
+```coffee
+echo(fName + " " + lName )
+```
+
+
+#### Get the String length
+```coffee
+echo("String Length : #{longString.length}")
+```
+
+#### Get the index of a matching string
+```coffee
+echo("Index of string : #{longString.indexOf("goes")}")
+```
+
+#### Get a character at an index
+```coffee
+echo("Index 8 : #{longString.charAt(8)}")
+```
+
+#### Get a substring
+```coffee
+echo("Word at 27 : #{longString.slice(27,31)}")
+```
+
+#### Get everything after an index
+```coffee
+echo("After 27 : #{longString.slice(27)}")
+```
+
+#### Replace a string with another
+```coffee
+longString = longString.replace("forever", "and on forever   ")
+echo("New String : #{longString}")
+```
+
+#### Convert a string into an Array
+```coffee
+strArray = longString.split(" ")
+```
+
+#### Output an array
+```coffee
+for x in strArray
+  echo("#{x}")
+  ```
+
+#### Trim whitespace
+```coffee
+longString = longString.trim()
+```
+
+#### Convert to all uppercase
+```coffee
+echo("#{longString.toUpperCase()}")
+```
+
+#### Convert to all lowercase
+echo("#{longString.toLowerCase()}")
+
+### CONDITIONALS 
+
+#### if
+```coffee
+age = 3
+
+if age >= 18
+  echo('You can Vote')
+  if (age >= 16)
+    echo('You can Drive also>')
+else if (age >= 16)
+  echo('You can Drive')
+else
+  echo('You\'ll be 16 soon')
+```
+
+#### Unless executes if the test returns false
+
+```coffee
+unless (age >= 19)
+  echo('You are in school')
+else
+  echo('You may go to college')
+  ```
+
+#### Logical operators are &&, || and !
+
+```coffee
+hsGrad = true
+
+if !(age > 4) || (age > 65)
+  echo('You don\'t go to school')
+else if (age >= 5) && (age <= 6)
+  echo('Go to Kindergarten')
+else if (age > 6) && (age <= 18)
+  schoolGrade = "Go to Grade #{age - 5}<br>"
+    echo(schoolGrade)
+else
+  echo('Go to Work')
+  ```
+
+#### Ternary operator
+```coffee
+votingAge = if age > 18 then true else false
+echo("Can Vote : #{votingAge}")
+```
+
+#### Switch
+
+```coffee
+childAge = 7
+
+switch childAge
+  when 5 then echo('Go to Kindergarten')
+  when 6, 7, 8, 9, 10 then echo('Go to Elementary School')
+  else echo('Go to Someplace')
+```
+
+#### Do something if the variable has a value
+```coffee
+if age?
+  echo("#{age} years old")
+```
+
+#### The existential operator can also assign 1 value if it exists or another if not
+```coffee
+chicken = null
+chickenName = chicken ? "Fred"
+echo("Chickens Name : #{chickenName}")
+```
+
+#### We can stack conditions
+```coffee
+hat = "Winter Hat"
+coat = "Winter Coat"
+gloves = null
+```
+
+#### Only execute if we have a hat and coat
+```coffee
+if hat? and coat?
+  echo('beforeend',
+    "#{hat} #{coat} #{gloves ? '?'}<br>")
+```
+
+### ARRAYS
+
+```coffee
+randArray = ["word", false, 1234, 1.234]
+echo("Index 2 : #{randArray[2]}")
+```
+
+#### Get the last 2 indexes
+```coffee
+echo("Last 2 : #{randArray[2..3]}")
+```
+
+#### Defines an array with a range from 1 to 10
+
+```coffee
+oneTo10 = [1..10]
+```
+
+#### You can go backwards as well
+
+```coffee
+tenTo1 = [10..1]
+```
+
+#### Combine Arrays
+```coffee
+combinedArray = oneTo10.concat tenTo1
+```
+
+#### Splat "soak up" a list of arguments, or all the values in the array
+```coffee
+oneTo10.push tenTo1...
+```
+
+#### Use a for loop to cycle through the array
+```coffee
+for x in oneTo10
+  echo("#{x}")
+  ```
+
+#### Convert an array into a String
+```coffee
+echo("#{oneTo10.toString()}")
+```
+
+#### Filter out all odds by saving elements that return true for the condition
+```coffee
+evensOnly = oneTo10.filter (x) -> x % 2 == 0
+echo("#{evensOnly.toString()}")
+```
+
+#### Get the maximum value in the array
+```coffee
+echo("Max : #{Math.max oneTo10...}")
+```
+
+#### Get the minimum value in the array
+```coffee
+echo("Min : #{Math.min oneTo10...}")
+```
+
+#### Sum items in an array
+```coffee
+sumOfArray = oneTo10.reduce (x,y) -> x+y
+echo("Sum : #{sumOfArray}")
+```
+
+#### Reverse an Array
+```coffee
+echo("Reverse : #{tenTo1.reverse()}")
+```
+
+#### Create an array of objects
+```coffee
+peopleArray = [
+  {
+    name: "Paul"
+    age: 43
+  },
+  {
+    name: "Sue"
+    age: 39
+  },
+]
+```
+
+#### Access item by key in array
+```coffee
+echo("First Name : #{peopleArray[0].name}")
+```
+
+### LOOPING
+
+#### loop in an array
+```coffee
+for x in oneTo10
+  echo("#{x}")
+```
+
+#### We can use the guard when to print out only odd numbers
+
+```coffee
+for x in oneTo10 when x%2 isnt 0
+  echo("#{x}")
+```
+
+#### We can cycle trough a range of numbers and print out the evens
+```coffee
+for x in [50..100] when x%2 is 0
+  echo("#{x}")
+```
+
+#### We can skip certain values using by
+```coffee
+for x in [20..40] by 2
+  echo("#{x}")
+```
+
+#### We can access indexes
+
+```coffee
+employees = [
+  "Doug"
+  "Sue"
+  "Paul"
+]
+
+for employee, employeeIndex in employees
+  echo("Index: " + employeeIndex + " Employee: " + employee )
+```
+
+#### We can search for a value with in
+```coffee
+if "Doug" in employees
+  echo("I Found Doug")
+```
+
+#### Let's count from 100 to 110 with a while loop
+```coffee
+i = 100
+
+while (i += 1) <= 110
+  echo("i = #{i}")
+```
+
+#### You can use a while loop to cycle until 0 is reached
+```coffee
+monkeys = 10
+while monkeys -= 1
+  echo("#{monkeys} little monkeys, jumping on the bed. One fell off and bumped his head.")
+```
+
+#### There is no Do While loop but it can be emulated
+```coffee
+x = 0
+loop
+  echo('beforeend', "#{++x}<br>")
+  break unless x != 5
+```
+
+### FUNCTIONS
+
+#### definition
+```coffee
+helloFunc = (name) ->
+  return "Hello #{name}"
+
+echo("#{helloFunc("Derek")}")
+```
+
+#### function with no attributes
+
+```coffee
+getRandNum = ->
+  return Math.floor(Math.random() * 100) + 1
+
+echo("Random Number : #{getRandNum()}")
+```
+
+#### You can receive an undefined number of values with vars...
+```coffee
+sumNums = (vars...) ->
+  sum = 0
+  for x in vars
+    sum += x
+  return sum
+
+echo("Sum : #{sumNums(1,2,3,4,5)}")
+```
+
+#### The last expression in a function is returned by default 
+```coffee
+movieRank = (stars = 1) ->
+  if stars <= 2
+    "Bad"
+  else
+    "Good"
+
+echo("Movie Rank : #{movieRank()}")
+```
+
+#### Recursive function that calculates a factorial
+```coffee
+factorial = (x) ->
+  return 0 if x < 0
+  return 1 if x == 0 or x == 1
+  return x * factorial(x - 1)
+
+echo("Factorial of 4 : #{factorial(4)}")
+```
+
+### OBJECTS
+
+```coffee
+derek = {name: "Derek", age: 41, street: "123 Main St"}
+
+echo("Name : #{derek.name}")
+```
+
+#### How we add an object property
+```coffee
+derek.state = "Pennsylvania"
+```
+
+#### Cycle through an object
+```coffee
+for x, y of derek
+  echo(x + " is " + y")
+```
+
+### CLASSES
+
+```coffee
+class Animal
+
+  # List properties along with their default values
+  name: "No Name"
+  height: 0
+  weight: 0
+  sound: "No Sound"
+
+  # Define a static property that is shared by all objects
+  @numOfAnimals: 0
+
+  # Static methods also start with @
+  @getNumOfAnimals: () ->
+    Animal.numOfAnimals
+
+  # The constructor is called when the object is created
+  # If we use @ with attributes the value is automatically assigned
+  constructor: (name = "No Name", @height = 0, @weight = 0) ->
+
+    # @ is like this in other languages
+    @name = name
+
+    # You access static properties using the class name
+    Animal.numOfAnimals++
+
+  # A class function
+  makeSound: ->
+    "says #{@sound}"
+
+  # Use @ to reference the objects properties
+  # Use @ to call ofther methods of this object
+  getInfo: ->
+    "#{@name} is #{@height} cm and weighs #{@weight} kg and #{@makeSound()}"
+```
+
+### Create an Animal object
+```coffee
+grover = new Animal()
+```
+
+### Assign values to the Animal object
+```coffee
+grover.name = "Grover"
+grover.height = 60
+grover.weight = 35
+grover.sound = "Woof"
+
+echo("#{grover.getInfo()}")
+```
+
+### You can attach new object methods outside of the class
+```coffee
+Animal::isItBig = ->
+  if @height >= 45
+    "Yes"
+  else
+    "No"
+
+echo("Is Grover Big #{grover.isItBig()}")
+echo("Number of Animals #{Animal.getNumOfAnimals()}")
+```
+
+### INHERITANCE
+
+```coffee
+class Dog extends Animal
+  sound2: "No Sound"
+
+  constructor: (name = "No Name", height = 0, weight = 0) ->
+
+    # When super is called in the constructor CS calls the super classes
+    # constructor
+    super(name, height, weight)
+
+  # You override methods by declaring one with the same name
+  # CS is smart enough to know you are calling the Animal version
+  # of makeSound when you just type super
+  makeSound: ->
+    super + " and #{@sound2}"
+
+sparky = new Dog("Sparky")
+
+sparky.sound = "Wooooof"
+sparky.sound2 = "Grrrrr"
+
+echo("#{sparky.getInfo()}")
+```

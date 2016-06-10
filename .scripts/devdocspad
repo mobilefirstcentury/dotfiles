@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# This script launches the devdocspad. Name and Title are used by i3 to toggle the  devdocspad with the <WIN+V> shortcut.
+# google-chrome --app=http//devdocs.io  -name DEVDOCSPAD  -title DEVDOCSPAD  #scratchpad to take notes
+
+# exec --no-startup-id urxvt -name SCRATCHPAD -title SCRATCHPAD -e nvim ~/Documents/Utils/scratchpad.md #scratchpad to take notes
+exec urxvt -name DEVDOCSPAD -title DEVDOCSPAD -e google-chrome  --app=http://devdocs.io #scratchpad to take notes

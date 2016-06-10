@@ -1,0 +1,10 @@
+[3134:3134:0603/173220:ERROR:background_mode_manager_aura.cc(13)] Not implemented reached in virtual void BackgroundModeManager::EnableLaunchOnStartup(bool)
+[3134:3168:0603/173221:ERROR:connection_factory_impl.cc(369)] Failed to connect to MCS endpoint with error -106
+[3134:3134:0603/173236:ERROR:zygote_communication_linux.cc(392)] Failed to send GetTerminationStatus message to zygote
+[3134:3134:0603/173236:ERROR:zygote_communication_linux.cc(392)] Failed to send GetTerminationStatus message to zygote
+[3134:3134:0603/173236:ERROR:zygote_communication_linux.cc(392)] Failed to send GetTerminationStatus message to zygote
+[3134:3134:0603/173236:ERROR:zygote_communication_linux.cc(392)] Failed to send GetTerminationStatus message to zygote
+[3134:3134:0603/173236:ERROR:zygote_communication_linux.cc(392)] Failed to send GetTerminationStatus message to zygote
+[3134:3134:0603/173236:ERROR:zygote_communication_linux.cc(392)] Failed to send GetTerminationStatus message to zygote
+[3134:3134:0603/173236:ERROR:zygote_communication_linux.cc(392)] Failed to send GetTerminationStatus message to zygote
+[3134:3134:0603/173236:ERROR:zygote_communication_linux.cc(392)] Failed to send GetTerminationStatus message to zygote

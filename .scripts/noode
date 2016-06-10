@@ -1,0 +1,15 @@
+#!/usr/bin/env zsh 
+
+# this script needs a companion file in the same directory
+# this file 'noode.init' contains javascript code to initialize the context of the node repl.
+# when noode is launched on a real app, the app is responsible for the initialisation.
+
+# [TODO] node-repl is somewhat buggy and will fail if the file path to noode.init.js is not in the form below ...
+# [TODO] fill a bug ticket about that
+
+if [ -f "$1" ]
+then  
+  node --harmony `which node-repl` "$1";
+else  
+  node --harmony `which node-repl` /home/rachid/dotfiles/.scripts/noode.init.js
+fi

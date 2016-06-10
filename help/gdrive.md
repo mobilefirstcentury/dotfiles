@@ -1,11 +1,23 @@
 ---- drive cheatsheet ----
 ==========================
-
+[TODO] comparer à https://github.com/prasmussen/gdrive
 
 ## What is it ?
-  - `drive` is a tiny program to pull or push [Google Drive](https://drive.google.com) files.
+  -`drive` is a tiny program to pull or push [Google Drive](https://drive.google.com) files.
   - drive is only usefull from a directory 'initialized' i.e linked to Google Drive
-  - on MFC workstation, this directory is  '~/gdrive/i'
+  - on MFC workstation, this directory is  '~/gdrive/'
+
+
+## Workflow
+
+**note** markdown documents should never be created or modified with google docs (Google Docs doesn't recognize markdown format). Use instead local editor or
+[DriveNotePad](http://drivenotepad.io)
+
+  - cd in directory to modify in ~/gdrive
+  - `git pull` to have last version of documents
+  - modify/create a directory structure and files in ~/gdrive
+  - `git push` to save documents in Google Drive
+  
 
 ## Help
 

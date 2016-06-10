@@ -1,5 +1,5 @@
 ---- Curl CheatSheet ----
-========================
+  ========================
 
 GET
 ---
@@ -79,6 +79,10 @@ If you need to use the PUT method, you'll need to override the method with the `
 
     curl -X PUT -d '{"name": "Ted"}' -H 'Content-Type: application/json' http://api.example.com:8080/items/1234
 
+#### Upload a file
+We can upload a file a shortcut
+  # this will generated a PUT request with the content of the file 
+  $ curl http://myservice --upload-file file.txt
 
 ## Web REST API POST call with Json data
 curl -X POST -H "Content-Type: application/json" -data '{"key":"val"}' "URL" # Always use quotes around URL to avoid weird problèmes with ampersand '&'

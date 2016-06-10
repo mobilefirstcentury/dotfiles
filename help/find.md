@@ -1,5 +1,10 @@
 ###Find command
 
+
+Typical use
+-------------
+find /path/to/search/ -type f -name "regular-expression-to-find-files" | xargs cp -t /target/path/
+
 Basic find command examples
 =================================================================
 find / -name Chapter1 -type f					#find files by name in a directory 

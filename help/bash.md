@@ -1,12 +1,25 @@
 ---- Bash CheatSheet ----
 ==========================
 
-SheBang
+shebang
 -------
+**note** 
+  - on ubuntu `/bin/sh` is symlinked to `dash` which is a fast but tricky shell used internally by ubuntu
+  - on custom scripts, workstation always uses bash shebang
+
   `#!/usr/bin/env bash`
   `#!/bin/bash`
 
-## 0. Shortcuts.
+
+scripts
+-------
+  - the script ~/.scripts/backup can be taken as a template for simple needs
+  - for more evolved needs, use:
+    + [rebash](https://github.com/jandob/rebash)
+    + or [bash-boilerplate](https://github.com/alphabetum/bash-boilerplate)
+
+0. Shortcuts.
+------------
 
 
   ```

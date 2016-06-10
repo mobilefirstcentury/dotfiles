@@ -314,6 +314,10 @@ gh re --list --type private   -> List all private repositories.
 gh re --list --user zenorocha -> List all repositories from someone.
 
 ### 3. Create
+[TODO][ISSUE]
+  - il y a un bug dans la version 1.12.6 qui force l'ouverture du browser même avec un 'gh re --browser false'
+  - il y une [issue](https://github.com/node-gh/gh/issues/424) ouverte
+  - en attendant j'ai fait un hack dans le code du module en local (dans ~/.nvm/versions/node/v5.0.0/lib/node_modules/gh/lib/cmds/repo.js )
 
 `-N`, `--new`         | **Required** | `String`
 `--organization`      | *Optional*   | `String`

@@ -14,10 +14,12 @@
 ## Quick & Dirty Workflow
 
 1. $ screen                 # create screen session
+                            # we can alse name the session with `screen -S <session-name>`
 2. <ctrl>ad                 # detach or **disconnect: time-out, disconnect, etc.**
 3. $ screen -x              # reconnect last session
 3. $ screen -ls             # list sessions
 4. $ screen -r <session-id> # reconnect session
+                            # we can reconnect with a named session with `screen -r <session-name>`
 5. $ exit                   # close screen session
 
 

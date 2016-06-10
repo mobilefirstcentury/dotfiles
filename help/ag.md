@@ -1,26 +1,43 @@
 AG Text Search USER MANUAL
 =========================
 
-## SYNOPSIS
+synopsis
+---------
 
 `ag` [<file-type>] [<options>] PATTERN [PATH]
 
-## DESCRIPTION
+description
+------------
 
 Recursively search for PATTERN in PATH. Like grep or ack, but faster.
 
-## BASIC USE
-ag  reason  .                       -> searches text 'reason' recursively in the current directory
-ag reason guide/                    -> searches 'reason' recursively in the 'guide' subdirectory
-ag reason$ .                        -> searches lines ending with 'reason'
-ag .js .                            -> searches for any occurence off regexp /.js/ (for instance the word 'turbo')
-ag -Q .js .                         -> search for lines containing the exact pattern '.js" (for instance the word 'less.jst')
-ag -l reason .                      -> shows the list of files containing the pattern 'reason'
-ag -i reason  .                     -> search the case insensitive text 'reason'
-ag -l -G action key .               -> shows the list of files (option -l) with name containing 'action' (option -G) and containing 'key'
-ag -wil arduino -G pdf$ BOOKS .     -> lists all the PDF files containing the WORD 'arduino' in the directory 'BOOKS'
-ag -i -g 'paper' ~/Downloads        -> list all files with name containing case insensitive 'paper'
-ag -l -G action --ignore=*.js key . -> shows the list of files (option -l) except js files with name containing 'action' (option -G) and containing 'key' (--ignore doesn't support regex)
+basic use
+---------
+**note**
+  - ne recherche que dans fichiers de doc, de configuration et de documentation et ignore tous les autres types de fichiers
+  - ignore les fichiers vides (ils ne sont jamais retournés dans les résultats)
+  - les filtres de recherche portant sur le contenu des fichiers acceptent les expressions régulières
+  - les filtres de recherches portant sur les nom de fichiers n'acceptent pas les expressions régulières mais reconnaissent deux charactères spéciaux:
+    + '$': fin du nom
+    + '*': wildcard
+      
+
+**conditions sur le contenu uniquement**
+ag  reason  .                                  -> searches text 'reason' recursively in the current directory
+ag reason guide/                               -> searches 'reason' recursively in the 'guide' subdirectory
+ag -l reason .                                 -> shows the list of files containing the pattern 'reason'
+ag -i reason  .                                -> search the case insensitive text 'reason'
+ag reason$ .                                   -> searches lines ending with 'reason'
+ag .js .                                       -> searches for any occurence off regexp /.js/ 
+ag -Q .js .                                    -> search for lines containing the exact pattern '.js" (for instance the word 'less.jst')
+
+**conditions sur les noms de fichiers**
+ag -l -G action key .                          -> shows the list of files (option -l) with name containing 'action' (option -G) and containing 'key' in current directory
+ag -wil arduino -G .pdf$ BOOKS .               -> lists all the PDF files containing the WORD 'arduino' in the directory 'BOOKS'
+ag -i -g 'paper' ~/Downloads                   -> list all files with name containing case insensitive 'paper'
+ag -l -G lib*.pf$ -G lib*.pdf key .            -> list of pdf files with name containing lib OR data
+ag -l -G lib*data*.pdf$ -G data*lib*.pdf key . -> list of pdf files with name containing lib AND data
+ag -l -G action --ignore=*.js key .            -> shows the list of files (option -l) except js files with name containing 'action' (option -G) and containing 'key' (--ignore doesn't support regex)
 
 
 ## OPTIONS

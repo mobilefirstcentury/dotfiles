@@ -1,50 +1,50 @@
-search help
-search j
-search archwiki
-search Mon
-search Mon*
-search ruby.md
-search ruby*
-search *ranger*
-touch 
-touch toto.md
-vim new.md
-nvim toto.md
-find *.md
-find 2005
-find *2005*
-search 
-find AA
-find i3
-find now
-filter *.txt
-filter booo
-search fugitive
-search fugiti
-search ugiti
-find cut
-find emm
-filter em
-filter 
-autojump :q
-autojump tuto
+find awk
+;
+search awk
+mv %s ~/Documents/_EBOO
+ls mv %s ~
+mv %s ~/Documents/_EBOOKS/_3D
+shell mv %s ~/Documents/_EBOOKS/_3D
+search Data
+shell mv %s ~/Documents/_EBOOKS/_DATA
+search amazon
+shell mv %s ~/Documents/_EBOOKS/_AWS
+search android
+shell mv %s ~/Documents/_EBOOKS/_ANDROID
+search ansible
+shell mv %s ~/Documents/_EBOOKS/_ANSIBLE
+search arduino
+shell mv %s ~/Documents/_EBOOKS/_ARDUINO
+search IOT
+shell mv %s ~/Documents/_EBOOKS/_IOT
+search css
+shell mv %s ~/Documents/_EBOOKS/_CSS
+search bash
+search json
+shell mv %s ~/Documents/_EBOOKS/_JSON
+search banana
+shell nn
 
-shell @ %s
-cd
-cd .
-h
-mkdir VIDEOS
-mv _VIDEOS
-r
-rename _VIDEOS
-q
-help
-rm
-open_with em
-remove
-search ui
-search app
-delete
-delete 
-open_with 
-find tran
+shell mv %s ~/Documents/_EBOOKS/_BANANA
+search beagle
+shell mv %s ~/Documents/_EBOOKS/_BEAGLEBONE
+search linux
+shell mv %s ~/Documents/_EBOOKS/_ADMIN
+shell mv %s ~/Documents/_EBOOKS/_CRYPTOCURRENCY
+search regex
+shell mv %s ~/Documents/_EBOOKS/_REGEX
+shell mv %s ~/Documents/_EBOOKS/_SMARTCITY
+search docker
+shell mv %s ~/Documents/_EBOOKS/_DOCKER
+shell mv %s ~/Documents/_EBOOKS/_CORS
+shell mv %s ~/Documents/_EBOOKS/_SECURITY
+shell mv %s ~/Documents/_EBOOKS/_HACK
+search dash
+find in
+find index
+find s/su
+search su
+cd ~
+cd /home/rachid/.scripts/
+search Sys
+find x

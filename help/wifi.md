@@ -1,59 +1,87 @@
-How to connect to a WPA/WPA2 WiFi network using Linux command line
-This is a step-to-step guide for connecting to a WPA/WPA2 WiFi network via the Linux command line interface. The tools are:
+---- Wifi Network User Guide ----
+===================================
 
-wpa_supplicant
-iw
-ip
-ping
-iw is the basic tool for WiFi network-related tasks, such as finding the WiFi device name, and scanning access points. wpa_supplicant is the wireless tool for connecting to a WPA/WPA2 network. ip is used for enabling/disabling devices, and finding out general network interface information.
 
-The steps for connecting to a WPA/WPA2 network are:
 
-Find out the wireless device name.
-$ /sbin/iw dev
-phy#0
-	Interface wlan0
-		ifindex 3
-		type managed
-The above output showed that the system has 1 physical WiFi card, designated as phy#0. The device name is wlan0. The type specifies the operation mode of the wireless device. managed means the device is a WiFi station or client that connects to an access point.
+stop and start wifi interface
+----------------------------
+  $ sudo ifconfig wlan0 down
+  $ sudo ifconfig wlan0 up
 
-Check that the wireless device is up.
-$ ip link show wlan0
-3: wlan0: (BROADCAST,MULTICAST) mtu 1500 qdisc noop state DOWN mode DEFAULT qlen 1000
-    link/ether 74:e5:43:a1:ce:65 brd ff:ff:ff:ff:ff:ff
-Look for the word "UP" inside the brackets in the first line of the output.
+restart network functions
+------------------------
+  $ sudo service network-manager restart
+  # or without sudo rights 
+  $ mfcNetworkRestart
 
-In the above example, wlan0 is not UP. Execute the following command to bring it up:
+end power management of wifi card (buggy on ubuntu)
+--------------------------------------------------
+  $ iwconfig wlan0 power off  
 
-$ sudo ip link set wlan0 up  
-[sudo] password for peter: 
-Note: you need root privilege for the above operation.
 
-If you run the show link command again, you can tell that wlan0 is now UP.
+start power management of wifi card (not advised)
+--------------------------------------------------
+  $ iwconfig wlan0 power up
 
-$ ip link show wlan0
-3: wlan0: (NO-CARRIER,BROADCAST,MULTICAST,UP) mtu 1500 qdisc mq state DOWN mode DEFAULT qlen 1000
-    link/ether 74:e5:43:a1:ce:65 brd ff:ff:ff:ff:ff:ff
-Check the connection status.
-$ /sbin/iw wlan0 link
-Not connected.
-The above output shows that you are not connected to any network.
+list network interfaces with logical names
+-------------------------------------------
+  $ sudo lshw -C network
+  # or 
+  $ sudo lshw -C network | grep -i logi             
 
-Scan to find out what WiFi network(s) are detected
-$ sudo /sbin/iw wlan0 scan
-BSS 00:14:d1:9c:1f:c8 (on wlan0)
-        ... sniped ...
-	freq: 2412
-	SSID: gorilla
-	RSN:	 * Version: 1
-		 * Group cipher: CCMP
-		 * Pairwise ciphers: CCMP
-		 * Authentication suites: PSK
-		 * Capabilities: (0x0000)
-        ... sniped ...
-The 2 important pieces of information from the above are the SSID and the security protocol (WPA/WPA2 vs WEP). The SSID from the above example is gorilla. The security protocol is RSN, also commonly referred to as WPA2. The security protocol is important because it determines what tool you use to connect to the network.
 
-Connect to WPA/WPA2 WiFi network.
+Connect to WP1/WPA2 Wifi from CLI
+--------------------------------
+
+### tools
+  - wpa_supplicant: connect to WPA/WPA2 network
+  - iw: find Wifi device name, scan access points
+  - ip: enable/disable devices and find general network interface information
+  - ping: pong ...
+
+1. Find out the wireless device name.
+  $ iw dev                                      | show wireless netword interfaces    
+    ->                                          
+    phy#0                                       | system has one physical card designated as phy#0
+      Interface wlan0                           | the device name is wlan0
+        ifindex 3
+        type managed                            | `managed` means it's a wifi station or a client that connects to an access point
+
+  
+
+2. Check that the wireless device is up.
+  $ ip link show wlan0
+    -> 
+    3: wlan0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DORMANT group default qlen 1000
+        link/ether 0c:8b:fd:bf:90:37 brd ff:ff:ff:ff:ff:ff
+  # the device is UP is the key "UP" appears inside brakets on the first line
+  # if it's not the case, you can...
+
+3. bring the device up 
+  $ sudo ip link set wlan0 up  
+  # this needs root password
+
+4. Check the connection status.
+  $ /sbin/iw wlan0 link
+    ->
+    Not connected.
+
+5. Scan wifi networks
+  $ sudo iw wlan0 scan | grep SSID
+    ->
+    BSS 00:14:d1:9c:1f:c8 (on wlan0)
+            ......
+      freq: 2412
+      SSID: gorilla                                     
+      RSN:	 * Version: 1                       # The security protocol, here RSN (commonly referred to as WPA2), is important because it determines whhat tool to use
+        * Group cipher: CCMP
+        * Pairwise ciphers: CCMP
+        * Authentication suites: PSK
+        * Capabilities: (0x0000)
+            ......
+
+
+6. Connect to WPA/WPA2 WiFi network.
 This is a 2 step process. First, you generate a configuration file for wpa_supplicant that contains the pre-shared key ("passphrase") for the WiFi network.
 
 $ sudo -s

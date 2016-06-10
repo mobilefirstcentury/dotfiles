@@ -8,6 +8,9 @@ RACCOURCIS:
 
 Expand : <C-y>,
 
+SNIPPETS DEFINTIION
+====================
+see [snippets.json](https://github.com/emmetio/emmet/blob/master/lib/snippets.json)
 
 
 CONTENTS                                                      *emmet-contents*

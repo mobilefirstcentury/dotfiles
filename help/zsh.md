@@ -1,6 +1,44 @@
 AIDE ZSH
 ========
+[TODO] 
+  - Récupérer tout ce qui est interressant dans [ce guide](https://www.smashingmagazine.com/2015/07/become-command-line-power-user-oh-my-zsh-z/)
 
+Directories
+------------
+d                               # print numbered recent directories stack  
+d | most                        # print numbered recent directories in a pager
+                                # does not pollute current console.
+                                # exit qith 'q'
+dirs -v                         # print numbered recent directories stack
+dirs -p                         # print recent directories stack (one by line)
+dirs -l                         # print recent directories stack (long names)
+popd +5                         # Displays the nth entry counting from the left of the list (starting with zero)
+                                [TODO] `popd -N` et `popd +N` ne marche pas comme attendu (elles supprime le repertoire du stack mais ne changent pas de repertoire)
+popd -5                         # Displays  the  nth  entry  counting from the right of the list starting with zero.
+                                [TODO] `popd -N` et `popd +N` ne marche pas comme attendu (elles supprime le repertoire du stack mais ne changent pas de repertoire)
+5                               # cd to fifth directory in directory stack
+cd ~5                           # cd to fifth directory in directory stack
+cd -5                           # cd to fifth directory in directory stack
+cd -<tab>5                      # cd to 5'th directory in the dir stack (normal order)
+cd +<tab>5                      # cd to 5'th directory in the dir stack (reverse order) 
+cp file ~1                      # where 1 is first entry in pushd stack
+cp file.txt ~+<TAB>          # select recent directory 
+pushd +2                        # cd to 3rd entry in pushd stack
+setopt autopushd                # force cd to act like pushd
+
+command line
+-------------
+
+### vim mode
+On workstation, the command line emulate main vim modes and keyboard shortcuts.
+[TODO] détailler l'utilisation des modes vim et des shortcuts vim dans la ligne de commande.
+
+### best practices
+#### edit in vim
+  to enter or modify a complex command line:
+    1. > <n>                           # enters normal mode
+    2. > <v>                           # edit current command line in vim
+    3. > <:q>                          # got back to command line
 
 [TODO]
 ======
@@ -97,7 +135,8 @@ LS
 ### Vrac
 
 ls *(.)                                               # list just regular files
-ls -d *(/)                                            # list just directories *C*
+ls -d */                              i               # list just directories in current directory
+ls -d *(/)                                            # list just directories in current dictory
 ls *(@)                                               # list all symlinks in the current directory
 ls -lt  **/*(.om[1,20])                               # list 20 newest files anywhere in directory hierarchy (very useful)
 ls -lt  **/*.php(.om[1,20])                           # list 20 newest php files anywhere in directory hierarchy (very useful)
@@ -492,33 +531,6 @@ anchortext=${${(C)url//[_-]/ }:t}  # titlecase
 echo "<a href='$url'>$anchortext</a>"
 
 
-# creating a family of functions
-# generate hrefs from url
-function href{,s}
-{
-# href creates an HTML hyperlink from a URL
-# hrefs creates an HTML hyperlink from a URL with modified anchor text
-PROGNAME=`basename $0`
-url=`cat /dev/clipboard`
-if [ "$PROGNAME" = "href" ] ; then
-href="<a href='$url'>$url"
-elif [ "$PROGNAME" = "hrefs" ] ; then 
-anchortext=${${(C)url//[_-]/ }:t}
-href="<a href='$url'>$anchortext"
-fi
-echo -n $col
-echo $href > /dev/clipboard | more
-}
-# access vim scratch files v1,v2 to v9
-function vx{0..9} {gvim.exe c:/aax/${0/#v/} &}
-#
-# create vim scratch files va,vb to vz
-function vx{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,q,r,s,t,u,v,w,x,y,z}
-{
-scratchfile=${0/#v/}
-gvim.exe c:/aax/$scratchfile &
-}
-
 
 
 # regular expressions in zsh  examples 
@@ -555,16 +567,7 @@ cp -a file1 file   # -a transfer  permissions etc of file1 to file2preserve
 eval "$1=$PWD"
 
 
-# brilliant will change your life
-setopt autopushd                # *C*
-dirs -v                         # 
-cd ~5                           # cd to fifth directory in directory stack
-cd -<tab complete> then type number of directory needs compinit *C*
-dirs -p                         # display recent directories 
-cp file ~1                      # where 1 is first entry in pushd stack
-#
-cp file.txt ~+<TAB>          # select recent directory 
-pushd +2                        # cd to 3rd entry in pushd stack
+
 #zsh completion
 startfilename<tab>           # will complete matching files anywhere in $PATH
 startfilename<C-D>           # will list matching files anywhere in $PATH
@@ -616,6 +619,7 @@ make install > /tmp/logfile | grep -i error
 
 function g{0..9} { gmark $0 $* }          # declaring multiple functions
 
+# bulk rename
 # zmv "programmable rename"
 autoload -U zmv
 # Replace spaces in filenames with a underline
@@ -629,6 +633,9 @@ $ zmv -i '(*)' '${(L)1}' # lowercase
 $ zmv -i '(*)' '${(U)1}' # uppercase
 $ zmv '([a-z])(*).txt' '${(C)1}$2.txt' ; rename fred.txt to Fred.txt
 
+# easier than zmv
+$ mmv *.c.orig orig/*.c
+$ rename 's/.txt/.doc/' *.txt
 
 # initialize zsh/config 
 autoload -U compinit

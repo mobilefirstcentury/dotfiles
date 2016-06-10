@@ -1,4 +1,4 @@
 #!/bin/bash
 
-# This script launches the scratchpad. Name and Title are used by i3 to toggle the  scratchpad with the win+m shortcut.
+# This script launches the scratchpad. Name and Title are used by i3 to toggle the  scratchpad with the <WIN+N> shortcut.
 urxvt -name SCRATCHPAD -title SCRATCHPAD -e nvim -c "let g:auto_save = 1 " ~/Documents/Utils/scratchpad.md &

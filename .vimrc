@@ -22,6 +22,9 @@ nnoremap <leader>ev :vsplit $MYVIMRC<CR>
 " <leader>sv sources .vimrc
 nnoremap <leader>sv :source $MYVIMRC<CR>:redraw<CR>:echo $MYVIMRC 'reloaded'<CR>
 
+" we want to have howdoi in vim command line.
+" typing ':howdoi<space>' will be expansed to ':read howdoi '''
+cnoreabbrev howdoi read !howdoi ''<Left>
 
 " -- backup and swap files -----------------------------------------------------
 
@@ -437,10 +440,8 @@ map <S-Right> <C-w>>
 
 " <leader>q quits the current window
 nnoremap <silent> <leader>q :q<CR>
-inoremap <silent> <leader>q <ESC>:q<CR>
 " <leader> <escape> also quits the current window
 nnoremap <silent> <leader><ESC>  :q<CR>
-inoremap <silent> <leader><ESC>  <ESC>:q<CR>
 
 
 " create a new tab
@@ -561,7 +562,14 @@ set wildignore+=*.pyc
 noremap Y y$
 
 " CTRL-S saves file
-"nnoremap <C-s> :w<CR>
+
+nmap <c-s> :w<CR>
+vmap <c-s> <Esc><c-s>gv
+imap <c-s> <Esc><c-s>a
+
+nmap <F2> :update<CR>
+vmap <F2> <Esc><F2>gv
+imap <F2> <c-o><F2>
 
 " inverts paste mode
 nnoremap <silent> <leader>pp :set paste! paste?<CR>
@@ -587,6 +595,9 @@ noremap <silent> <leader>s :call Preserve("%s/\\s\\+$//e")<CR>
 noremap <silent> <leader>$ :call Preserve("%s/<C-V><CR>//e")<CR>
 
 " Copy Paste Settings
+
+" vp will select previously pasted text
+nnoremap <expr> vp '`[' . strpart(getregtype(), 0, 1) . '`]'
 
 " use <leader>d to delete a line without adding it to the yanked stack
 nnoremap <silent> <leader>d "_d
@@ -655,12 +666,7 @@ noremap <C-Q>   	<C-V>
 " autofix typos
 "iabbrev teh the
 
-" reselect last selection after indent / un-indent in visual and select modes
-vnoremap < <gv
-vnoremap > >gv
-vmap <Tab> >
-vmap <S-Tab> <
-
+"
 " set cpoptions+=$  " display $ at the end of the replacement zone instead of
 "                  " deleting text with 'cw' and alike
 
@@ -675,7 +681,7 @@ au BufRead,BufNewFile *.md setlocal textwidth=190
 
 " this allows fenced block codes to by syntax colored in VIM
 au BufNewFile,BufReadPost *.md set filetype=markdown
-let g:markdown_fenced_languages = ['coffee', 'css', 'erb=eruby', 'javascript', 'js=javascript', 'json=javascript', 'ruby', 'sass', 'xml', 'html']
+  let g:markdown_fenced_languages = ['coffee', 'css', 'erb=eruby', 'javascript', 'js=javascript', 'json=javascript', 'ruby', 'sass', 'xml', 'html', 'sh', 'yaml', 'liquid']
 
 
 " exit from insert mode without cursor movement
@@ -732,6 +738,11 @@ vnoremap . :normal .<CR>
 "vnoremap v <C-V>
 "vnoremap <C-V> v
 
+
+" pretty print javascript code
+" This is an experiment as I choose to not use the existing plugin version of
+" this module and map directly a system call
+nnoremap <leader>ff :%!js-beautify -j -q -B -f -<CR>
 
 " -- searching -----------------------------------------------------------------
 
@@ -904,7 +915,6 @@ call vundle#begin()
 
 " Plugins
 Plugin 'gmarik/Vundle.vim'
-"Plugin 'gabrielelana/vim-markdown'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'tomtom/tcomment_vim'
 Plugin 'bling/vim-airline'
@@ -921,9 +931,10 @@ Plugin 'elzr/vim-json'
 Plugin 'pangloss/vim-javascript'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'mattn/gist-vim'
+Plugin 'vim-airline/vim-airline-themes'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'christoomey/vim-tmux-navigator'
-"Plugin 'tomtom/tlib_vim'
+Plugin 'tomtom/tlib_vim'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'Raimondi/delimitMate'
@@ -936,18 +947,22 @@ Plugin 'tyru/open-browser.vim'
 Plugin 'Mizuchi/vim-ranger'
 Plugin 'djoshea/vim-autoread'
 Plugin 'kchmck/vim-coffee-script'
+"Plugin 'tpope/vim-liquid'
+"Plugin 'laurentgoudet/vim-howdoi.git'
+Plugin 'vim-scripts/CountJump'  "Ca marche pas
+Plugin 'vim-scripts/JumpToVerticalOccurrence'  "Ca marche pas
+Plugin 'moll/vim-node'
+Plugin 'terryma/vim-multiple-cursors'
 
 if has('lua') && (v:version > 703 || v:version == 703 && has('patch885'))
     Plugin 'Shougo/neocomplete.vim'
 else
     Plugin 'ervandew/supertab'
 endif
+"
 " Plugins conditionnels
 " neovim -> neomake
 Plugin 'scrooloose/syntastic'
-
-
-
 
 
   
@@ -972,8 +987,9 @@ let g:jedi#auto_vim_configuration = 0
 let g:jedi#completions_enabled = 0
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 
-" Ignore gitignored files in CtrlP
+" Ignore some directories in CtrlP fuzzy search
 let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
+let g:ctrlp_custom_ignore = 'node_modules\|^.git$\|_site'
 
 " Always populate loclists with syntastic
 let g:syntastic_always_populate_loc_list = 1
@@ -1023,7 +1039,7 @@ let g:airline_mode_map = {
     \ }
  
 " Show json quotes
-let g:vim_json_syntax_conceal = 0
+let g:vim_json_syntax_conceal = 0             
 
 " Expand current split to fullscren/restore split size
 nmap <silent><leader>o :ZoomWin<CR>
@@ -1075,6 +1091,27 @@ augroup VimStartup
 augroup END
 
 
+" remaps default Ultisnips mappings to avoid collision with Indentation with Tabi key
+let g:UltiSnipsExpandTrigger  =  '<c-l>'
+let g:UltiSnipsListSnippets   =    '<c-h>'
+let g:UltiSnipsJumpForwardTrigger =  '<c-j>'
+let g:UltiSnipsJumpBackwardTrigger =  ' <c-k>'
+
+" Options of delimitmate to automate braces completion
+let g:delimitMate_autoclose = 1
+let g:delimitMate_matchpairs = "(:),[:],{:},<:>"
+let g:delimitMate_jump_expansion = 1
+let g:delimitMate_expand_space = 1
+let g:delimitMate_expand_cr = 2
+let g:delimitMate_expand_inside_quotes = 1
+
+
+" JumpToVerticalOccurence Plugin motion mappings
+let g:JumpToVerticalOccurrence_CharUnderCursorMapping = 'v' 
+let g:JumpToVerticalOccurrence_QueriedMapping = 'V' 
+let g:JumpToVerticalOccurrence_NonWhitespaceMapping = '<Bar>' 
+let g:JumpToVerticalOccurrence_LastSameCharMapping = '!' 
+
 "
 " ==================== Colors ====================
 
@@ -1085,7 +1122,21 @@ colorscheme solarized "ajouté pour installation solarized
 "silent! colorscheme jellybeans
 
 
+" ======================= TAB ne fonctionne pas alors je le mets ici ==========
+"
+" reselect last selection after indent / un-indent in visual and select modes
+vnoremap < <gv
+vnoremap > >gv
+vmap <Tab> >
+vmap <S-Tab> <
 
+nnoremap <Tab> >>_
+nnoremap <S-Tab> <<_
+inoremap <S-Tab> <C-D>
+vnoremap <Tab> >gv
+vnoremap <S-Tab> <gv
+
+" ==============================================================================
 
 " clear screen when vim exists ?
 "set t_te= t_ti=
@@ -1115,3 +1166,6 @@ colorscheme solarized "ajouté pour installation solarized
     "     redraw!
     " endfun
     " map ,r :call RangerChooser()<CR>
+    "
+    "
+    "

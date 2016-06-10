@@ -68,44 +68,64 @@ Navigation
 Working with Files
 ==================
 
-     * :e <filename> = Creates a new file and opens it in Vim
-     * i = Display file (useful if you'd like to view a text file in a
-       pager instead of editing it)
-     * l or E = Open file (opens file in default file-handler)
-     * r = Open file with… (allows you to choose program to use)
-     * o = Change sort order (follow by character in menu selection)
-     * z = Change settings (commonly used toggle settings)
-     * zh = View hidden files
-     * <space> = Select current file
-     * t = Tag file (you can perform actions on tagged files)
-     * cw = Rename current file
-     * / = Search for files
-     * n = Jump to next match
-     * N = Jump to previous match
-     * yy = Yank (copy) file
-     * dd = Mark file for cut operation
-     * <delete><enter> = Delete selected files
+     * :e  <filename>               | Creates a new file and opens it in Vim
+     * i                            | Display file (useful if you'd like to view a text file in a pager instead of editing it)
+     * l or E                       | Open file (opens file in default file-handler)
+     * r                            | Open file with… (allows you to choose program to use)
+
+     * /                            | Search for files
+     * n                            | Jump to next match
+     * N                            | Jump to previous match
+     
+     * <space>                      | Select current file
+     * cw                           | Rename current file
+     * yy                           | Yank (copy) file
+     * dd                           | Mark file for cut operation
+     * <delete><enter>              | Delete selected files
+
+     * o                            | Change sort order (follow by character in menu selection)
+     * zh                           | View hidden files
+     * z                            | Change settings (commonly used toggle settings)
+
+
+Terminal
+=========
+
+     * S                            | opens an embedded terminal in current directory 
+     * <C-D>                        | closes embedded terminal and returns to ranger
+
+
 
 File tagging and marking
 ========================
+     * t                            | Tag file (you can perform actions on tagged files)
+
+
+
 
 Tabbed Browsing
 ================
-     * <ctrl>-n = Create new tab
-     * <ctrl>-w = Close current tab
-     * <tab> = Next tab
-     * <shift><tab> = Previous tab
+     * <ctrl>-N     | Create new tab
+     * <ctrl>-W     | Close current tab
+     * <tab>        | Next tab
+     * <shift><tab> | Previous tab
+     * <alt-N>      | opens nth tab
+
+
+
 
 
 Command Interface
 ==================
 ** Notes ** Like vim, ranger also includes a command interface accessible with ":"
+
      * ! = Execute a command from the shell (non-ranger commands)
      * : = Execute a ranger command
      * du = Measure disk usage of current directory
      * chmod = Change permissions of current file
 
 ** Notes ** Following flags can be used with a dash "-" after typing "!" for shell commands or ":" for ranger commands
+
      * -s = Discard the output of the current command.
      * -d = Detach the process and run in the background
      * -p = Return the output in ranger's file pager

@@ -1,3 +1,7 @@
+---- Rename Cheat Sheet -----
+=============================
+
+
 Consider this common scenario. A directory contains multiple files that are named using a common convention: for example, image-001.png, image-002.png, image-003.png, etc. You want to rename the files to, say, upload-001.png, upload-002.png, upload-003.png, etc.
 
 The coders among us can write a bash script to automate the process. For expedience, this post shows how to use the built-in rename command to achieve the same goal.

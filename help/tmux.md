@@ -10,11 +10,13 @@
 Workflow Quick & Dirty
 ----------------------
 
-1. $ tmux                   # create screen session
+1. $ tmux                   # create screen session 
+                            # or **create a named session with `tmux new -s <session-name>`**
 2. $ ctrl-a d               # detach ou **disconnect: time-out, disconnect, etc.**
 4. $ tmux a                 # reconnect **last** session
-3. $ tmux ls               # list sessions
+3. $ tmux ls                # list sessions
 4. $ tmux a <session-id>x   # reconnect session if several sessions
+                            # or reconnect to a named session with `tmux a -t <session-name>`
 5. $ exit                   # close screen session
 
 Workflow conseillé

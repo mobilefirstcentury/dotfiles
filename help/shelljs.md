@@ -13,53 +13,73 @@ Installation
 ------------
  + [ATTENTION]
    + Tant que la version disponible via npm n'intègre pas les 'pipe', il faut installer shelljs directement depuis github
+
+     ```sh
      - npm install -g shelljs/shelljs 
      - cd ~ ; npm install shelljs/shelljs
+     ```
    + So maintenace must be done manually by reinstalling shelljs globally and locally ...
  + Installation is a bit tricky: 
     - # install node js through NVM
     - # install shelljs module globally:
+
+      ```sh
       $ npm install -g shelljs  # this allows the use of shelljs from the command line (no so usefull ...) 
-    - # install shelljs locally in home directory (~):
-      * # to have the possibility to 'require' a module from the code, it's must be a direct dependance: a global module can't be required but only called from the command line
-      * # for some undocumented (?) reasons, if module is installed locally in the user's home directory (~): 
-         + # a bunch of warnings are displayed as the home directory is not a node project directory
-         + # the module becomes available for 'require' from anywhere ...
+      ```
+    + # install shelljs locally in home directory (~):
+      - # to have the possibility to 'require' a module from the code, it's must be a direct dependance: a global module can't be required but only called from the command line
+      + # for some undocumented (?) reasons, if module is installed locally in the user's home directory (~): 
+         - a bunch of warnings are displayed as the home directory is not a node project directory
+         - the module becomes available for 'require' from anywhere ...
     - # install globally coffeejs
+
+      ```sh
       $ npm insall -g coffeescript
+      ```
    
 Additionnal Modules
 ------------------
+
 ### yamljs 
   + [Github repo](https://github.com/jeremyfa/yaml.js)
   + usefull to convert yaml files or strings to native objects or to json
-  + $ npm install -g yamljs # for command line use
-  + $ cd ~ ; npm install yamljs  # for shell script use with require from anywhere 
-  
+
+  ```sh
+  $ npm install -g yamljs # for command line use
+  $ cd ~ 
+  $ npm install yamljs  # for shell script use with require from anywhere 
+  ```
 
 Command line Shell Scripting
 ---------------------------
+
 ### shexec 
   + Very simple shell script installed in ~/scripts that automatically requires shelljs and executes arguments as coffee script code if arguments are given or otherwise exectutes code from stdin 
   + Exemple use: 
-    `
+
+    ```sh
     $ shexec "echo file for file in ls '*.js'" 
-      # or (only for most simple cases ...)
-      $ shexec echo file for file in ls \'*.js\'
+
+    # or (only for most simple cases ...)
+    $ shexec echo file for file in ls \'*.js\'
+
     $ shexec "ages = max:10, shella:9, bob:7; echo \"#{child} is #{age}\" for child, age of ages"
+
     $ echo "echo \"random = #{Math.random 1}\"" | shexec "echo 'done'"
+    
+    # or using stdin
     $ shexec                                                                                                                                                        ~downloads  
       for num in [0...10]
         echo "text#{num} content"
           .to "text#{num}.txt"
       ^D
-    `
+    ```
 
 Script writing
 --------------
   1. write script with coffee shebang and require shelljs. Example: 
 
-  `
+      ```coffee
       #!/usr/bin/env coffee
 
       require 'shelljs/global'
@@ -84,7 +104,8 @@ Script writing
       if (exec 'git commit -am "Auto-commit"').code != 0
         echo 'Error: Git commit failed'
         exit 1
-  `
+      ```
+
   2. save the file without extension
   3. change execution mode of the script: chmod +x new-script
   4. move the file in ~/scripts to have it in the PATH
@@ -95,13 +116,14 @@ Best practices
 --------------
   - Installing every module needed by scripts in home directory would not be feasible as it would be generate version conflicts among the scripts
   - So we would install in home directory only very basic and important modules
-  - MOST scripts would be created in their own directory under ~/scripts :
-    + symbolic link would be created from '~/scripts' to '~/scripts/script-folder/script-name.js'
-    + all dependencies would be installed locally in the script folder
+  + MOST scripts would be created in their own directory under ~/scripts :
+    - symbolic link would be created from '~/scripts' to '~/scripts/script-folder/script-name.js'
+    - all dependencies would be installed locally in the script folder
 
 Require
 --------
 
+    ```coffee
     # global require
     require 'shelljs/global'
     echo 'hello world'
@@ -109,7 +131,7 @@ Require
     # or local require ...
     shell = require 'shelljs'
     shell.echo 'hello world'
-
+    ```
 
 Reference
 ---------
@@ -129,7 +151,7 @@ Reference
   Returns array of files in the given path, or in current directory if no path provided.
 
   **options**
-  ```
+  ```coffee
   ls '-R'  # recursive
   ls '-A'  # all files (include files beginning with `.`, except for `.` and `..`)
   ls '-d'  # list directories themselves, not their contents
@@ -137,7 +159,7 @@ Reference
   ```
 
   **examples**
-  ```
+  ```coffee
   ls 'projs/*.js'
   ls '-R', '/users/me', '/tmp'
   ls '-R', ['/users/me', '/tmp'] // same as above
@@ -152,7 +174,7 @@ The main difference from `ls('-R', path)` is that the resulting file names inclu
 
 
   **examples**
-  ```
+  ```coffee
   find 'src', 'lib';
   find ['src', 'lib']; // same as above
   # retrieve js files with a regex
@@ -168,14 +190,14 @@ The main difference from `ls('-R', path)` is that the resulting file names inclu
   Copies files. The wildcard `*` is accepted.
 
   **options**
-  ```
+  ```coffee
   cp '-f'  # force (default behavior)
   cp '-n' # no-clobber
   cp '-r', cp '-R' # recursive
   ```
 
   **examples**
-  ```
+  ```coffee
   cp 'file1', 'dir1'
   cp '-R', 'path/to/dir/', '~/newCopy/'
   cp '-Rf', '/tmp/*', '/usr/local/*', '/home/tmp'
@@ -187,12 +209,14 @@ The main difference from `ls('-R', path)` is that the resulting file names inclu
   Removes files. The wildcard `*` is accepted.
 
 **options**
-rm '-f' # force
-rm '-r', rm '-R'# recursive
+  ```coffee
+  rm '-f' # force
+  rm '-r', rm '-R'# recursive
+  ```
 
 **examples**
 
-  ```
+  ```coffee
   rm '-rf', '/tmp/*'
   rm 'some_file.txt', 'another_file.txt'
   rm ['some_file.txt', 'another_file.txt'] // same as above
@@ -207,7 +231,8 @@ rm '-r', rm '-R'# recursive
 `-n`: no-clobber
 
 **examples**
-  ```
+  
+  ```coffee
   mv '-n', 'file', 'dir/'  
   mv 'file1', 'file2', 'dir/'  
   mv ['file1', 'file2'], 'dir/'   // same as above
@@ -223,7 +248,7 @@ rm '-r', rm '-R'# recursive
 
 **examples**
 
-  ```javascript
+  ```coffee
   mkdir '-p', '/tmp/a/b/c/d', '/tmp/e/f/g'  
   mkdir '-p', ['/tmp/a/b/c/d', '/tmp/e/f/g']   // same as above
   ```
@@ -233,7 +258,8 @@ rm '-r', rm '-R'# recursive
   Evaluates expression using the available primaries and returns corresponding value.
 
 **options**
-  ```
+
+  ```coffee
   test '-b', 'path' # true if path is a block device
   test '-c', 'path' # true if path is a character device
   test '-d', 'path' # true if path is a directory
@@ -245,12 +271,11 @@ rm '-r', rm '-R'# recursive
   ```
 
 **examples**
-  ```
+
+  ```coffee
   if  test '-d', path  then  /* do something with dir */  
   if not test '-f', path  continue  // skip if it's a regular file
   ```
-
-
 
 ### cat file [, file ...] 
 ### cat file_array 
@@ -260,7 +285,7 @@ rm '-r', rm '-R'# recursive
 
 **examples**
 
-  ```
+  ```coffee
   str = cat 'file*.txt'  
   str = cat 'file1', 'file2'  
   str = cat ['file1', 'file2']   // same as above
@@ -275,7 +300,7 @@ rm '-r', rm '-R'# recursive
 
 **examples**
 
-  ```
+  ```coffee
   cat 'input.txt' 
     .to 'output.txt'  
   ```
@@ -285,7 +310,7 @@ rm '-r', rm '-R'# recursive
 
 **examples**
 
-  ```
+  ```coffee
   cat 'input.txt' 
     .toEnd 'output.txt'  
   ```
@@ -302,7 +327,7 @@ rm '-r', rm '-R'# recursive
 
 **examples**
 
-  ```
+  ```coffee
   sed '-i', 'PROGRAM_VERSION', 'v0.1.3', 'source.js'  
   sed /.*DELETE_THIS_LINE.*\n/, '', 'source.js'  
   ```
@@ -317,7 +342,8 @@ rm '-r', rm '-R'# recursive
   `grep '-l'`: Print only filenames of matching "files"
 
 **examples**
-  ```
+
+  ```coffee
   grep '-v', 'GLOBAL_VARIABLE', '*.js'  
   grep 'GLOBAL_VARIABLE', '*.js'  
   ```
@@ -328,7 +354,8 @@ rm '-r', rm '-R'# recursive
   Returns string containing the absolute path to the command.
 
 **examples**
-  ```
+
+  ```coffee
   nodeExec = which 'node'  
   ```
 
@@ -338,7 +365,8 @@ rm '-r', rm '-R'# recursive
   Prints string to stdout, and returns string with additional utility methods like `.to()`.
 
 **examples**
-  ```
+
+  ```coffee
   echo 'hello world'  
   str = echo 'hello world'  
   echo 'temperature = ', temp
@@ -347,8 +375,6 @@ rm '-r', rm '-R'# recursive
   echo "this is nice"
     .toend "myfile.txt"
   ```
-
-
 
 ### pushd [options,] [dir   '-N'   '+N'] 
 Save the current directory on the top of the directory stack and then cd to `dir`.
@@ -362,10 +388,11 @@ Returns an array of paths in the stack.
   `pushd '-N'`: Brings the Nth directory (counting from the right of the list printed by dirs, starting with zero) to the top of the list by rotating the stack.
 
 **examples**
-  ```
-  // with curent directory '/usr'
-  pushd '/etc'   // Returns /etc /usr
-  pushd '+1'     // Returns /usr /etc
+  
+  ```coffee
+  # with curent directory '/usr'
+  pushd '/etc'   # Returns /etc /usr
+  pushd '+1'     # Returns /usr /etc
   ```
 
 ### popd [options,] ['-N'   '+N'] 
@@ -379,12 +406,13 @@ Returns an array of paths in the stack.
   `popd '-N'`: Removes the Nth directory (counting from the right of the list printed by dirs), starting with zero.
 
 **examples**
-  ```
-  echo process.cwd()     // '/usr'
-  pushd '/etc'         // '/etc /usr'
-  echo process.cwd()     // '/etc'
-  popd()                 // '/usr'
-  echo process.cwd()     // '/usr'
+
+  ```coffee
+  echo process.cwd() # '/usr'
+  pushd '/etc'       # '/etc /usr'
+  echo process.cwd() # '/etc'
+  popd()             # '/usr'
+  echo process.cwd() # '/usr'
   ```
 
 ### dirs [options   '+N'   '-N'] 
@@ -404,8 +432,9 @@ Returns an array of paths in the stack.
   `ln '-s'`: symlink
   `ln '-f'`: force
 
-**examples
-  ```
+**examples**
+
+  ```coffee
   ln 'file', 'newlink'  
   ln '-sf', 'file', 'existing'  
   ```
@@ -423,14 +452,14 @@ Returns an array of paths in the stack.
   **note** sync exec is not optimized, use async for heavy process exec ...
 
 **options**
-  + any option available for nodejs's `chidl_process.exec` is accepted
-  + options listed below are false by default
+  - any option available for nodejs's `chidl_process.exec` is accepted
+  - options listed below are false by default
 
 `exec async:true`: Asynchronous execution. If a callback is provided, it will be set to `true`, regardless of the passed value.
 `exec silent:true`: Do not echo program output to console.
 
 **examples**
-  ```
+  ```coffee
   version = exec 'node --version', silent:true 
     .stdout 
   echo version
@@ -462,7 +491,8 @@ Returns an array of paths in the stack.
   `chmod '-R'`: change files and directories recursively
 
 **examples**
-  ```
+
+  ```coffee
   chmod 755, '/Users/brandon'  
   chmod '755', '/Users/brandon'   // same as above
   chmod 'u+x', '/Users/brandon'  
@@ -481,14 +511,13 @@ Returns an array of paths in the stack.
   `touch '-r FILE'` : Use FILE's times instead of current time
 
 **examples**
-  ```
+  
+  ```coffee
   touch 'source.js'  
   touch '-c', '/path/to/some/dir/source.js'  
   # [TODO] Here coffee script literal object notation would be ambiguous ...
   touch { '-r': FILE }, '/path/to/some/dir/source.js'  
   ```
-
-
 
 ### set options 
   Sets global configuration variables
@@ -499,7 +528,8 @@ Returns an array of paths in the stack.
   `set '+/-f'`: disable filename expansion (globbing)
 
 **examples**
-  ```
+
+  ```coffee
   set '-e'   // exit upon first error
   set '+e'   // this undoes a "set '-e' "
   ```
@@ -508,11 +538,10 @@ Returns an array of paths in the stack.
   Searches and returns string containing a writeable, platform-dependent temporary directory.
 
 **examples**
-  ```
+
+  ```coffee
   tmp = tempdir() // "/tmp" for most *nix platforms
   ```
-
-
 
 ### error()
   Tests if error occurred in the last command. Returns `null` if no error occurred, otherwise returns string explaining the error
@@ -523,7 +552,8 @@ Returns an array of paths in the stack.
   This has special methods, like `.to()` and `.toEnd()`
 
 **examples**
-  ```
+
+  ```coffee
   foo = ShellString 'hello world'  
   ```
 
@@ -531,8 +561,9 @@ Returns an array of paths in the stack.
   Commands can send their output to another command in a pipe-like fashion.
   `sed`, `grep`, `cat`, `exec`, `to`, and `toEnd` can appear on the right-hand side of a pipe. Pipes can be chained.
 
-** examples**
-  ```
+**examples**
+
+  ```coffee
   grep 'foo', 'file1.txt', 'file2.txt'
     .sed /o/g, 'a' 
       .to 'output.txt'  
@@ -548,7 +579,8 @@ Default is `false`.
 ### config.silent
 
 **examples**
-  ```
+
+  ```coffee
   sh = require 'shelljs' 
   silentState = sh.config.silent // save old silent state
   sh.config.silent = true;
@@ -562,7 +594,8 @@ Default is `false`.
   This is analogous to Bash's `set -e`
 
 **examples**
-  ```
+
+  ```coffee
   require 'shelljs/global' 
   config.fatal = true; // or set '-e' 
   cp 'this_file_does_not_exist', '/dev/null'  // throws Error here
@@ -573,13 +606,14 @@ Default is `false`.
 ### config.verbose
 Will print each command as follows:
 
-  ```
+  ```coffee
   cd dir/
   ls subdir/
   ```
 
 **examples**
-  ```
+
+  ```coffee
   config.verbose = true; // or set '-v' 
   cd 'dir/' 
   ls 'subdir/' 
@@ -587,38 +621,40 @@ Will print each command as follows:
 
 Make
 ----
+  ```sh
   # to run `all`:
-    `$ node make`
+  $ node make
   # to run target `docs`
-    `$ node make docs`
+  $ node make docs
   # to run target `task` with arguments
-    `$ node make task -- arg1 arg2`
+  $ node make task -- arg1 arg2
+  ```
 
-    ```
-    require 'shelljs/make'
+  ```coffee
+  require 'shelljs/make'
 
-    target.all = ->
-      target.bundle()
-      target.docs()
+  target.all = ->
+    target.bundle()
+    target.docs()
 
-    target.task = (args)->
-    // args contains a array of options values
+  target.task = (args)->
+  // args contains a array of options values
 
-    target.bundle = ->
-      cd __dirname
-      mkdir 'build'
-      cd 'lib'
-      (cat '*.js').to '../build/output.js'
+  target.bundle = ->
+    cd __dirname
+    mkdir 'build'
+    cd 'lib'
+    (cat '*.js').to '../build/output.js'
 
-    target.docs = ->
-      cd __dirname
-      mkdir 'docs'
-      cd 'lib'
-      for file in ls '*.js'
-        text = grep '//@', file     # extract special comments
-        text.replace '//@', ''      # remove comment tags
-        text.to 'docs/my_docs.md'
-    ```
+  target.docs = ->
+    cd __dirname
+    mkdir 'docs'
+    cd 'lib'
+    for file in ls '*.js'
+      text = grep '//@', file     # extract special comments
+      text.replace '//@', ''      # remove comment tags
+      text.to 'docs/my_docs.md'
+  ```
 
 
 

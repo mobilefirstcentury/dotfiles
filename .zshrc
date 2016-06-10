@@ -28,10 +28,13 @@ fi
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
-#ZSH_THEME="babun"
+# Optionally, if you set this to "random", it'll load a random theme each time that oh-my-zsh is loaded.
+# ZSH_THEME="random"
 ZSH_THEME="babun"
+# ZSH_THEME="spaceship"
+# ZSH_THEME="agnoster"
+# ZSH_THEME="bureau"
+
 
 ((windows)) && source $ZSH/dir_colors/sol.dark
 
@@ -52,13 +55,46 @@ COMPLETION_WAITING_DOTS="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git autojump history-substring-search)
+# plugins=(git autojump history-substring-search autoenv)
+# plugins=(git npm autojump history-substring-search autoenv aws docker docker-compose encode64 extract geeknote gpg-agent gulp httpie iwhois jsontools last-working-dir meteor nvm per-directory-history pj vi-mode wd zsh-navigation-tools zsh-reload zsh-syntax-highlighting)
+ plugins=()
+
+# begin oh-my-zsh plugins configuration 
+
+# pj plugin configurtion
+PROJECT_PATHS=(~/Documents/_PLAY ~/Dev)
+
+
+## change Global/Local History stack switch keyboard for per-directory-history plugin
+export PER_DIRECTORY_HISTORY_TOGGLE='^S'
 
 source $ZSH/oh-my-zsh.sh
 
-# User configuration
+# pour une raison inconnue le plugin per-directory-history n'arrive pas à créer ce shortcut. 
+# on créer le shortcut ici de manière TEMPORAIRE le temps qu'il soit opérationnel
+# la version du plugin comprise dans oh-my-zsh (vieille) n'est plus d'actualité
+bindkey $PER_DIRECTORY_HISTORY_TOGGLE per-directory-history-toggle-history   
+ 
+# Bindings liés à history-substring-search (plugin oh-my-zsh)
+# bind UP and DOWN arrow keys
+zmodload zsh/terminfo
+bindkey "$terminfo[kcuu1]" history-substring-search-up
+bindkey "$terminfo[kcud1]" history-substring-search-down
 
-export PATH=.:$HOME/bin:/usr/local/bin:$PATH:$HOME/.scripts:$HOME/scripts
+# bind UP and DOWN arrow keys (compatibility fallback
+# for Ubuntu 12.04, Fedora 21, and MacOSX 10.9 users)
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+
+# bind k and j for VI mode
+bindkey -M vicmd 'k' history-substring-search-up
+bindkey -M vicmd 'j' history-substring-search-down
+
+# end oh-my-zsh plugins configuration
+
+# User configuration
+export PATH=.:$HOME/bin:/usr/local/bin:$PATH:$HOME/.scripts:$HOME/scripts:$HOME/packages/dasht/bin
+
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
@@ -80,7 +116,6 @@ if [[ -n $SSH_CONNECTION ]]; then
 else
   export EDITOR='nvim'
 fi
-alias vim=nvim
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -117,6 +152,9 @@ unsetopt correct
 export LESS='-g -i -M -R -S -w  -z-4'
 # export PAGER=/usr/local/bin/vimpager
 # alias less=$PAGER
+
+# most pager renders colors in man pages
+export PAGER="/usr/bin/most -s"  
 alias zless=$PAGER
 
 # I want zmv !
@@ -144,21 +182,6 @@ setopt HIST_IGNORE_SPACE # Don't preserve spaces. You may want to turn it off
 setopt NO_HIST_BEEP # Don't beep
 setopt SHARE_HISTORY # Share history between session/terminals
 #export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND" # save command to HISTFILE in real time 
-
-# Bindings liés à history-substring-search (plugin oh-my-zsh)
-# bind UP and DOWN arrow keys
-zmodload zsh/terminfo
-bindkey "$terminfo[kcuu1]" history-substring-search-up
-bindkey "$terminfo[kcud1]" history-substring-search-down
-
-# bind UP and DOWN arrow keys (compatibility fallback
-# for Ubuntu 12.04, Fedora 21, and MacOSX 10.9 users)
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
-
-# bind k and j for VI mode
-bindkey -M vicmd 'k' history-substring-search-up
-bindkey -M vicmd 'j' history-substring-search-down
 
 
 
@@ -188,7 +211,8 @@ bindkey '^[OB' history-beginning-search-forward
 
 
 # On utilise Ctrl-C pour la copy, On doit donc remmaper le Break pour killer une ligne de commande ou envoyer un sigkill au process courant
-bindkey '^G' send-break 
+# MAIS Ctrl+Shift+C marche bien ...
+# bindkey '^G' send-break 
 
 # eliminates delay when escaping insert mode
 export KEYTIMEOUT=1
@@ -223,9 +247,13 @@ alias tempty='trash-empty'
 alias trestore='trash-restore'
 alias fu="python ~/scripts/fu/fu"
 alias dropbox='~/.dropbox-dist/dropbox.py'
+alias d='dirs -v | most'
+alias v='nvim'
+
+alias vi='nvim --noplugin'
 
 # Folder Alias 
-hash -d help=~/Help
+hash -d help=~/help
 hash -d notes=~/Documents/_NOTES
 hash -d downloads=~/Downloads
 hash -d music=~/Music
@@ -247,7 +275,11 @@ hash -d admin=~/Documents/_ADMIN
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
-
+# [TODO] check if NODE_PATH export is needed (I can require all 'global require' modules installed in '~/node_modules' from anywhere even without NODE_PATH ...
+export NODE_PATH=$NVM_DIR/versions/node/`nvm version`/lib/node_modules    
+# the noode alias is a TEMPORARY workaround a bug in `maxogden/node-repl` with harmony functions
+# this as been replaced by a script in ~/.scripts
+# alias noode='node --harmony `which node-repl`'
 
 # custom functions
 
@@ -278,7 +310,7 @@ function mkcd()
 {
 mkdir $1 && eval cd $1
 }
-
+setopt pushdsilent # Omit printing directory stack
 
 # On définit l'opérateur '=' pour effectuer des calculs en ligne de commande grâce à l'utilitaire wcacl
 = () {                                                                                                                                                                               ~  
@@ -316,3 +348,63 @@ source '/home/rachid/google-cloud-sdk/path.zsh.inc'
 
 # The next line enables shell command completion for gcloud.
 source '/home/rachid/google-cloud-sdk/completion.zsh.inc'
+
+# Activate properly virtualenv and virtualenvwrapper
+PATH=$PATH:~/.local/bin
+source ~/.local/bin/virtualenvwrapper.sh     # add this in ~/.zshrc
+
+# export gvm variables for GO 
+. ~/.gvm/scripts/gvm  
+
+
+### PM2 ###
+###-begin-pm2-completion-###
+### credits to npm for the completion file model
+#
+# Installation: pm2 completion >> ~/.bashrc  (or ~/.zshrc)
+#
+
+COMP_WORDBREAKS=${COMP_WORDBREAKS/=/}
+COMP_WORDBREAKS=${COMP_WORDBREAKS/@/}
+export COMP_WORDBREAKS
+
+if type complete &>/dev/null; then
+  _pm2_completion () {
+    local si="$IFS"
+    IFS=$'\n' COMPREPLY=($(COMP_CWORD="$COMP_CWORD" \
+                           COMP_LINE="$COMP_LINE" \
+                           COMP_POINT="$COMP_POINT" \
+                           pm2 completion -- "${COMP_WORDS[@]}" \
+                           2>/dev/null)) || return $?
+    IFS="$si"
+  }
+  complete -o default -F _pm2_completion pm2
+elif type compctl &>/dev/null; then
+  _pm2_completion () {
+    local cword line point words si
+    read -Ac words
+    read -cn cword
+    let cword-=1
+    read -l line
+    read -ln point
+    si="$IFS"
+    IFS=$'\n' reply=($(COMP_CWORD="$cword" \
+                       COMP_LINE="$line" \
+                       COMP_POINT="$point" \
+                       pm2 completion -- "${words[@]}" \
+                       2>/dev/null)) || return $?
+    IFS="$si"
+  }
+  compctl -K _pm2_completion + -f + pm2
+fi
+###-end-pm2-completion-###
+# this allows apps launched by pm2 to bind to priviledged ports
+alias pm2='authbind --deep pm2'
+
+# npm completion
+# ceci est un workaround crade dont je ne comprends pas le fonctionnement
+# je n'arrive pas à virer l'auto completion de npm et lorsque je fais 'npm <tab>' ça affice du code
+# la commande suivante répare le problème de manière temporaire seulement
+# pour l'instant on execute ça à chaque nouveau terminal
+# eval "$(npm completion 2>/dev/null)"
+

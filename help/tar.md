@@ -1,61 +1,92 @@
 ---- tar cheatsheet ----
 =======================
 
-# create an compressed archive 
-  $ tar czf foder.to.encrypt.tar.gz folder.to.encrypt
+**note** .tgz is the same thing as .tar.gz
 
-# extract an encrypted archive (with tar and 7z)
-  $ sudo tar xf folder.to.encrypt.tar.gz  // Preserving owners and permissions needs priviledges
+cookbooks
+---------
 
+### backup
+**note** 
+  - this describes best practice for quick and dirty backup (more complexes backups are done with specialized tools) 
+  - we insert a README.md file in each tarball explaining how to manipulate the archive
+  - if the archive doesn't contain README.md, one should extract with relative paths by default
 
-#tar -czvf myarchive.tgz mydirectory/'
-#tar -czvf myarchive.tgz myfile1 myfile2 mydir1
+#### backup with relative paths
+  ```sh
+  # prepare a README.md in dir with extractions instructions
+  # create a tarball with relative paths (-P)
+  $ tar czvf tarball.tgz relative/path/to/dir  relative/path/to/file 
 
-We use the -t option to create an linux tar archive
--c, –create create a new archive
-Note that .tgz is the same thing as .tar.gz
-Create linux simple tar archive (withouth compresion)
-#tar -cvf myarchive.tar mydirectory/
-Extracting linux tar archive:
+  # read README.md instructions with vim
+  $ nvim tarball.tgz   # then type <enter> on 'README.md' entry  
 
+  # extract files and directories in their relative path preserving ownership and permission (default behaviour for superuser)
+  $ cd somewhere
+  $ sudo tar xzvf tarball.tgz   # archive will be extracted in <somewhere>
+  ```
 
-Extract linux tar gz (Gzip) archive
+#### backup with absolute paths
+  ```sh
+  # prepare a README.md in dir with extractions instructions
+  # create a tarball with absolute paths (-P)
+  $ tar czvf tarball.tgz absolute/path/to/dir  absolute/path/to/file README.md -P  
 
-#tar -xzvf mystuff.tgz
+  # read README.md instructions with vim
+  $ nvim tarball.tgz   # then type <enter> on 'README.md' entry  
 
-Extract linux simple tar archive
-
-#tar -xvf mystuff.tar
-
-We use -x to extract the files form the tar archive
--x, –extract, –get extract files from an archive
-Extract linux tar archive to speciefied directorytar -xvzf filename.tar.gz -C /desired/path
-
-And now let us shortly explain this command
-
-Usage: tar [OPTION]… [FILE]…
-Let us check the option used in this example
--c, –create                      create a new archive
--z, –gzip, –ungzip        filter the archive through gzip
--v, –verbose                   verbosely list files processed
--f, –file=ARCHIVE          use archive file or device ARCHIVE
--C directory file Performs a chdir  operation on directory and performs the c (create) or r (replace) operation on file .
-
-In c and r mode, these changes the directory before adding the following files. In x mode, change directories after opening the archive but before extracting entries from the archive.
-You can extract to a defined location using:
-#tar xvf yourstuff.tar -C your/path/here
-Testing / viewing your archive
-
-#tar -tvf myarchive.tar
-#tar -tzvf myarchive.tgz
-Here we used the – t opton
--t, –list                           list the contents of an archive
+  # If asked for README.md, extract files and directories in their absolute path (-P)  preserving ownership and permission (default behaviour for superuser)
+  $ sudo tar xzvf tarball.tgz  -P     
+  ```
 
 
-tar --exclude='./folder' --exclude='./upload/folder2' -zcvf /backup/filename.tgz .   # extract tar archive with pattern exclusion
-————————————————-
+create archive
+--------------
+### create a gzip compressed archive 
+  $ tar czf foder.tar.gz folder
+  $ tar czvf foder.tar.gz folder   # verbose
 
-# extract archive with a new directory name
+### create a compressed archive containing multiple files & folders
+  $ tar -czvf myarchive.tgz myfile1 myfile2 mydir1
+
+### create a tar archive (withouth compresion)
+  $ tar -cvf myarchive.tar mydirectory/
+
+### create tar archive with pattern exclusion
+tar --exclude='./folder' --exclude='./upload/folder2' -zcvf /backup/filename.tgz .   
+
+
+### create gpg encrypted tarball
+[TODO] modifier pour avoir une encryption asymetrique
+
+  $ tar -cz your_dir | gpg -c -o your_archive.tgz.gpg
+
+
+
+extract archive
+--------------
+### extract a compressed archive
+  $ sudo tar xf folder.tar.gz     # preserving owners and permissions needs priviledges
+  $ sudo tar xf folder.tgz        # preserving owners and permissions needs priviledges
+
+
+### extracting linux tar gzip compressed archive:
+ $ tar -xzvf mystuff.tgz
+
+### extract a tar archive (withouth compresion) 
+  $ tar -xvf mystuff.tar
+
+### extract linux tar archive to speciefied directory
+  $ tar -xvzf filename.tar.gz -C /desired/path
+
+### test / view an  archive
+  $ tar -tvf myarchive.tar     # list archive content
+  $ tar -tzvf myarchive.tgz    # list compressed archive content
+
+### extract archive with a new directory name
 mkdir pretty_name && tar xf ugly_name.tar -C pretty_name --strip-components 1
 
+### extract gpg encrypted tarball
+[TODO] modifier pour avoir une encryption asymetrique
 
+  $ gpg -d your_archive.tgz.gpg | tar xz

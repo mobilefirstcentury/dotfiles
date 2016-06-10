@@ -29,10 +29,12 @@ The -c option is used to replace the non-matching characters with another set of
 # echo "unix" | tr -c "u" "a"
 uaaa
 In the above example, except the character "c" other characters are replaced with "a"
+
 4. Delete non-printable characters
 
 The -d option can be used to delete characters. The following example deletes all the non-printable characters from a file.
 # tr -cd "[:print:]" < filename
+
 5. Squeezing characters
 
 You can squeeze more than one occurrence of continuous characters with single occurrence. The following example squeezes two or more successive blank spaces into a single space.
@@ -41,12 +43,11 @@ linux server
 Here you can replace the space character with any other character by specifying in set2.
 # "linux    server" | tr -s " " ","
 linux,server
+
 6. Delete characters
 
 The following example removes the word linux from the string.
 # echo "linuxserver" | tr -d "linux"
 server
-
-
 
 $ tr '[:upper:]' '[:lower:]' < input.txt > output.txt # convert text file to lower case
